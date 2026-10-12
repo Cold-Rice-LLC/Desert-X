@@ -27,6 +27,9 @@ export default defineConfig([
 	{
 		// Override or add rule settings here, such as:
 		// 'svelte/button-has-type': 'error'
-		rules: {}
+		rules: {
+			// resolve() only adds paths.base, and the site is served from the root
+			'svelte/no-navigation-without-resolve': 'off'
+		}
 	}
 ]);
