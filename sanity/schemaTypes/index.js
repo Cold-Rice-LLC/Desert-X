@@ -5,6 +5,7 @@ import artwork from './documents/artwork'
 import story from './documents/story'
 import location from './documents/location'
 import edition from './documents/edition'
+import navLink from './objects/navLink'
 import placeholderModule from './modules/placeholderModule'
 
 export const schemaTypes = [
@@ -16,6 +17,8 @@ export const schemaTypes = [
   story,
   location,
   edition,
+  // Objects
+  navLink,
   // Modules
   placeholderModule,
 ]

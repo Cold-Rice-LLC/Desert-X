@@ -3,14 +3,19 @@ import {defineField} from 'sanity'
 /**
  * Where a link points, with no label of its own. Pass `required: true` for
  * links that must point somewhere; left optional, an untouched link renders
- * as no link. `types` narrows the destinations on offer.
+ * as no link. `types` narrows the destinations on offer, and `schemes`
+ * widens the URL schemes an external link accepts.
  */
 const LINK_TYPE_TITLES = {
   internal: 'Internal',
   external: 'External',
 }
 
-export const linkTargetFields = ({required = false, types = ['internal', 'external']} = {}) => [
+export const linkTargetFields = ({
+  required = false,
+  schemes,
+  types = ['internal', 'external'],
+} = {}) => [
   defineField({
     name: 'linkType',
     type: 'string',
@@ -53,10 +58,14 @@ export const linkTargetFields = ({required = false, types = ['internal', 'extern
     name: 'externalUrl',
     type: 'url',
     title: 'External URL',
-    description: 'A full URL. Opens in a new tab.',
+    description: schemes
+      ? 'A full URL, or a mailto:/tel: address. Opens in a new tab.'
+      : 'A full URL. Opens in a new tab.',
     hidden: ({parent}) => parent?.linkType !== 'external',
+    // `url` allows http/https only unless told otherwise — rich text links
+    // also reach inboxes and phone numbers.
     validation: (rule) =>
-      rule.custom((value, context) =>
+      (schemes ? rule.uri({scheme: schemes}) : rule).custom((value, context) =>
         context.parent?.linkType === 'external' && !value ? 'External URL is required.' : true,
       ),
   }),
@@ -64,3 +73,19 @@ export const linkTargetFields = ({required = false, types = ['internal', 'extern
 
 /** Whether a link object points anywhere. */
 export const hasLink = (link) => ['internal', 'external'].includes(link?.linkType)
+
+/**
+ * Shared preview select for a link destination — internalTitle reaches
+ * through the reference for the linked page's title.
+ */
+export const linkTargetSelect = {
+  linkType: 'linkType',
+  internalTitle: 'internalLink.title',
+  externalUrl: 'externalUrl',
+}
+
+/** Shared preview subtitle for a link destination. */
+export const linkTargetSubtitle = ({linkType, internalTitle, externalUrl}) => {
+  if (linkType === 'external') return `↗ ${externalUrl || ''}`
+  return internalTitle || ''
+}
