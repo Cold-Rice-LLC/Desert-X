@@ -1,8 +1,8 @@
 import {
-  BookIcon,
   CalendarIcon,
   CogIcon,
   DocumentIcon,
+  DocumentTextIcon,
   HomeIcon,
   ImageIcon,
   PinIcon,
@@ -121,13 +121,6 @@ export const myStructure = (S) =>
                   parameter: 'artistId',
                   label: 'New artwork by',
                 },
-                {
-                  title: 'Stories',
-                  query: '*[_type == "story" && $id in artists[]._ref] | order(title asc)',
-                  template: {schemaType: 'story', id: 'story-by-artist'},
-                  parameter: 'artistId',
-                  label: 'New story about',
-                },
               ]),
             ),
         ),
@@ -135,7 +128,14 @@ export const myStructure = (S) =>
 
       S.divider(),
 
-      S.documentTypeListItem('story').title('Stories').icon(BookIcon),
+      S.listItem()
+        .title('News')
+        .icon(DocumentTextIcon)
+        .child(
+          S.documentTypeList('news')
+            .title('News')
+            .defaultOrdering([{field: 'publishDate', direction: 'desc'}]),
+        ),
 
       S.divider(),
 

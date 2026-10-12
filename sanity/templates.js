@@ -27,13 +27,4 @@ export const templates = [
       artists: [{_type: 'reference', _ref: artistId}],
     }),
   },
-  {
-    id: 'story-by-artist',
-    title: 'Story about artist',
-    schemaType: 'story',
-    parameters: [{name: 'artistId', type: 'string'}],
-    value: ({artistId}) => ({
-      artists: [{_type: 'reference', _ref: artistId}],
-    }),
-  },
 ]

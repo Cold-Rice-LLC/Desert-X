@@ -1,5 +1,6 @@
 import {defineField, defineType} from 'sanity'
 import {DocumentIcon} from '@sanity/icons'
+import {moduleMembers} from '../modules'
 
 const isHomepage = (document) => ['homepage', 'drafts.homepage'].includes(document?._id)
 
@@ -30,7 +31,7 @@ export default defineType({
       name: 'modules',
       type: 'array',
       title: 'Modules',
-      of: [{type: 'placeholderModule'}],
+      of: moduleMembers,
     }),
   ],
 })

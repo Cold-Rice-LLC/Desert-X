@@ -45,7 +45,7 @@ export const linkTargetFields = ({
       {type: 'location'},
       {type: 'artist'},
       {type: 'artwork'},
-      {type: 'story'},
+      {type: 'news'},
     ],
     options: {disableNew: true},
     hidden: ({parent}) => parent?.linkType !== 'internal',

@@ -1,29 +1,6 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {hasLink, linkTargetFields} from './objects/linkTarget'
 
-// Footer rich text: paragraphs with italic and links only.
-const footerTextMembers = [
-  defineArrayMember({
-    type: 'block',
-    styles: [{title: 'Normal', value: 'normal'}],
-    lists: [],
-    marks: {
-      decorators: [{title: 'Italic', value: 'em'}],
-      annotations: [
-        {
-          name: 'link',
-          type: 'object',
-          title: 'Link',
-          fields: linkTargetFields({
-            required: true,
-            schemes: ['http', 'https', 'mailto', 'tel'],
-          }),
-        },
-      ],
-    },
-  }),
-]
-
 export default defineType({
   name: 'siteSettings',
   type: 'document',
@@ -97,17 +74,15 @@ export default defineType({
     ),
     defineField({
       name: 'footerText',
-      type: 'array',
+      type: 'richText',
       title: 'Text',
       fieldset: 'footer',
-      of: footerTextMembers,
     }),
     defineField({
       name: 'credits',
-      type: 'array',
+      type: 'richText',
       title: 'Credits',
       fieldset: 'footer',
-      of: footerTextMembers,
     }),
   ],
 })
