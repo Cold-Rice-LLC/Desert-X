@@ -10,6 +10,10 @@ import richText from './objects/richText'
 import textModule from './modules/textModule'
 import scheduleModule from './modules/scheduleModule'
 import mediaModule from './modules/mediaModule'
+import bioModule from './modules/bioModule'
+import interviewModule from './modules/interviewModule'
+import peopleListModule from './modules/peopleListModule'
+import dropdownsModule from './modules/dropdownsModule'
 
 export const schemaTypes = [
   // Documents
@@ -27,4 +31,8 @@ export const schemaTypes = [
   textModule,
   scheduleModule,
   mediaModule,
+  bioModule,
+  interviewModule,
+  peopleListModule,
+  dropdownsModule,
 ]
