@@ -9,7 +9,15 @@ export async function load({ cookies }) {
 				text,
 				linkLabel,
 				${linkFields}
-			}
+			},
+			menuItems[]{
+				_key,
+				label,
+				${linkFields},
+				subItems[]{ _key, label, ${linkFields} }
+			},
+			menuText,
+			donateLink{ label, ${linkFields} }
 		}
 	`);
 
@@ -24,6 +32,11 @@ export async function load({ cookies }) {
 		: null;
 
 	return {
+		menu: {
+			items: settings?.menuItems ?? [],
+			text: settings?.menuText,
+			donateLink: settings?.donateLink
+		},
 		announcement,
 		// Read here rather than in the browser so a dismissed bar never flashes
 		announcementDismissed:

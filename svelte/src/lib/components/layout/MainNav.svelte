@@ -2,6 +2,7 @@
 	import Hamburger from '$lib/components/icons/Hamburger.svelte';
 	import HamburgerAlt from '$lib/components/icons/HamburgerAlt.svelte';
 	import Logo from '$lib/components/icons/Logo.svelte';
+	import { ui } from '$lib/ui.svelte.js';
 
 	/**
 	 * Sticky (not fixed) so other sticky elements further down a page can
@@ -16,7 +17,7 @@
 	<header
 		class="sticky top-0 z-10 flex h-0 items-start gap-[2.3rem] px-edge text-white *:mt-[2.6rem]"
 	>
-		<button aria-label="Open menu">
+		<button aria-label="Open menu" aria-haspopup="dialog" onclick={() => (ui.menuOpen = true)}>
 			<Hamburger class="h-[3.1rem] w-auto" />
 		</button>
 		<a href="/" aria-label="Desert X home">
@@ -25,7 +26,12 @@
 	</header>
 {:else}
 	<header class="sticky top-0 z-10 flex items-center bg-white px-gutter py-[1.2rem] text-md">
-		<button class="absolute top-1/2 left-edge -translate-y-1/2" aria-label="Open menu">
+		<button
+			class="absolute top-1/2 left-edge -translate-y-1/2"
+			aria-label="Open menu"
+			aria-haspopup="dialog"
+			onclick={() => (ui.menuOpen = true)}
+		>
 			<HamburgerAlt class="h-[1.7rem] w-auto" />
 		</button>
 		{#if title}

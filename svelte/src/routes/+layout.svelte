@@ -7,6 +7,7 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import AnnouncementBar from '$lib/components/layout/AnnouncementBar.svelte';
 	import MainNav from '$lib/components/layout/MainNav.svelte';
+	import Menu from '$lib/components/layout/Menu.svelte';
 
 	let { children, data } = $props();
 
@@ -40,5 +41,7 @@
 {/if}
 
 <MainNav {home} {title} />
+
+<Menu menu={data.menu} />
 
 {@render children()}

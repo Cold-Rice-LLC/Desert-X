@@ -29,4 +29,15 @@ export const linkHref = (link) => {
 	return slug && paths[_type] ? paths[_type](slug) : null;
 };
 
-export const isExternalLink = (link) => link?.linkType === 'external';
+// Opens in a new tab: web URLs only, not mailto:/tel:
+export const isExternalLink = (link) =>
+	link?.linkType === 'external' && /^https?:/.test(link.externalUrl ?? '');
+
+/** GROQ projection for a richText field, resolving its link annotations. */
+export const richTextFields = `
+	...,
+	markDefs[]{
+		...,
+		_type == "link" => { ${linkFields} }
+	}
+`;
