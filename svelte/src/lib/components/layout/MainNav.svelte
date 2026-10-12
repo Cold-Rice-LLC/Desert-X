@@ -6,14 +6,15 @@
 	/**
 	 * Sticky (not fixed) so other sticky elements further down a page can
 	 * take its place. On the homepage it has no height and floats in white
-	 * over the hero; elsewhere it sits on white with the smaller hamburger.
+	 * over the hero. Elsewhere it sits on white with the smaller hamburger
+	 * in the left margin, so the page's title starts at the content gutter.
 	 */
-	let { home } = $props();
+	let { home, title } = $props();
 </script>
 
 {#if home}
 	<header
-		class="sticky top-0 z-10 flex h-0 items-start gap-[2.3rem] px-[2rem] text-white *:mt-[2.6rem]"
+		class="sticky top-0 z-10 flex h-0 items-start gap-[2.3rem] px-edge text-white *:mt-[2.6rem]"
 	>
 		<button aria-label="Open menu">
 			<Hamburger class="h-[3.1rem] w-auto" />
@@ -23,9 +24,12 @@
 		</a>
 	</header>
 {:else}
-	<header class="sticky top-0 z-10 flex items-center bg-white px-[2rem] py-[2.2rem]">
-		<button aria-label="Open menu">
+	<header class="sticky top-0 z-10 flex items-center bg-white px-gutter py-[1.2rem] text-md">
+		<button class="absolute top-1/2 left-edge -translate-y-1/2" aria-label="Open menu">
 			<HamburgerAlt class="h-[1.7rem] w-auto" />
 		</button>
+		{#if title}
+			<p>{title}</p>
+		{/if}
 	</header>
 {/if}

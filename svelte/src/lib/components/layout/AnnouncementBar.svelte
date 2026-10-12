@@ -16,13 +16,13 @@
 </script>
 
 <aside
-	class="flex items-center gap-[2.4rem] bg-grey-2 px-[2rem] py-[1.4rem] font-mono text-sm"
+	class="flex items-center gap-[2.4rem] bg-grey-2 px-edge py-[1.4rem] font-mono text-sm"
 	aria-label="Announcement"
 >
 	<p class="flex-1">{announcement.text}</p>
 
 	{#if linkHref(announcement) && announcement.linkLabel}
-		<AppLink link={announcement} class="uppercase underline underline-offset-[0.4rem]">
+		<AppLink link={announcement} class="uppercase link-underline">
 			{announcement.linkLabel}
 		</AppLink>
 	{/if}

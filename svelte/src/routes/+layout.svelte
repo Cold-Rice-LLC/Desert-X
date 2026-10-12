@@ -9,6 +9,12 @@
 
 	let home = $derived(page.url.pathname === '/');
 
+	let title = $derived.by(() => {
+		if (page.status === 404) return 'Not Found';
+		if (page.error) return 'Error';
+		return page.data.navTitle;
+	});
+
 	// Closed in this visit; the cookie covers later page loads
 	let announcementClosed = $state(false);
 </script>
@@ -19,6 +25,6 @@
 	<AnnouncementBar announcement={data.announcement} onclose={() => (announcementClosed = true)} />
 {/if}
 
-<MainNav {home} />
+<MainNav {home} {title} />
 
 {@render children()}

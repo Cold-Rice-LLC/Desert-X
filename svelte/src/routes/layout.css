@@ -17,6 +17,25 @@
 	--color-white: #ffffff;
 	--color-grey-1: #f2f2f2;
 	--color-grey-2: #d9d9d9;
+
+	/* Screen edge to the nav's hamburger, and to the page content: the nav
+	   title starts at the gutter, so content lines up under it */
+	--spacing-edge: 2rem;
+	--spacing-gutter: 6.8rem;
+}
+
+/* Static so the variables are always emitted; Tailwind has no theme
+   namespace for underline offset or thickness */
+@theme static {
+	--underline-offset: 0.2em;
+	--underline-thickness: 0.05em;
+}
+
+/* The site's underline for links and the like */
+@utility link-underline {
+	text-decoration-line: underline;
+	text-underline-offset: var(--underline-offset);
+	text-decoration-thickness: var(--underline-thickness);
 }
 
 html {
