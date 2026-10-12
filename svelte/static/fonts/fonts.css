@@ -1,0 +1,38 @@
+/*
+Loaded by a <link> in app.html rather than through Vite: in dev, Vite inlines
+its CSS as <style> tags, whose url()s Chrome re-resolves on every client-side
+navigation, re-downloading the fonts and blanking the text (font-display:
+block) on each one
+*/
+
+@font-face {
+	font-family: 'DESERT X Schengen';
+	src: url('/fonts/DESERTXSchengen-Regular.woff2') format('woff2');
+	font-weight: 400;
+	font-style: normal;
+	font-display: block;
+}
+
+@font-face {
+	font-family: 'DESERT X Schengen';
+	src: url('/fonts/DESERTXSchengen-RegularItalic.woff2') format('woff2');
+	font-weight: 400;
+	font-style: italic;
+	font-display: block;
+}
+
+@font-face {
+	font-family: 'DESERT X Schengen Mono';
+	src: url('/fonts/DESERTXSchengen-MonoRegular.woff2') format('woff2');
+	font-weight: 400;
+	font-style: normal;
+	font-display: block;
+}
+
+@font-face {
+	font-family: 'DESERT X Schengen Mono';
+	src: url('/fonts/DESERTXSchengen-MonoRegularItalic.woff2') format('woff2');
+	font-weight: 400;
+	font-style: italic;
+	font-display: block;
+}

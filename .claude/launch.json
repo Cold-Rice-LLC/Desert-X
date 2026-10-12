@@ -4,9 +4,22 @@
     {
       "name": "sanity",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
       "cwd": "sanity",
       "port": 3333
+    },
+    {
+      "name": "svelte",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "cwd": "svelte",
+      "port": 5173
     }
   ]
 }

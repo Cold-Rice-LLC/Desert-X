@@ -1,1 +1,10 @@
 @import 'tailwindcss';
+
+@theme {
+	--font-sans: 'DESERT X Schengen', sans-serif;
+	--font-mono: 'DESERT X Schengen Mono', monospace;
+}
+
+html {
+	font-size: 10px;
+}
