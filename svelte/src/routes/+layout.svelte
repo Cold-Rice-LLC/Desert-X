@@ -1,11 +1,25 @@
 <script>
 	import './layout.css';
+	import 'nprogress/nprogress.css';
+	import NProgress from 'nprogress';
+	import { beforeNavigate } from '$app/navigation';
 	import { page } from '$app/state';
 	import favicon from '$lib/assets/favicon.svg';
 	import AnnouncementBar from '$lib/components/layout/AnnouncementBar.svelte';
 	import MainNav from '$lib/components/layout/MainNav.svelte';
 
 	let { children, data } = $props();
+
+	NProgress.configure({ showSpinner: false });
+
+	// Finishes on `complete` rather than in afterNavigate, which doesn't run
+	// when a navigation is cancelled or fails, leaving the bar stuck
+	beforeNavigate(({ willUnload, complete }) => {
+		if (willUnload) return;
+		NProgress.start();
+		const done = () => NProgress.done();
+		complete.then(done, done);
+	});
 
 	let home = $derived(page.url.pathname === '/');
 

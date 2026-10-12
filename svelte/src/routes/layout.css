@@ -41,3 +41,21 @@
 html {
 	font-size: 10px;
 }
+
+/* Tailwind's preflight gives buttons the default cursor */
+button {
+	cursor: pointer;
+}
+
+/* nprogress builds its own markup, so it's styled here. Nested under body
+   to outrank nprogress.css */
+body {
+	#nprogress {
+		z-index: 5000;
+	}
+
+	#nprogress .bar {
+		height: 2px;
+		background-color: var(--color-black);
+	}
+}
