@@ -1,13 +1,6 @@
 import {defineField, defineType} from 'sanity'
-import {
-  DocumentTextIcon,
-  EarthGlobeIcon,
-  ImageIcon,
-  PinIcon,
-  SearchIcon,
-  UserIcon,
-} from '@sanity/icons'
 import {NoteField} from '../../components/NoteField'
+import {landingPages} from './landingPages'
 
 /**
  * Landing pages: pages the site builds itself (a news listing, the search
@@ -48,25 +41,20 @@ const landing = ({name, title, icon, fields = []}) =>
     },
   })
 
-export const landings = [
-  landing({name: 'newsLanding', title: 'News', icon: DocumentTextIcon}),
-  landing({name: 'artistsLanding', title: 'Artists', icon: UserIcon}),
-  landing({name: 'artLanding', title: 'Art', icon: ImageIcon}),
-  landing({name: 'locationsLanding', title: 'Locations', icon: PinIcon}),
-  landing({name: 'visitLanding', title: 'Visit', icon: EarthGlobeIcon}),
-  landing({
-    name: 'searchLanding',
-    title: 'Search',
-    icon: SearchIcon,
-    fields: [
-      defineField({
-        name: 'intro',
-        type: 'richText',
-        title: 'Intro',
-        description: 'Shown above the search field.',
-      }),
-    ],
-  }),
-]
+// Fields beyond the title, by landing
+const landingFields = {
+  searchLanding: [
+    defineField({
+      name: 'intro',
+      type: 'richText',
+      title: 'Intro',
+      description: 'Shown above the search field.',
+    }),
+  ],
+}
+
+export const landings = landingPages.map((page) =>
+  landing({...page, fields: landingFields[page.name]}),
+)
 
 export const landingTypes = landings.map(({name}) => name)
