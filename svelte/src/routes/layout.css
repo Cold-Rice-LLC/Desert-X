@@ -37,12 +37,15 @@
 	/* Below the nav to a page's content, and its content to the footer */
 	--spacing-page-top: 9.25rem;
 	--spacing-page-bottom: 15rem;
+	/* Side padding of text-led modules: the gutter, unless their page sets
+	   it narrower (news articles run from column 2 to 11) */
+	--spacing-module: var(--spacing-gutter);
 }
 
 /* Static so the variables are always emitted; Tailwind has no theme
    namespace for underline offset or thickness */
 @theme static {
-	--underline-offset: 0.2em;
+	--underline-offset: 0.06em;
 	--underline-thickness: 0.05em;
 }
 

@@ -25,10 +25,13 @@
 
 	let home = $derived(page.url.pathname === '/');
 
-	let title = $derived.by(() => {
-		if (page.status === 404) return 'Not Found';
-		if (page.error) return 'Error';
-		return page.data.navTitle;
+	// What the nav shows beside the menu button: the page's title, which
+	// can link up a level (navHref), and an optional detail after it
+	let nav = $derived.by(() => {
+		if (page.status === 404) return { title: 'Not Found' };
+		if (page.error) return { title: 'Error' };
+		const { navTitle, navHref, navDetail } = page.data;
+		return { title: navTitle, href: navHref, detail: navDetail };
 	});
 
 	// Closed in this visit; the cookie covers later page loads
@@ -41,7 +44,7 @@
 	<AnnouncementBar announcement={data.announcement} onclose={() => (announcementClosed = true)} />
 {/if}
 
-<MainNav {home} {title} />
+<MainNav {home} {...nav} />
 
 <Menu menu={data.menu} />
 

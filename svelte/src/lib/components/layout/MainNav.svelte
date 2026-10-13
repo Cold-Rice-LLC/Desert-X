@@ -9,9 +9,11 @@
 	 * take its place. On the homepage it has no height and floats in white
 	 * over the hero. Elsewhere it sits on white with the smaller hamburger
 	 * in the left margin, so the page's title starts at the content gutter.
-	 * Its height is fixed, so pages without a title don't collapse it.
+	 * Its height is fixed, so pages without a title don't collapse it. With
+	 * an `href` the title is a link up a level, like a breadcrumb; `detail`
+	 * follows it, e.g. a news article's date.
 	 */
-	let { home, title } = $props();
+	let { home, title, href, detail } = $props();
 </script>
 
 {#if home}
@@ -26,7 +28,9 @@
 		</a>
 	</header>
 {:else}
-	<header class="sticky top-0 z-10 flex h-[7.5rem] items-center bg-white px-gutter text-md">
+	<header
+		class="sticky top-0 z-10 flex h-[7.5rem] items-center gap-x-[0.8em] bg-white px-gutter text-md"
+	>
 		<button
 			class="absolute top-1/2 left-edge -translate-y-1/2"
 			aria-label="Open menu"
@@ -35,8 +39,13 @@
 		>
 			<HamburgerAlt class="h-[1.7rem] w-auto" />
 		</button>
-		{#if title}
+		{#if title && href}
+			<a {href}>{title}</a>
+		{:else if title}
 			<p>{title}</p>
+		{/if}
+		{#if detail}
+			<p>{detail}</p>
 		{/if}
 	</header>
 {/if}

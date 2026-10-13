@@ -6,7 +6,7 @@
 	let { module } = $props();
 </script>
 
-<div class="text-module space-y-line px-gutter">
+<div class="text-module space-y-line px-module">
 	<ModuleHeading heading={module.heading} />
 	{#if module.text}
 		<Portable value={module.text} />

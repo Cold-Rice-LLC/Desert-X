@@ -22,6 +22,24 @@ export const modulesFields = `
 		leftList,
 		rightList
 	},
+	_type == "mediaModule" => {
+		mediaType,
+		image{ ${imageFields} },
+		secondImage{ ${imageFields} },
+		"caption": coalesce(caption, image.asset->description, video.asset->description),
+		"video": video.asset->url,
+		poster{ ${imageFields} },
+		youtubeId,
+		vimeoUrl
+	},
+	_type == "scheduleModule" => {
+		heading,
+		items[]{
+			_key,
+			time,
+			details[]{ ${richTextFields} }
+		}
+	},
 	_type == "dropdownsModule" => {
 		heading,
 		dropdowns[]{

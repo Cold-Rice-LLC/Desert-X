@@ -1,27 +1,32 @@
 <script>
 	import BioModule from '$lib/components/modules/BioModule.svelte';
 	import DropdownsModule from '$lib/components/modules/DropdownsModule.svelte';
+	import MediaModule from '$lib/components/modules/MediaModule.svelte';
 	import PeopleListModule from '$lib/components/modules/PeopleListModule.svelte';
+	import ScheduleModule from '$lib/components/modules/ScheduleModule.svelte';
 	import TextModule from '$lib/components/modules/TextModule.svelte';
 
 	/**
 	 * Renders a modules array in order, picking a component by type. Types
 	 * without a component yet are skipped. Modules sit 10rem apart, or one
-	 * blank line between consecutive text modules.
+	 * blank line between consecutive text modules. `children` comes first,
+	 * spaced like a module (a news article's title). `narrow` runs text-led
+	 * modules from column 2 to 11 of the 12-column grid, as news does.
 	 */
-	let { modules } = $props();
+	let { modules, narrow = false, children } = $props();
 
 	const components = {
 		textModule: TextModule,
 		bioModule: BioModule,
 		peopleListModule: PeopleListModule,
-		dropdownsModule: DropdownsModule
+		dropdownsModule: DropdownsModule,
+		mediaModule: MediaModule,
+		scheduleModule: ScheduleModule
 	};
 </script>
 
-<div
-	class="pt-page-top pb-page-bottom text-md *:not-first:mt-[10rem] [&>.text-module+.text-module]:mt-line"
->
+<div class="modules pt-page-top pb-page-bottom text-md" class:narrow>
+	{@render children?.()}
 	{#each modules ?? [] as module (module._key)}
 		{@const Module = components[module._type]}
 		{#if Module}
@@ -29,3 +34,20 @@
 		{/if}
 	{/each}
 </div>
+
+<style>
+	.modules {
+		> :global(* + *) {
+			margin-top: 10rem;
+		}
+
+		> :global(.text-module + .text-module) {
+			margin-top: var(--spacing-line);
+		}
+
+		/* Column 2 to 11 of the 12-column grid inside the screen edges */
+		&.narrow {
+			--spacing-module: calc(var(--spacing-edge) + (100% - 2 * var(--spacing-edge)) / 12);
+		}
+	}
+</style>

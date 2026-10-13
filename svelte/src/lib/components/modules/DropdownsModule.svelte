@@ -12,7 +12,7 @@
 	let { module } = $props();
 </script>
 
-<div class="space-y-line px-gutter">
+<div class="space-y-line px-module">
 	<ModuleHeading heading={module.heading} />
 
 	{#if module.dropdowns?.length}
@@ -20,7 +20,7 @@
 			{#each module.dropdowns as dropdown (dropdown._key)}
 				<details class="group border-b-[2.5px]">
 					<summary
-						class="flex cursor-pointer list-none items-center justify-between py-6 group-first:pt-0 [&::-webkit-details-marker]:hidden"
+						class="flex cursor-pointer list-none items-center justify-between py-6 group-first:pt-0"
 					>
 						{dropdown.title}
 						<Caret class="h-[1.8rem] w-auto group-open:rotate-180" />
@@ -35,3 +35,10 @@
 		</div>
 	{/if}
 </div>
+
+<style>
+	/* Safari's disclosure triangle, which list-none doesn't hide */
+	summary::-webkit-details-marker {
+		display: none;
+	}
+</style>

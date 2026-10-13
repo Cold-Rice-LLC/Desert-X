@@ -4,7 +4,7 @@
 
 	const { value } = $props();
 
-	const components = { hardBreak: null, marks: { link: PortableLink } };
+	const components = { marks: { link: PortableLink } };
 </script>
 
 <PortableText {value} {components} />
