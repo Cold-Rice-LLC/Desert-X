@@ -12,7 +12,10 @@
 	 * so focus stays inside, Escape closes it and the page behind is inert.
 	 * Items whose Link Type is Sub-items open them in place of the menu text;
 	 * the rest are plain links. Sub-items linking to a location get the
-	 * Desert X mark. Hidden while closed; flex once open.
+	 * Desert X mark. Always rendered, so it can fade on opacity alone: while
+	 * closed it's transparent, ignores the pointer and is inert, and it's
+	 * fixed and stacked above the nav so the fade-out isn't cut off when the
+	 * dialog leaves the top layer.
 	 */
 	let { menu } = $props();
 
@@ -42,7 +45,8 @@
 <dialog
 	bind:this={dialog}
 	{oncancel}
-	class="m-0 hidden size-full max-h-none max-w-none flex-col bg-white text-menu text-black open:flex"
+	inert={!ui.menuOpen}
+	class="pointer-events-none fixed inset-0 z-20 m-0 flex size-full max-h-none max-w-none flex-col bg-white text-menu text-black opacity-0 transition-opacity duration-300 open:pointer-events-auto open:opacity-100"
 	aria-label="Menu"
 >
 	<div class="flex items-start justify-between px-edge pt-nav-top">
