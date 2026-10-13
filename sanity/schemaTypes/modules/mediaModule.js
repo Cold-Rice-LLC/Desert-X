@@ -39,6 +39,14 @@ export default defineType({
       ...forType('image', 'Choose an image.'),
     }),
     defineField({
+      name: 'secondImage',
+      type: 'image',
+      title: 'Second Image',
+      description: 'Optional. The two images sit side by side, both cropped to 4:5.',
+      options: {hotspot: true},
+      hidden: ({parent}) => parent?.mediaType !== 'image',
+    }),
+    defineField({
       name: 'video',
       type: 'file',
       title: 'Video',
