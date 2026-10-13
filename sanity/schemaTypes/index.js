@@ -17,6 +17,7 @@ import interviewModule from './modules/interviewModule'
 import peopleListModule from './modules/peopleListModule'
 import dropdownsModule from './modules/dropdownsModule'
 import newsModule from './modules/newsModule'
+import donateModule from './modules/donateModule'
 
 export const schemaTypes = [
   // Documents
@@ -41,4 +42,5 @@ export const schemaTypes = [
   peopleListModule,
   dropdownsModule,
   newsModule,
+  donateModule,
 ]
