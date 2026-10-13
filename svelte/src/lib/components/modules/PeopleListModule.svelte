@@ -11,7 +11,7 @@
 </script>
 
 <div class="grid grid-cols-12 px-gutter text-base">
-	<section class="col-span-6 space-y-[1lh]">
+	<section class="col-span-6 space-y-line">
 		{#if left.title}
 			<h2>{left.title}</h2>
 		{/if}
@@ -20,7 +20,7 @@
 		{/if}
 	</section>
 
-	<section class="col-span-6 grid grid-cols-2 content-start gap-y-[1lh]">
+	<section class="col-span-6 grid grid-cols-2 content-start gap-y-line">
 		{#if right.title}
 			<h2 class="col-span-2">{right.title}</h2>
 		{/if}

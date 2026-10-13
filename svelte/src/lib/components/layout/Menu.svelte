@@ -49,12 +49,12 @@
 	class="pointer-events-none fixed inset-0 z-20 m-0 flex size-full max-h-none max-w-none flex-col bg-white text-menu text-black opacity-0 transition-opacity duration-300 open:pointer-events-auto open:opacity-100"
 	aria-label="Menu"
 >
-	<div class="flex items-start justify-between px-edge pt-[2.6rem]">
+	<div class="flex items-start justify-between px-edge pt-nav-top">
 		<a href="/" aria-label="Desert X home">
-			<Logo class="h-[3.1rem] w-auto" />
+			<Logo class="h-nav-icon w-auto" />
 		</a>
 		<button aria-label="Close menu" onclick={() => (ui.menuOpen = false)}>
-			<Close class="h-[3.1rem] w-auto" />
+			<Close class="h-nav-icon w-auto" />
 		</button>
 	</div>
 
@@ -94,7 +94,7 @@
 		<p class="mt-[5rem] px-gutter">{menu.text}</p>
 	{/if}
 
-	<div class="mt-auto flex items-center gap-[5.4rem] px-edge pb-[2rem]">
+	<div class="mt-auto flex items-center gap-[5.4rem] px-edge pb-edge">
 		<a href="/search" aria-label="Search">
 			<Search class="h-[4rem] w-auto" />
 		</a>

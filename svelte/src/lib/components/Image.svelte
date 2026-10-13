@@ -15,6 +15,7 @@
 	let { image, aspect, sizes = '100vw', loading = 'lazy', class: className, ...rest } = $props();
 
 	let sources = $derived(imageSources(image, aspect));
+	let lazy = $derived(loading === 'lazy');
 
 	let el = $state();
 	let loaded = $state(false);
@@ -37,11 +38,7 @@
 	width={sources.width}
 	height={sources.height}
 	{loading}
-	class={[
-		className,
-		loading === 'lazy' && 'transition-opacity duration-300',
-		loading === 'lazy' && !loaded && 'opacity-0'
-	]}
+	class={[className, lazy && 'transition-opacity duration-300', lazy && !loaded && 'opacity-0']}
 	onload={() => (loaded = true)}
 	onerror={() => (loaded = true)}
 />

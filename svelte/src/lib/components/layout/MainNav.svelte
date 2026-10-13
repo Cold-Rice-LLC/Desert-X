@@ -16,13 +16,13 @@
 
 {#if home}
 	<header
-		class="sticky top-0 z-10 flex h-0 items-start gap-[2.3rem] px-edge text-white *:mt-[2.6rem]"
+		class="sticky top-0 z-10 flex h-0 items-start gap-[2.3rem] px-edge text-white *:mt-nav-top"
 	>
 		<button aria-label="Open menu" aria-haspopup="dialog" onclick={() => (ui.menuOpen = true)}>
-			<Hamburger class="h-[3.1rem] w-auto" />
+			<Hamburger class="h-nav-icon w-auto" />
 		</button>
 		<a href="/" aria-label="Desert X home">
-			<Logo class="h-[3.1rem] w-auto" />
+			<Logo class="h-nav-icon w-auto" />
 		</a>
 	</header>
 {:else}

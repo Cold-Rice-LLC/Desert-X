@@ -27,6 +27,13 @@
 	   title starts at the gutter, so content lines up under it */
 	--spacing-edge: 2rem;
 	--spacing-gutter: 6.8rem;
+	/* One line of the current text: the gap between paragraphs, headings
+	   and the text under them, and consecutive text modules */
+	--spacing-line: 1lh;
+	/* The homepage nav and the menu: window top to the logo, hamburger and
+	   close button, and their height */
+	--spacing-nav-top: 2.6rem;
+	--spacing-nav-icon: 3.1rem;
 }
 
 /* Static so the variables are always emitted; Tailwind has no theme

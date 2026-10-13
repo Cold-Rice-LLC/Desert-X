@@ -1,5 +1,6 @@
 <script>
 	import ImageFrame from '$lib/components/ImageFrame.svelte';
+	import ModuleHeading from '$lib/components/modules/ModuleHeading.svelte';
 	import Portable from '$lib/components/Portable.svelte';
 
 	/**
@@ -10,14 +11,12 @@
 	let { module } = $props();
 </script>
 
-<div class="bios-module space-y-[1lh] px-gutter">
-	{#if module.heading}
-		<h2 class="text-center uppercase">{module.heading}</h2>
-	{/if}
+<div class="space-y-line px-gutter">
+	<ModuleHeading heading={module.heading} />
 
-	{#if module.bios?.length > 0}
+	{#if module.bios?.length}
 		<ul class="space-y-[2.5rem] text-base">
-			{#each module.bios ?? [] as bio (bio._key)}
+			{#each module.bios as bio (bio._key)}
 				<li class="grid grid-cols-12 items-start">
 					<ImageFrame
 						image={bio.image}
@@ -26,12 +25,10 @@
 						class="col-span-3"
 					/>
 					{#if bio.imageText}
-						<div class="col-span-3 pl-24">
-							<p class="whitespace-pre-line">{bio.imageText}</p>
-						</div>
+						<p class="col-span-3 pl-[6rem] whitespace-pre-line">{bio.imageText}</p>
 					{/if}
 					{#if bio.text}
-						<div class="col-span-6 space-y-[1lh]">
+						<div class="col-span-6 space-y-line">
 							<Portable value={bio.text} />
 						</div>
 					{/if}
