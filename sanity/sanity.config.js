@@ -1,6 +1,7 @@
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
+import {colorInput} from '@sanity/color-input'
 import {media} from 'sanity-plugin-media'
 import {schemaTypes} from './schemaTypes'
 import {myStructure} from './myStructure'
@@ -19,7 +20,7 @@ export default defineConfig({
   projectId: '2f7qebi8',
   dataset: 'production',
 
-  plugins: [structureTool({structure: myStructure}), media(), visionTool()],
+  plugins: [structureTool({structure: myStructure}), media(), colorInput(), visionTool()],
 
   schema: {
     types: schemaTypes,

@@ -7,6 +7,7 @@ import location from './documents/location'
 import edition from './documents/edition'
 import {landings} from './documents/landings'
 import navLink from './objects/navLink'
+import palette from './objects/palette'
 import richText from './objects/richText'
 import textModule from './modules/textModule'
 import scheduleModule from './modules/scheduleModule'
@@ -28,6 +29,7 @@ export const schemaTypes = [
   ...landings,
   // Objects
   navLink,
+  palette,
   richText,
   // Modules
   textModule,

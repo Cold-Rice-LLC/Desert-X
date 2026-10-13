@@ -43,6 +43,14 @@ const landing = ({name, title, icon, fields = []}) =>
 
 // Fields beyond the title, by landing
 const landingFields = {
+  newsLanding: [
+    defineField({
+      name: 'generalPalette',
+      type: 'palette',
+      title: 'General Palette',
+      description: 'Four colours for news with no location. News tiles mix them into a gradient.',
+    }),
+  ],
   searchLanding: [
     defineField({
       name: 'intro',

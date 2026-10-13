@@ -20,5 +20,10 @@ export default defineType({
       options: {source: 'title'},
       validation: (rule) => rule.required(),
     }),
+    defineField({
+      name: 'palette',
+      type: 'palette',
+      title: 'Palette',
+    }),
   ],
 })
