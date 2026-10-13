@@ -26,7 +26,7 @@
 		</a>
 	</header>
 {:else}
-	<header class="sticky top-0 z-10 flex h-[6.25rem] items-center bg-white px-gutter text-md">
+	<header class="sticky top-0 z-10 flex h-[7.5rem] items-center bg-white px-gutter text-md">
 		<button
 			class="absolute top-1/2 left-edge -translate-y-1/2"
 			aria-label="Open menu"
