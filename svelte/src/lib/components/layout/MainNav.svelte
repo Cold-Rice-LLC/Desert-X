@@ -9,6 +9,7 @@
 	 * take its place. On the homepage it has no height and floats in white
 	 * over the hero. Elsewhere it sits on white with the smaller hamburger
 	 * in the left margin, so the page's title starts at the content gutter.
+	 * Its height is fixed, so pages without a title don't collapse it.
 	 */
 	let { home, title } = $props();
 </script>
@@ -25,7 +26,7 @@
 		</a>
 	</header>
 {:else}
-	<header class="sticky top-0 z-10 flex items-center bg-white px-gutter py-[1.2rem] text-md">
+	<header class="sticky top-0 z-10 flex h-[6.25rem] items-center bg-white px-gutter text-md">
 		<button
 			class="absolute top-1/2 left-edge -translate-y-1/2"
 			aria-label="Open menu"
