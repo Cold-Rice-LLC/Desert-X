@@ -7,8 +7,8 @@
 
 <!-- UI only for now: submitting does nothing until search is built -->
 <main class="px-gutter pt-[9rem] text-md">
-	{#if data.intro}
-		<Portable value={data.intro} />
+	{#if data.landing?.intro}
+		<Portable value={data.landing.intro} />
 	{/if}
 
 	<form

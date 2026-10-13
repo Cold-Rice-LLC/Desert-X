@@ -8,13 +8,23 @@ export const linkFields = `
 	"internal": internalLink->{ _id, _type, "slug": slug.current }
 `;
 
+// Where each landing document lives: pages the site builds itself
+const landingPaths = {
+	newsLanding: '/news',
+	artistsLanding: '/artists',
+	artLanding: '/art',
+	locationsLanding: '/locations',
+	visitLanding: '/visit',
+	searchLanding: '/search'
+};
+
 // Where each linkable document type lives on the site. Provisional until
 // the URL structure is settled.
 const paths = {
 	page: (slug) => `/${slug}`,
 	news: (slug) => `/news/${slug}`,
 	artist: (slug) => `/artists/${slug}`,
-	artwork: (slug) => `/artworks/${slug}`,
+	artwork: (slug) => `/art/${slug}`,
 	edition: (slug) => `/editions/${slug}`,
 	location: (slug) => `/locations/${slug}`
 };
@@ -26,6 +36,7 @@ export const linkHref = (link) => {
 
 	const { _id, _type, slug } = link.internal;
 	if (_id === 'homepage') return '/';
+	if (landingPaths[_type]) return landingPaths[_type];
 	return slug && paths[_type] ? paths[_type](slug) : null;
 };
 

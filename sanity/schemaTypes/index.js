@@ -5,6 +5,7 @@ import artwork from './documents/artwork'
 import news from './documents/news'
 import location from './documents/location'
 import edition from './documents/edition'
+import {landings} from './documents/landings'
 import navLink from './objects/navLink'
 import richText from './objects/richText'
 import textModule from './modules/textModule'
@@ -24,6 +25,7 @@ export const schemaTypes = [
   news,
   location,
   edition,
+  ...landings,
   // Objects
   navLink,
   richText,

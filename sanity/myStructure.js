@@ -9,6 +9,7 @@ import {
   UserIcon,
 } from '@sanity/icons'
 import DocumentsPane from 'sanity-plugin-documents-pane'
+import {landings} from './schemaTypes/documents/landings'
 
 const publishedId = (document) => document?.displayed?._id?.replace('drafts.', '')
 
@@ -56,6 +57,12 @@ export const myStructure = (S) =>
                 .title('Homepage')
                 .icon(HomeIcon)
                 .child(S.document().schemaType('page').documentId('homepage')),
+              ...landings.map(({name, title, icon}) =>
+                S.listItem()
+                  .title(title)
+                  .icon(icon)
+                  .child(S.document().schemaType(name).documentId(name)),
+              ),
               S.divider(),
               S.documentTypeListItem('page')
                 .title('All pages')

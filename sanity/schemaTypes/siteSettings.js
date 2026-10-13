@@ -1,13 +1,19 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {hasLink, linkTargetFields, linkTargetSelect, linkTargetSubtitle} from './objects/linkTarget'
 
-// A menu item with sub-items opens them instead of following a link, so
-// its link fields hide once it has any
-const hasSubItems = (parent) => parent?.subItems?.length > 0
-const menuItemLinkFields = linkTargetFields().map((field) => ({
-  ...field,
-  hidden: (context) => hasSubItems(context.parent) || field.hidden?.(context),
-}))
+// Menu items take the usual link fields plus a fourth Link Type, Sub-items:
+// the item then opens its sub-items in the menu instead of following a link
+const menuItemLinkFields = linkTargetFields().map((field) =>
+  field.name === 'linkType'
+    ? {
+        ...field,
+        options: {
+          ...field.options,
+          list: [...field.options.list, {title: 'Sub-items', value: 'subItems'}],
+        },
+      }
+    : field,
+)
 
 export default defineType({
   name: 'siteSettings',
@@ -22,11 +28,6 @@ export default defineType({
     {
       name: 'menu',
       title: 'Menu',
-      options: {collapsible: true, collapsed: false},
-    },
-    {
-      name: 'search',
-      title: 'Search',
       options: {collapsible: true, collapsed: false},
     },
     {
@@ -102,8 +103,14 @@ export default defineType({
               name: 'subItems',
               type: 'array',
               title: 'Sub-items',
-              description:
-                'Shown when the item is clicked, in place of following a link. Sub-items linking to a location get the Desert X mark.',
+              description: 'Sub-items linking to a location get the Desert X mark.',
+              hidden: ({parent}) => parent?.linkType !== 'subItems',
+              validation: (rule) =>
+                rule.custom((value, context) =>
+                  context.parent?.linkType === 'subItems' && !value?.length
+                    ? 'Add at least one sub-item.'
+                    : true,
+                ),
               of: [defineArrayMember({type: 'navLink'})],
             }),
           ],
@@ -111,9 +118,10 @@ export default defineType({
             select: {label: 'label', subItems: 'subItems', ...linkTargetSelect},
             prepare: ({label, subItems = [], ...link}) => ({
               title: label,
-              subtitle: subItems.length
-                ? `${subItems.length} ${subItems.length === 1 ? 'sub-item' : 'sub-items'}`
-                : linkTargetSubtitle(link),
+              subtitle:
+                link.linkType === 'subItems'
+                  ? `${subItems.length} ${subItems.length === 1 ? 'sub-item' : 'sub-items'}`
+                  : linkTargetSubtitle(link),
             }),
           },
         }),
@@ -133,13 +141,6 @@ export default defineType({
       title: 'Donate Link',
       description: 'Bottom left of the menu.',
       fieldset: 'menu',
-    }),
-    defineField({
-      name: 'searchIntro',
-      type: 'richText',
-      title: 'Search Intro',
-      description: 'Shown above the search field on the search page.',
-      fieldset: 'search',
     }),
     // One field per footer column, left and right.
     ...[1, 2].map((n) =>

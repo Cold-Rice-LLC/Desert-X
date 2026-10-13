@@ -10,8 +10,8 @@
 	/**
 	 * Full-screen menu, opened by either nav's hamburger. A modal <dialog>,
 	 * so focus stays inside, Escape closes it and the page behind is inert.
-	 * Items with sub-items open them in place of the menu text; the rest are
-	 * plain links. Sub-items linking to a location get the Desert X mark.
+	 * Items whose Link Type is Sub-items open them in place of the menu text;
+	 * the rest are plain links. Sub-items linking to a location get the Desert X mark.
 	 */
 	let { menu } = $props();
 
@@ -56,7 +56,7 @@
 	<ul class="mt-[4rem] flex justify-between px-gutter">
 		{#each menu.items as item (item._key)}
 			<li>
-				{#if item.subItems?.length}
+				{#if item.linkType === 'subItems'}
 					<button
 						class={[item._key === activeKey && 'link-underline']}
 						aria-expanded={item._key === activeKey}
@@ -74,7 +74,7 @@
 
 	{#if active}
 		<ul id="menu-sub-items" class="mt-[5rem] flex flex-wrap gap-x-[0.8em] px-gutter">
-			{#each active.subItems as subItem (subItem._key)}
+			{#each active.subItems ?? [] as subItem (subItem._key)}
 				<li>
 					<AppLink link={subItem} class="flex items-center gap-[0.3em]">
 						{#if subItem.internal?._type === 'location'}

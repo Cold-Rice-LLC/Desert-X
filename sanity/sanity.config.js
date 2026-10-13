@@ -5,6 +5,12 @@ import {media} from 'sanity-plugin-media'
 import {schemaTypes} from './schemaTypes'
 import {myStructure} from './myStructure'
 import {templates} from './templates'
+import {landingTypes} from './schemaTypes/documents/landings'
+
+// One fixed document each, opened from the structure: no create, delete or
+// duplicate, and kept out of the "new document" menu
+const singletonTypes = new Set(['siteSettings', ...landingTypes])
+const singletonActions = new Set(['publish', 'discardChanges', 'restore'])
 
 export default defineConfig({
   name: 'default',
@@ -17,6 +23,16 @@ export default defineConfig({
 
   schema: {
     types: schemaTypes,
-    templates: (prev) => [...prev, ...templates],
+    templates: (prev) => [
+      ...prev.filter(({schemaType}) => !singletonTypes.has(schemaType)),
+      ...templates,
+    ],
+  },
+
+  document: {
+    actions: (input, {schemaType}) =>
+      singletonTypes.has(schemaType)
+        ? input.filter(({action}) => action && singletonActions.has(action))
+        : input,
   },
 })
