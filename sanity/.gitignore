@@ -27,3 +27,6 @@
 
 # Dotenv and similar local-only files
 *.local
+
+# Migration dry-run output, for review
+/scripts/*.dry-run.json
