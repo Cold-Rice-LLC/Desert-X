@@ -1,6 +1,6 @@
 <script>
 	import NewsFilter from '$lib/components/news/NewsFilter.svelte';
-	import NewsTile from '$lib/components/news/NewsTile.svelte';
+	import NewsGrid from '$lib/components/news/NewsGrid.svelte';
 	import Pagination from '$lib/components/Pagination.svelte';
 
 	let { data } = $props();
@@ -12,17 +12,7 @@
 	<NewsFilter filter={data.filter} locations={data.locations} />
 
 	{#if data.items.length}
-		<ul class="mt-[8rem] grid grid-cols-3 gap-[2.5rem] px-gutter">
-			{#each data.items as item (item._id)}
-				<li>
-					<NewsTile
-						{item}
-						generalPalette={data.landing?.generalPalette}
-						sizes="calc((100vw - 18.6rem) / 3)"
-					/>
-				</li>
-			{/each}
-		</ul>
+		<NewsGrid items={data.items} generalPalette={data.landing?.generalPalette} class="mt-[8rem]" />
 	{:else}
 		<p class="mt-[8rem] px-gutter">No news yet.</p>
 	{/if}

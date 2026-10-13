@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
 import { client } from '$lib/sanity/client';
-import { imageFields } from '$lib/sanity/images';
 import { loadLanding } from '$lib/sanity/landing';
+import { newsTileFields } from '$lib/sanity/news';
 
 const PAGE_SIZE = 12;
 
@@ -31,17 +31,7 @@ export async function load({ url }) {
 			`{
 				"total": count(*[_type == "news" && ${condition}]),
 				"items": *[_type == "news" && ${condition}] | order(publishDate desc) [$start...$end]{
-					_id,
-					"kind": coalesce(kind, "news"),
-					title,
-					"slug": slug.current,
-					publishDate,
-					cardText,
-					publication,
-					pressUrl,
-					"location": location->{ title, "palette": palette[].hex },
-					featuredImage{ ${imageFields} },
-					"logo": logo{ "url": asset->url, "alt": asset->altText }
+					${newsTileFields}
 				},
 				"locations": *[_type == "location"] | order(title asc){ title, "slug": slug.current }
 			}`,
