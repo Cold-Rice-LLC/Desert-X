@@ -4,7 +4,7 @@ import {UserIcon} from '@sanity/icons'
 export default defineType({
   name: 'bioModule',
   type: 'object',
-  title: 'Bio',
+  title: 'Bios',
   icon: UserIcon,
   fields: [
     defineField({
@@ -56,8 +56,8 @@ export default defineType({
   preview: {
     select: {heading: 'heading', bios: 'bios'},
     prepare: ({heading, bios = []}) => ({
-      title: heading || 'Bio',
-      subtitle: `Bio · ${bios.length} ${bios.length === 1 ? 'bio' : 'bios'}`,
+      title: heading || 'Bios',
+      subtitle: `Bios · ${bios.length} ${bios.length === 1 ? 'bio' : 'bios'}`,
     }),
   },
 })
