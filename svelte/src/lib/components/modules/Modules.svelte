@@ -1,5 +1,6 @@
 <script>
 	import BioModule from '$lib/components/modules/BioModule.svelte';
+	import DonateModule from '$lib/components/modules/DonateModule.svelte';
 	import DropdownsModule from '$lib/components/modules/DropdownsModule.svelte';
 	import MediaModule from '$lib/components/modules/MediaModule.svelte';
 	import NewsModule from '$lib/components/modules/NewsModule.svelte';
@@ -21,6 +22,7 @@
 		bioModule: BioModule,
 		peopleListModule: PeopleListModule,
 		dropdownsModule: DropdownsModule,
+		donateModule: DonateModule,
 		mediaModule: MediaModule,
 		newsModule: NewsModule,
 		scheduleModule: ScheduleModule

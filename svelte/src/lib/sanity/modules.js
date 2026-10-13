@@ -49,6 +49,13 @@ export const modulesFields = `
 		),
 		${newsLandingFields}
 	},
+	_type == "donateModule" => {
+		heading,
+		image{ ${imageFields} },
+		title,
+		text,
+		amounts
+	},
 	_type == "dropdownsModule" => {
 		heading,
 		dropdowns[]{
