@@ -21,5 +21,13 @@ export const modulesFields = `
 	_type == "peopleListModule" => {
 		leftList,
 		rightList
+	},
+	_type == "dropdownsModule" => {
+		heading,
+		dropdowns[]{
+			_key,
+			title,
+			content[]{ ${richTextFields} }
+		}
 	}
 `;

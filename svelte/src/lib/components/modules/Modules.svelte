@@ -1,5 +1,6 @@
 <script>
 	import BioModule from '$lib/components/modules/BioModule.svelte';
+	import DropdownsModule from '$lib/components/modules/DropdownsModule.svelte';
 	import PeopleListModule from '$lib/components/modules/PeopleListModule.svelte';
 	import TextModule from '$lib/components/modules/TextModule.svelte';
 
@@ -13,7 +14,8 @@
 	const components = {
 		textModule: TextModule,
 		bioModule: BioModule,
-		peopleListModule: PeopleListModule
+		peopleListModule: PeopleListModule,
+		dropdownsModule: DropdownsModule
 	};
 </script>
 
