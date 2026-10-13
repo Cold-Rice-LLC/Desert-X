@@ -10,3 +10,6 @@ export const moduleMembers = [
   defineArrayMember({type: 'peopleListModule'}),
   defineArrayMember({type: 'dropdownsModule'}),
 ]
+
+/** Pages also get the News module; news articles show related news on their own. */
+export const pageModuleMembers = [...moduleMembers, defineArrayMember({type: 'newsModule'})]
