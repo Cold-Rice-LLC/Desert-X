@@ -17,5 +17,9 @@ export const modulesFields = `
 			imageText,
 			text[]{ ${richTextFields} }
 		}
+	},
+	_type == "peopleListModule" => {
+		leftList,
+		rightList
 	}
 `;

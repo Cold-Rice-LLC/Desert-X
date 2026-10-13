@@ -1,5 +1,6 @@
 <script>
 	import BioModule from '$lib/components/modules/BioModule.svelte';
+	import PeopleListModule from '$lib/components/modules/PeopleListModule.svelte';
 	import TextModule from '$lib/components/modules/TextModule.svelte';
 
 	/**
@@ -12,7 +13,8 @@
 
 	const components = {
 		textModule: TextModule,
-		bioModule: BioModule
+		bioModule: BioModule,
+		peopleListModule: PeopleListModule
 	};
 </script>
 
