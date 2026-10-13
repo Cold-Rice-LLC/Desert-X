@@ -45,7 +45,7 @@
 /* Static so the variables are always emitted; Tailwind has no theme
    namespace for underline offset or thickness */
 @theme static {
-	--underline-offset: 0.06em;
+	--underline-offset: 0.2em;
 	--underline-thickness: 0.05em;
 }
 
