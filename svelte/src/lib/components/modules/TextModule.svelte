@@ -5,7 +5,7 @@
 	let { module } = $props();
 </script>
 
-<div class="space-y-[1lh]">
+<div class="text-module space-y-[1lh] px-gutter">
 	{#if module.heading}
 		<h2 class="text-center uppercase">{module.heading}</h2>
 	{/if}

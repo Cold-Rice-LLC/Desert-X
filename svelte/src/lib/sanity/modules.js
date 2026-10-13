@@ -1,3 +1,4 @@
+import { imageFields } from '$lib/sanity/images';
 import { richTextFields } from '$lib/sanity/links';
 
 /** GROQ projection for a modules array, with a branch per module type. */
@@ -7,5 +8,14 @@ export const modulesFields = `
 	_type == "textModule" => {
 		heading,
 		text[]{ ${richTextFields} }
+	},
+	_type == "bioModule" => {
+		heading,
+		bios[]{
+			_key,
+			image{ ${imageFields} },
+			imageText,
+			text[]{ ${richTextFields} }
+		}
 	}
 `;

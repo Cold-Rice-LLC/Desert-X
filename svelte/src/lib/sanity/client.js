@@ -13,7 +13,3 @@ const builder = createImageUrlBuilder(client);
 export const urlFor = (source) => {
 	return builder.image(source);
 };
-
-export const getImageHeight = (width, aspectRatio) => {
-	return width / aspectRatio;
-};
