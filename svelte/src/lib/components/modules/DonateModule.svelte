@@ -21,12 +21,17 @@
 		const parameter = frequency === 'monthly' ? 'rgamt' : 'onetimeamt';
 		return `/donate/checkout?${parameter}=${amount}`;
 	});
-
-	const frequencies = [
-		{ value: 'once', label: 'One-time' },
-		{ value: 'monthly', label: 'Monthly' }
-	];
 </script>
+
+{#snippet frequencyButton(value, label)}
+	<button
+		class={[frequency === value && 'link-underline']}
+		aria-pressed={frequency === value}
+		onclick={() => (frequency = value)}
+	>
+		{label}
+	</button>
+{/snippet}
 
 <div>
 	<ModuleHeading heading={module.heading} />
@@ -47,16 +52,9 @@
 			{/if}
 
 			<div role="group" aria-label="How often" class="mt-line uppercase">
-				{#each frequencies as option, i (option.value)}
-					{#if i}{' / '}{/if}
-					<button
-						class={[frequency === option.value && 'link-underline']}
-						aria-pressed={frequency === option.value}
-						onclick={() => (frequency = option.value)}
-					>
-						{option.label}
-					</button>
-				{/each}
+				{@render frequencyButton('once', 'One-time')}
+				/
+				{@render frequencyButton('monthly', 'Monthly')}
 			</div>
 
 			<div role="group" aria-label="Amount" class="mt-line flex flex-wrap gap-x-[0.6em]">
