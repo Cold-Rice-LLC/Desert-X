@@ -2,6 +2,7 @@
 	import BioModule from '$lib/components/modules/BioModule.svelte';
 	import DonateModule from '$lib/components/modules/DonateModule.svelte';
 	import DropdownsModule from '$lib/components/modules/DropdownsModule.svelte';
+	import InterviewModule from '$lib/components/modules/InterviewModule.svelte';
 	import MediaModule from '$lib/components/modules/MediaModule.svelte';
 	import NewsModule from '$lib/components/modules/NewsModule.svelte';
 	import PeopleListModule from '$lib/components/modules/PeopleListModule.svelte';
@@ -23,6 +24,7 @@
 		peopleListModule: PeopleListModule,
 		dropdownsModule: DropdownsModule,
 		donateModule: DonateModule,
+		interviewModule: InterviewModule,
 		mediaModule: MediaModule,
 		newsModule: NewsModule,
 		scheduleModule: ScheduleModule
