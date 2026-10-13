@@ -34,6 +34,9 @@
 	   close button, and their height */
 	--spacing-nav-top: 2.6rem;
 	--spacing-nav-icon: 3.1rem;
+	/* Below the nav to a page's content, and its content to the footer */
+	--spacing-page-top: 9.25rem;
+	--spacing-page-bottom: 15rem;
 }
 
 /* Static so the variables are always emitted; Tailwind has no theme
@@ -54,9 +57,11 @@ html {
 	font-size: 10px;
 }
 
-/* Tailwind's preflight gives buttons the default cursor */
+/* Tailwind's preflight gives buttons the default cursor, and leaves the
+   browser's text-transform: none, so they'd ignore an uppercase parent */
 button {
 	cursor: pointer;
+	text-transform: inherit;
 }
 
 /* nprogress builds its own markup, so it's styled here. Nested under body

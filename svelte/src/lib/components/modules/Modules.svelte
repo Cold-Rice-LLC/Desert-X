@@ -20,7 +20,7 @@
 </script>
 
 <div
-	class="pt-[9.25rem] pb-[15rem] text-md *:not-first:mt-[10rem] [&>.text-module+.text-module]:mt-line"
+	class="pt-page-top pb-page-bottom text-md *:not-first:mt-[10rem] [&>.text-module+.text-module]:mt-line"
 >
 	{#each modules ?? [] as module (module._key)}
 		{@const Module = components[module._type]}

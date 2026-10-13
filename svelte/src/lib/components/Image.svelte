@@ -9,16 +9,24 @@
 	 *
 	 * Lazy images start transparent and fade in once loaded; `loaded` is also
 	 * set on error so a broken file doesn't stay blank. Pass `loading="eager"`
-	 * for above-the-fold images so they paint immediately. Other attributes,
-	 * like `class`, pass through to the <img>.
+	 * for above-the-fold images so they paint immediately. Bind `loaded` to
+	 * fade something else in with it. Other attributes, like `class`, pass
+	 * through to the <img>.
 	 */
-	let { image, aspect, sizes = '100vw', loading = 'lazy', class: className, ...rest } = $props();
+	let {
+		image,
+		aspect,
+		sizes = '100vw',
+		loading = 'lazy',
+		loaded = $bindable(false),
+		class: className,
+		...rest
+	} = $props();
 
 	let sources = $derived(imageSources(image, aspect));
 	let lazy = $derived(loading === 'lazy');
 
 	let el = $state();
-	let loaded = $state(false);
 
 	// A cached image can finish before hydration attaches onload. `complete`
 	// alone isn't enough, since a lazy image still waiting its turn also
