@@ -5,13 +5,13 @@
 	--font-mono: 'DESERT X Schengen Mono', monospace;
 
 	--text-sm: 1.6rem;
-	--text-sm--line-height: 1.1;
+	--text-sm--line-height: 1;
 	--text-base: 2.2rem;
-	--text-base--line-height: 1.1;
+	--text-base--line-height: 1;
 	--text-md: 3.5rem;
-	--text-md--line-height: 1.1;
+	--text-md--line-height: 1;
 	--text-lg: 7rem;
-	--text-lg--line-height: 1.1;
+	--text-lg--line-height: 1;
 	/* The menu's links and text: scales with the viewport so the top-level
 	   links fit on one line */
 	--text-menu: 5vw;

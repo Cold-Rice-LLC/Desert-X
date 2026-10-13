@@ -12,7 +12,7 @@
 	let { footer } = $props();
 </script>
 
-<footer class="mt-auto grid grid-cols-12 items-end px-edge pb-edge text-base leading-none">
+<footer class="mt-auto grid grid-cols-12 items-end px-edge pb-edge text-base">
 	<a href="/search" aria-label="Search">
 		<Search class="h-[2.4rem] w-auto" />
 	</a>
