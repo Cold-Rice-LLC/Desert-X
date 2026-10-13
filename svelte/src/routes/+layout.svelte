@@ -6,6 +6,7 @@
 	import { page } from '$app/state';
 	import favicon from '$lib/assets/favicon.svg';
 	import AnnouncementBar from '$lib/components/layout/AnnouncementBar.svelte';
+	import Footer from '$lib/components/layout/Footer.svelte';
 	import MainNav from '$lib/components/layout/MainNav.svelte';
 	import Menu from '$lib/components/layout/Menu.svelte';
 
@@ -45,3 +46,7 @@
 <Menu menu={data.menu} />
 
 {@render children()}
+
+{#if !home}
+	<Footer footer={data.footer} />
+{/if}
