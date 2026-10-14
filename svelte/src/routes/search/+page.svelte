@@ -6,10 +6,10 @@
 </script>
 
 <!-- UI only for now: submitting does nothing until search is built -->
-<main class="px-gutter pt-[9rem] text-md">
+<main class="px-gutter pt-page-top text-md">
 	{#if data.landing?.intro}
 		<Portable value={data.landing.intro} />
 	{/if}
 
-	<SearchField class="mt-[7rem]" />
+	<SearchField class="mt-lg" />
 </main>

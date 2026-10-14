@@ -23,6 +23,15 @@
 	--color-grey-2: #d9d9d9;
 	--color-grey-3: #a6a6a6;
 
+	/* The spacing scale, for gaps, margins and padding. The tokens below
+	   name a role, and use a step where one fits. */
+	--spacing-xs: 1rem;
+	--spacing-sm: 1.5rem;
+	--spacing-base: 2.5rem;
+	--spacing-md: 5rem;
+	--spacing-lg: 7rem;
+	--spacing-xl: 10rem;
+
 	/* Screen edge to the nav's hamburger, and to the page content: the nav
 	   title starts at the gutter, so content lines up under it */
 	--spacing-edge: 2rem;
@@ -32,7 +41,7 @@
 	--spacing-line: 1lh;
 	/* The homepage nav and the menu: window top to the logo, hamburger and
 	   close button, and their height */
-	--spacing-nav-top: 2.6rem;
+	--spacing-nav-top: var(--spacing-base);
 	--spacing-nav-icon: 3.1rem;
 	/* The nav's height on every page but the homepage */
 	--spacing-nav: 7.5rem;

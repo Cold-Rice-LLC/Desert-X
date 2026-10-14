@@ -14,7 +14,7 @@
 	<div>
 		<ModuleHeading heading={module.heading || 'News'} />
 		<NewsGrid items={module.items} generalPalette={module.generalPalette} class="mt-line" />
-		<p class="mt-[2.5rem] px-gutter">
+		<p class="mt-base px-gutter">
 			Read more <a href="/news" class="link-underline">{module.landingTitle || 'News'}</a>
 		</p>
 	</div>

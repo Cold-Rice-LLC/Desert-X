@@ -39,7 +39,7 @@
 			/>
 		{/if}
 		<div
-			class="hidden flex-col space-y-line p-[2.5rem] backdrop-blur-2xl group-hover:flex group-focus-visible:flex"
+			class="hidden flex-col space-y-line p-base backdrop-blur-2xl group-hover:flex group-focus-visible:flex"
 		>
 			<p>{date}</p>
 			<p><span class="uppercase">Featured</span><br />{item.publication}</p>
@@ -50,7 +50,7 @@
 {:else}
 	<a
 		href="/news/{item.slug}"
-		class="block aspect-[4/5] space-y-line overflow-hidden bg-grey-3 p-[2.5rem] font-mono text-white"
+		class="block aspect-[4/5] space-y-line overflow-hidden bg-grey-3 p-base font-mono text-white"
 		style:background-image={gradient}
 	>
 		{#if item.cardText}

@@ -25,7 +25,7 @@
 <h1 class="sr-only">{data.navTitle}</h1>
 
 <div class="pt-page-top pb-page-bottom text-md">
-	<header class="mb-[4.5rem] px-gutter">
+	<header class="mb-md px-gutter">
 		{#if data.landing?.intro}
 			<Portable value={data.landing.intro} />
 		{/if}
@@ -44,7 +44,7 @@
 			>
 		</nav>
 
-		<SearchField value={data.query} label="Search artworks" oninput={search} class="mt-[7rem]" />
+		<SearchField value={data.query} label="Search artworks" oninput={search} class="mt-lg" />
 
 		<div class="mt-[15rem] grid grid-cols-3">
 			<p>All ({data.count})</p>
@@ -65,6 +65,6 @@
 		<ArtList entries={data.entries} />
 	{:else}
 		<ArtGrid entries={data.entries} />
-		<Pagination page={data.page} pageCount={data.pageCount} class="mt-[5rem]" />
+		<Pagination page={data.page} pageCount={data.pageCount} class="mt-md" />
 	{/if}
 </div>

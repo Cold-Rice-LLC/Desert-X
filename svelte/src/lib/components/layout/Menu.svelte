@@ -58,7 +58,7 @@
 		</button>
 	</div>
 
-	<ul class="mt-[4rem] flex justify-between px-gutter">
+	<ul class="mt-md flex justify-between px-gutter">
 		{#each menu.items as item (item._key)}
 			<li>
 				{#if item.linkType === 'subItems'}
@@ -78,7 +78,7 @@
 	</ul>
 
 	{#if active}
-		<ul id="menu-sub-items" class="mt-[5rem] flex flex-wrap gap-x-[0.8em] px-gutter">
+		<ul id="menu-sub-items" class="mt-md flex flex-wrap gap-x-[0.8em] px-gutter">
 			{#each active.subItems ?? [] as subItem (subItem._key)}
 				<li>
 					<AppLink link={subItem} class="flex items-center gap-[0.3em]">
@@ -91,10 +91,10 @@
 			{/each}
 		</ul>
 	{:else if menu.text}
-		<p class="mt-[5rem] px-gutter">{menu.text}</p>
+		<p class="mt-md px-gutter">{menu.text}</p>
 	{/if}
 
-	<div class="mt-auto flex items-center gap-[5.4rem] px-edge pb-edge">
+	<div class="mt-auto flex items-center gap-md px-edge pb-edge">
 		<a href="/search" aria-label="Search">
 			<Search class="h-[4rem] w-auto" />
 		</a>

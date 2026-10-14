@@ -11,7 +11,7 @@
 
 <form
 	role="search"
-	class={['flex items-center gap-[0.25em] border-b-2 border-grey-3 pb-1 text-grey-3', className]}
+	class={['flex items-center gap-[0.3em] border-b-2 border-grey-3 pb-xs text-grey-3', className]}
 	onsubmit={(event) => event.preventDefault()}
 >
 	<Search class="h-[0.65em] w-auto" />

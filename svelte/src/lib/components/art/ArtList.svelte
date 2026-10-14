@@ -32,7 +32,7 @@
 			<h2>{letter}</h2>
 			<ul>
 				{#each artists as artist, index (`${artist.id}-${index}`)}
-					<li class="grid grid-cols-12 gap-x-[2.5rem]">
+					<li class="grid grid-cols-12 gap-x-base">
 						<p class="col-span-3">{artist.name}</p>
 						<ul class="col-span-9 grid grid-cols-subgrid">
 							{#each artist.artworks as artwork (artwork._id)}

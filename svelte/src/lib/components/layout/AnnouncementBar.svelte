@@ -16,7 +16,7 @@
 </script>
 
 <aside
-	class="flex items-center gap-[2.4rem] bg-grey-2 px-edge py-[1.4rem] font-mono text-sm"
+	class="flex items-center gap-base bg-grey-2 px-edge py-sm font-mono text-sm"
 	aria-label="Announcement"
 >
 	<p class="flex-1">{announcement.text}</p>

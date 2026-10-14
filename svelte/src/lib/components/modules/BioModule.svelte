@@ -15,7 +15,7 @@
 	<ModuleHeading heading={module.heading} />
 
 	{#if module.bios?.length}
-		<ul class="space-y-[2.5rem] text-base">
+		<ul class="space-y-base text-base">
 			{#each module.bios as bio (bio._key)}
 				<li class="grid grid-cols-12 items-start">
 					<ImageFrame

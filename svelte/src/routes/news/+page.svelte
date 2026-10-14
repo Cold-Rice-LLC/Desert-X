@@ -12,10 +12,10 @@
 	<NewsFilter filter={data.filter} locations={data.locations} />
 
 	{#if data.items.length}
-		<NewsGrid items={data.items} generalPalette={data.landing?.generalPalette} class="mt-[8rem]" />
+		<NewsGrid items={data.items} generalPalette={data.landing?.generalPalette} class="mt-lg" />
 	{:else}
-		<p class="mt-[8rem] px-gutter">No news yet.</p>
+		<p class="mt-lg px-gutter">No news yet.</p>
 	{/if}
 
-	<Pagination page={data.page} pageCount={data.pageCount} class="mt-[5rem]" />
+	<Pagination page={data.page} pageCount={data.pageCount} class="mt-md" />
 </div>

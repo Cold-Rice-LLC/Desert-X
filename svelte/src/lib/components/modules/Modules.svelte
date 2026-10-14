@@ -44,7 +44,7 @@
 <style>
 	.modules {
 		> :global(* + *) {
-			margin-top: 10rem;
+			margin-top: var(--spacing-xl);
 		}
 
 		> :global(.text-module + .text-module) {

@@ -36,10 +36,7 @@
 <div>
 	<ModuleHeading heading={module.heading} />
 	<div
-		class={[
-			'mx-gutter grid grid-cols-2 gap-[3rem] bg-grey-2 p-[3rem]',
-			module.heading && 'mt-line'
-		]}
+		class={['mx-gutter grid grid-cols-2 gap-base bg-grey-2 p-base', module.heading && 'mt-line']}
 	>
 		<ImageFrame image={module.image} aspect={4 / 3} sizes="calc((100vw - 22.6rem) / 2)" />
 

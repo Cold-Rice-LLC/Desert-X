@@ -20,13 +20,13 @@
 			{#each module.dropdowns as dropdown (dropdown._key)}
 				<details class="group border-b-[2.5px]">
 					<summary
-						class="flex cursor-pointer list-none items-center justify-between py-6 group-first:pt-0"
+						class="flex cursor-pointer list-none items-center justify-between py-sm group-first:pt-0"
 					>
 						{dropdown.title}
 						<Caret class="h-[1.8rem] w-auto group-open:rotate-180" />
 					</summary>
 					{#if dropdown.content}
-						<div class="space-y-line pt-2 pb-12">
+						<div class="space-y-line pt-[0.5rem] pb-[3rem]">
 							<Portable value={dropdown.content} />
 						</div>
 					{/if}

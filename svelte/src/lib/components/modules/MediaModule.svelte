@@ -61,6 +61,6 @@
 		></iframe>
 	{/if}
 	{#if module.caption}
-		<figcaption class={['mt-[1rem] text-base', span]}>{module.caption}</figcaption>
+		<figcaption class={['mt-xs text-base', span]}>{module.caption}</figcaption>
 	{/if}
 </figure>

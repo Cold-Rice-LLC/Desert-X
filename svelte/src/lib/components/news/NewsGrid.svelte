@@ -5,7 +5,7 @@
 	let { items, generalPalette, class: className } = $props();
 </script>
 
-<ul class={['grid grid-cols-3 gap-[2.5rem] px-gutter', className]}>
+<ul class={['grid grid-cols-3 gap-base px-gutter', className]}>
 	{#each items as item (item._id)}
 		<li>
 			<NewsTile {item} {generalPalette} sizes="calc((100vw - 18.6rem) / 3)" />

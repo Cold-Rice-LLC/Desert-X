@@ -17,9 +17,7 @@
 </script>
 
 {#if home}
-	<header
-		class="sticky top-0 z-10 flex h-0 items-start gap-[2.3rem] px-edge text-white *:mt-nav-top"
-	>
+	<header class="sticky top-0 z-10 flex h-0 items-start gap-base px-edge text-white *:mt-nav-top">
 		<button aria-label="Open menu" aria-haspopup="dialog" onclick={() => (ui.menuOpen = true)}>
 			<Hamburger class="h-nav-icon w-auto" />
 		</button>
