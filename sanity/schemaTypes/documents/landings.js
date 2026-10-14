@@ -51,6 +51,14 @@ const landingFields = {
       description: 'Four colours for news with no location. News tiles mix them into a gradient.',
     }),
   ],
+  artLanding: [
+    defineField({
+      name: 'intro',
+      type: 'richText',
+      title: 'Intro',
+      description: 'Shown above the list and grid of artworks.',
+    }),
+  ],
   searchLanding: [
     defineField({
       name: 'intro',

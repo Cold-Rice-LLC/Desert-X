@@ -1,5 +1,6 @@
 <script>
 	import { page as currentPage } from '$app/state';
+	import { queryHref } from '$lib/url';
 
 	/**
 	 * Page-number links that keep the rest of the URL's query, with the
@@ -8,12 +9,7 @@
 	 */
 	let { page, pageCount, class: className } = $props();
 
-	const href = (number) => {
-		const entries = [...currentPage.url.searchParams].filter(([key]) => key !== 'page');
-		if (number > 1) entries.push(['page', number]);
-		const query = new URLSearchParams(entries).toString();
-		return query ? `?${query}` : currentPage.url.pathname;
-	};
+	const href = (number) => queryHref(currentPage.url, { page: number > 1 ? number : null });
 </script>
 
 {#if pageCount > 1}

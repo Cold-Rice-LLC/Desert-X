@@ -20,5 +20,12 @@ export default defineType({
       options: {source: 'title'},
       validation: (rule) => rule.required(),
     }),
+    defineField({
+      name: 'sortName',
+      type: 'string',
+      title: 'Sort Name',
+      description:
+        'Optional. What the artist is sorted and grouped by on the Art page, e.g. Smith for Phillip K Smith III. Leave empty to sort by the last word of the name.',
+    }),
   ],
 })
