@@ -25,6 +25,8 @@
 	let swiper;
 
 	const sizes = 'calc((100vw - 4rem) * 2 / 3)';
+	// The section's height, whichever way the images show
+	const height = 'min-h-[clamp(60rem,calc(100svh-var(--spacing-nav)),100rem)]';
 
 	const carousel = (node) => {
 		swiper = new Swiper(node, {
@@ -40,10 +42,7 @@
 </script>
 
 {#if images.length > 1}
-	<div
-		class="swiper min-h-[clamp(60rem,calc(100svh-var(--spacing-nav)),100rem)] items-center"
-		{@attach carousel}
-	>
+	<div class={['swiper w-full items-center', height]} {@attach carousel}>
 		<div class="swiper-wrapper">
 			{#each images as image, index (image._key)}
 				<!-- The arrow keys move it too (Swiper's Keyboard module) -->
@@ -67,9 +66,7 @@
 		</div>
 	</div>
 {:else}
-	<div
-		class="grid min-h-[clamp(60rem,calc(100svh-var(--spacing-nav)),100rem)] grid-cols-24 items-center px-edge"
-	>
+	<div class={['grid grid-cols-24 items-center px-edge', height]}>
 		<ImageFrame
 			image={images[0]}
 			aspect={4 / 3}
@@ -82,7 +79,9 @@
 
 <style>
 	/* A flex box to centre the slides; Swiper's own CSS makes it a block,
-	   which would win over a utility */
+	   which would win over a utility. Its auto side margins would also shrink
+	   it to its content in the body's flex column, so it starts at no width
+	   and grows as its images load: w-full keeps it full width. */
 	.swiper {
 		display: flex;
 	}
