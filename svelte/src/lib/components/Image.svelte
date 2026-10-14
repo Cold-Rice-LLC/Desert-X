@@ -7,8 +7,9 @@
 	 * it displays (default 100vw) so the browser can pick a file, and an
 	 * `aspect` (width / height) crops every file to it around the hotspot.
 	 *
-	 * Images start transparent and fade in once loaded; `loaded` is also set
-	 * on error so a broken file doesn't stay blank. Pass `loading="eager"` for
+	 * Images start transparent and fade in once loaded and decoded, so the
+	 * fade doesn't start with a stalled frame; `loaded` is also set on error
+	 * so a broken file doesn't stay blank. Pass `loading="eager"` for
 	 * above-the-fold images so they load straight away. Bind `loaded` to fade
 	 * something else in with it. Other attributes, like `class`, pass
 	 * through to the <img>.
@@ -47,7 +48,11 @@
 	{loading}
 	class={className}
 	class:loaded
-	onload={() => (loaded = true)}
+	onload={() =>
+		el
+			.decode()
+			.catch(() => {})
+			.then(() => (loaded = true))}
 	onerror={() => (loaded = true)}
 />
 

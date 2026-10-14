@@ -1,1 +1,7 @@
-<div class="h-screen w-full bg-grey-1"></div>
+<script>
+	import HomeCarousel from '$lib/components/HomeCarousel.svelte';
+
+	let { data } = $props();
+</script>
+
+<HomeCarousel slides={data.slides} />

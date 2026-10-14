@@ -17,7 +17,7 @@ export const imageFields = `
 const imageWidths = [400, 800, 1200, 1600, 2000, 2600, 3200];
 
 /** An image's size after its Studio crop, or null if it wasn't queried. */
-const croppedSize = ({ width, height, crop }) => {
+export const croppedSize = ({ width, height, crop }) => {
 	if (!width || !height) return null;
 	return {
 		width: Math.round(width * (1 - (crop?.left ?? 0) - (crop?.right ?? 0))),
