@@ -24,9 +24,10 @@
 
 	// Drift, in px/s, and the time constant the row eases toward where it's
 	// been pushed with, in s: about 6% of the way each frame at 60fps
-	const speed = 60;
+	const speed = 45;
 	const ease = 0.27;
-	// A drag moves the row this many times its distance
+	// A wheel moves the row this many times its distance, and a drag this
+	const wheelFactor = 0.6;
 	const dragFactor = 2;
 	// A pointer that travels further than this is dragging, not clicking
 	const clickSlop = 8;
@@ -135,7 +136,7 @@
 			const { deltaX, deltaY, deltaMode } = event;
 			const delta = Math.abs(deltaX) > Math.abs(deltaY) ? deltaX : deltaY;
 			// Deltas in lines or pages, as some mice send
-			push(-delta * [1, 16, section.clientHeight][deltaMode]);
+			push(-delta * [1, 16, section.clientHeight][deltaMode] * wheelFactor);
 		};
 
 		const onpointerdown = (event) => {
