@@ -64,5 +64,10 @@ export default defineType({
       title: 'Modules',
       of: pageModuleMembers,
     }),
+    defineField({
+      name: 'seo',
+      type: 'seo',
+      title: 'SEO',
+    }),
   ],
 })

@@ -189,6 +189,11 @@ export default defineType({
       ],
       validation: (rule) => rule.max(4),
     }),
+    defineField({
+      name: 'seo',
+      type: 'seo',
+      title: 'SEO',
+    }),
   ],
   orderings: [
     {

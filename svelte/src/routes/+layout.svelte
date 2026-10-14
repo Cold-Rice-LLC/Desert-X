@@ -4,11 +4,11 @@
 	import NProgress from 'nprogress';
 	import { beforeNavigate } from '$app/navigation';
 	import { page } from '$app/state';
-	import favicon from '$lib/assets/favicon.svg';
 	import AnnouncementBar from '$lib/components/layout/AnnouncementBar.svelte';
 	import Footer from '$lib/components/layout/Footer.svelte';
 	import MainNav from '$lib/components/layout/MainNav.svelte';
 	import Menu from '$lib/components/layout/Menu.svelte';
+	import Seo from '$lib/components/layout/Seo.svelte';
 	import { ui } from '$lib/ui.svelte.js';
 
 	let { children, data } = $props();
@@ -42,7 +42,7 @@
 	let announcementClosed = $state(false);
 </script>
 
-<svelte:head><link rel="icon" href={favicon} /></svelte:head>
+<Seo defaults={data.seo} />
 
 {#if home && data.announcement && !data.announcementDismissed && !announcementClosed}
 	<AnnouncementBar announcement={data.announcement} onclose={() => (announcementClosed = true)} />

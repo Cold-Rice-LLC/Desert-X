@@ -1,10 +1,14 @@
 import { createHash } from 'node:crypto';
 import { client } from '$lib/sanity/client';
+import { imageFields } from '$lib/sanity/images';
 import { linkFields, richTextFields } from '$lib/sanity/links';
 
 export async function load({ cookies }) {
 	const settings = await client.fetch(`
 		*[_id == "siteSettings"][0]{
+			siteTitle,
+			metaDescription,
+			ogImage{ ${imageFields} },
 			announcementBar{
 				text,
 				linkLabel,
@@ -36,6 +40,12 @@ export async function load({ cookies }) {
 		: null;
 
 	return {
+		// What pages fall back to for their head tags
+		seo: {
+			siteTitle: settings?.siteTitle,
+			description: settings?.metaDescription,
+			image: settings?.ogImage
+		},
 		menu: {
 			items: settings?.menuItems ?? [],
 			text: settings?.menuText,

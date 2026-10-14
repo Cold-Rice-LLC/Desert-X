@@ -78,6 +78,11 @@ export default defineType({
       title: 'Coordinates',
       description: 'For the map.',
     }),
+    defineField({
+      name: 'seo',
+      type: 'seo',
+      title: 'SEO',
+    }),
   ],
   preview: {
     select: {

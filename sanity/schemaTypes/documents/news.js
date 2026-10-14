@@ -119,6 +119,11 @@ export default defineType({
       of: moduleMembers,
       hidden: isPress,
     }),
+    defineField({
+      name: 'seo',
+      type: 'seo',
+      title: 'SEO',
+    }),
   ],
   orderings: [
     {

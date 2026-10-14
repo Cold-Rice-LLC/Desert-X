@@ -7,6 +7,7 @@ import { richTextFields } from '$lib/sanity/links';
  * The Search landing, and the titles and names of everything search can
  * find: artworks, editions, pages, the other landings and news. Searching
  * happens in +page.js, from the URL, so typing doesn't load them again.
+ * Kept out of search engines, results and all.
  */
 export async function load() {
 	const [landing, index] = await Promise.all([
@@ -27,5 +28,5 @@ export async function load() {
 		}`)
 	]);
 
-	return { ...landing, index };
+	return { ...landing, seo: { ...landing.seo, noindex: true }, index };
 }

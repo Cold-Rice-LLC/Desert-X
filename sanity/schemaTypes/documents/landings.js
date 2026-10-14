@@ -35,6 +35,11 @@ const landing = ({name, title, icon, fields = []}) =>
               components: {field: NoteField},
             }),
           ]),
+      defineField({
+        name: 'seo',
+        type: 'seo',
+        title: 'SEO',
+      }),
     ],
     preview: {
       prepare: () => ({title: `${title} Landing`}),
