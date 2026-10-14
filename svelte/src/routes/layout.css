@@ -79,6 +79,11 @@ button {
 	text-transform: inherit;
 }
 
+/* Search fields without the browser's clear button */
+input[type='search']::-webkit-search-cancel-button {
+	appearance: none;
+}
+
 /* nprogress builds its own markup, so it's styled here. Nested under body
    to outrank nprogress.css */
 body {
