@@ -10,7 +10,7 @@
 {/if}
 <Modules modules={data.artwork.modules}>
 	<!-- Spaced like a text module, so text straight after sits a line below -->
-	<header class="text-module grid grid-cols-2 gap-x-gutter px-module">
+	<header class="text-module grid grid-cols-2 px-module">
 		<h1>{data.artwork.title}</h1>
 		{#if data.artwork.credit || data.artwork.artistInfo}
 			<p class="whitespace-pre-line">
