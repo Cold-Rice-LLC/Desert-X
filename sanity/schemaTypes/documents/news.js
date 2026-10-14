@@ -65,6 +65,14 @@ export default defineType({
       hidden: isPress,
     }),
     defineField({
+      name: 'edition',
+      type: 'reference',
+      title: 'Edition',
+      description: 'Optional. Shows this on the edition’s page, under Read More.',
+      to: [{type: 'edition'}],
+      options: {disableNew: true},
+    }),
+    defineField({
       name: 'cardText',
       type: 'text',
       title: 'Card Text',

@@ -1,9 +1,11 @@
 /* global console, process, URL */
 import {writeFileSync} from 'node:fs'
 import {
+  EDITIONS,
   SITE,
   block,
   client,
+  editionSlug,
   embedModule,
   fetchDocument,
   imageModule,
@@ -35,25 +37,12 @@ import {
 const IMPORT = process.argv.includes('--import')
 const DRY_RUN_FILE = new URL('./migrateArtworks.dry-run.json', import.meta.url)
 
-// The old site's editions, oldest first. DX27 has no artworks yet.
-const EDITIONS = [
-  {path: 'desert-x-17', location: 'california', year: 2017},
-  {path: 'desert-x-19', location: 'california', year: 2019},
-  {path: 'desert-x-alula-2020', location: 'alula', year: 2020},
-  {path: 'desert-x-21', location: 'california', year: 2021},
-  {path: 'desert-x-alula-2022', location: 'alula', year: 2022},
-  {path: 'dx-23', location: 'california', year: 2023},
-  {path: 'dx24-alula', location: 'alula', year: 2024},
-  {path: 'dx-25-coachella-valley', location: 'california', year: 2025},
-  {path: 'dx-26-alula', location: 'alula', year: 2026},
-  {path: 'dx-27-coachella-valley', location: 'california', year: 2027},
-]
+// Edition titles go by the region, as the Studio's do
+const REGION_TITLES = {california: 'Coachella Valley', alula: 'AlUla'}
 
-// Edition titles and slugs go by the region, as the Studio's do
-const REGIONS = {
-  california: {title: 'Coachella Valley', slug: 'coachella-valley'},
-  alula: {title: 'AlUla', slug: 'alula'},
-}
+// Artwork ids keep the edition slugs of the first import, when Coachella
+// Valley editions were coachella-valley-YYYY, so links between them hold
+const ID_REGIONS = {california: 'coachella-valley', alula: 'alula'}
 
 // Pages under an edition that aren't artworks
 const SKIP = new Set([
@@ -265,15 +254,14 @@ const main = async () => {
   for (const edition of EDITIONS) {
     const location = existing.locations.find(({slug}) => slug === edition.location)
     if (!location) throw new Error(`No location with the slug ${edition.location}`)
-    const region = REGIONS[edition.location]
-    const slug = `${region.slug}-${edition.year}`
+    const slug = editionSlug(edition)
     const found = existing.editions.find((document) => document.slug === slug)
     editionIds.set(edition.path, found?._id ?? `edition-${slug}`)
     if (!found) {
       documents.push({
         _id: `edition-${slug}`,
         _type: 'edition',
-        title: `${region.title} ${edition.year}`,
+        title: `${REGION_TITLES[edition.location]} ${edition.year}`,
         slug: {_type: 'slug', current: slug},
         location: ref(location._id),
         year: edition.year,
@@ -289,7 +277,7 @@ const main = async () => {
     }
   }
   const pageId = (edition, path) =>
-    `artwork-${REGIONS[edition.location].slug}-${edition.year}-${path.split('/').at(-1)}`
+    `artwork-${ID_REGIONS[edition.location]}-${edition.year}-${path.split('/').at(-1)}`
   const context = {
     newsSlugs: new Set(existing.newsSlugs),
     artworkIds: new Map(pages.map(({edition, path}) => [path, pageId(edition, path)])),

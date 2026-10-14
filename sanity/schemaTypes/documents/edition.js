@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import {defineArrayMember, defineField, defineType} from 'sanity'
 import {CalendarIcon} from '@sanity/icons'
 
 export default defineType({
@@ -18,6 +18,7 @@ export default defineType({
       name: 'slug',
       type: 'slug',
       title: 'Slug',
+      description: 'The location then the year, e.g. california-2025.',
       options: {source: 'title'},
       validation: (rule) => rule.required(),
     }),
@@ -33,6 +34,37 @@ export default defineType({
       type: 'number',
       title: 'Year',
       validation: (rule) => rule.required().integer().min(2017),
+    }),
+    defineField({
+      name: 'startDate',
+      type: 'date',
+      title: 'Start Date',
+    }),
+    defineField({
+      name: 'endDate',
+      type: 'date',
+      title: 'End Date',
+      validation: (rule) =>
+        rule.custom((value, context) =>
+          value && context.document?.startDate && value < context.document.startDate
+            ? 'End Date is before Start Date.'
+            : true,
+        ),
+    }),
+    defineField({
+      name: 'images',
+      type: 'array',
+      title: 'Images',
+      description:
+        'Shown at the top, cropped to 4:3. Two or more become a carousel. Leave empty to show the first image of each artwork in the edition.',
+      of: [defineArrayMember({type: 'image', options: {hotspot: true}})],
+      options: {layout: 'grid'},
+    }),
+    defineField({
+      name: 'description',
+      type: 'richText',
+      title: 'Description',
+      description: 'Shown under the dates.',
     }),
   ],
   orderings: [

@@ -10,6 +10,23 @@ import {getCliClient} from 'sanity/cli'
  */
 export const SITE = 'https://desertx.org'
 
+// The old site's editions, oldest first, under /dx/
+export const EDITIONS = [
+  {path: 'desert-x-17', location: 'california', year: 2017},
+  {path: 'desert-x-19', location: 'california', year: 2019},
+  {path: 'desert-x-alula-2020', location: 'alula', year: 2020},
+  {path: 'desert-x-21', location: 'california', year: 2021},
+  {path: 'desert-x-alula-2022', location: 'alula', year: 2022},
+  {path: 'dx-23', location: 'california', year: 2023},
+  {path: 'dx24-alula', location: 'alula', year: 2024},
+  {path: 'dx-25-coachella-valley', location: 'california', year: 2025},
+  {path: 'dx-26-alula', location: 'alula', year: 2026},
+  {path: 'dx-27-coachella-valley', location: 'california', year: 2027},
+]
+
+/** An edition's slug in the Studio: its location's, then its year. */
+export const editionSlug = ({location, year}) => `${location}-${year}`
+
 export const client = getCliClient({apiVersion: '2024-07-19'})
 export const key = () => randomBytes(6).toString('hex')
 
