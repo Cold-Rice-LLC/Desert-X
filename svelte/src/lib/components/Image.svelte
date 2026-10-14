@@ -7,10 +7,10 @@
 	 * it displays (default 100vw) so the browser can pick a file, and an
 	 * `aspect` (width / height) crops every file to it around the hotspot.
 	 *
-	 * Lazy images start transparent and fade in once loaded; `loaded` is also
-	 * set on error so a broken file doesn't stay blank. Pass `loading="eager"`
-	 * for above-the-fold images so they paint immediately. Bind `loaded` to
-	 * fade something else in with it. Other attributes, like `class`, pass
+	 * Images start transparent and fade in once loaded; `loaded` is also set
+	 * on error so a broken file doesn't stay blank. Pass `loading="eager"` for
+	 * above-the-fold images so they load straight away. Bind `loaded` to fade
+	 * something else in with it. Other attributes, like `class`, pass
 	 * through to the <img>.
 	 */
 	let {
@@ -24,7 +24,6 @@
 	} = $props();
 
 	let sources = $derived(imageSources(image, aspect));
-	let lazy = $derived(loading === 'lazy');
 
 	let el = $state();
 
@@ -46,7 +45,20 @@
 	width={sources.width}
 	height={sources.height}
 	{loading}
-	class={[className, lazy && 'transition-opacity duration-300', lazy && !loaded && 'opacity-0']}
+	class={className}
+	class:loaded
 	onload={() => (loaded = true)}
 	onerror={() => (loaded = true)}
 />
+
+<style>
+	/* The same fade as Tailwind's transition-opacity duration-300, as the
+	   menu and news tiles use */
+	img {
+		transition: opacity 300ms var(--default-transition-timing-function);
+
+		&:not(.loaded) {
+			opacity: 0;
+		}
+	}
+</style>
