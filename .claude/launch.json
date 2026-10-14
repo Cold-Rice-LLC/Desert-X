@@ -20,6 +20,19 @@
       ],
       "cwd": "svelte",
       "port": 5173
+    },
+    {
+      "name": "svelte-preview",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "preview",
+        "--",
+        "--port",
+        "4173"
+      ],
+      "cwd": "svelte",
+      "port": 4173
     }
   ]
 }
