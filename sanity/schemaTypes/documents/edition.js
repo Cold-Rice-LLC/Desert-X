@@ -67,6 +67,13 @@ export default defineType({
       description: 'Shown under the dates.',
     }),
     defineField({
+      name: 'mapText',
+      type: 'richText',
+      title: 'Map Text',
+      description:
+        'Shown under the exhibition map, e.g. a link to the app. The map shows the artworks with coordinates.',
+    }),
+    defineField({
       name: 'sponsorGroups',
       type: 'array',
       title: 'Sponsor Groups',

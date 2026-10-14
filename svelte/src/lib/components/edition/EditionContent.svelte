@@ -3,6 +3,7 @@
 	import { formatDateRange } from '$lib/dates';
 	import ArtGrid from '$lib/components/art/ArtGrid.svelte';
 	import ArtworksBar from '$lib/components/art/ArtworksBar.svelte';
+	import ExhibitionMap from '$lib/components/edition/ExhibitionMap.svelte';
 	import Sponsors from '$lib/components/edition/Sponsors.svelte';
 	import Gallery from '$lib/components/Gallery.svelte';
 	import NewsModule from '$lib/components/modules/NewsModule.svelte';
@@ -10,11 +11,11 @@
 
 	/**
 	 * An edition, as its page shows it and as Other Editions shows it when
-	 * opened: the gallery, the dates and description, its artworks, its
-	 * sponsors and up to three news items, sections a 2xl step apart. The
-	 * gallery is the edition's images, or else each artwork's first.
-	 * Sections with nothing to show are left out. `children` follows as
-	 * another section. `news` holds the News landing fields the news tiles
+	 * opened: the gallery, the dates and description, the exhibition map, its
+	 * artworks, its sponsors and up to three news items, sections a 2xl step
+	 * apart. The gallery is the edition's images, or else each artwork's
+	 * first. Sections with nothing to show are left out. `children` follows
+	 * as another section. `news` holds the News landing fields the news tiles
 	 * need.
 	 */
 	let { edition, news, children } = $props();
@@ -51,6 +52,8 @@
 			{/if}
 		</div>
 	{/if}
+
+	<ExhibitionMap artworks={edition.artworks ?? []} {dates} text={edition.mapText} />
 
 	{#if entries.length}
 		<section aria-label="Artworks" class="space-y-md">

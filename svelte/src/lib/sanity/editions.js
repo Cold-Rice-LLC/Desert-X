@@ -5,7 +5,8 @@ import { newsTileFields } from '$lib/sanity/news';
 
 /**
  * GROQ projection for an edition shown by EditionContent: its own fields
- * (sponsors included), its artworks, and its three newest news items.
+ * (map text and sponsors included), its artworks with where they stand for
+ * the map, and its three newest news items.
  */
 export const editionFields = `
 	_id,
@@ -16,6 +17,7 @@ export const editionFields = `
 	"location": location->title,
 	images[]{ _key, ${imageFields} },
 	description[]{ ${richTextFields} },
+	mapText[]{ ${richTextFields} },
 	sponsorGroups[]{
 		_key,
 		title,
@@ -24,7 +26,9 @@ export const editionFields = `
 	},
 	sponsorLists[]{ _key, title, text },
 	"artworks": *[_type == "artwork" && edition._ref == ^._id && defined(slug.current)]{
-		${artworkListFields}
+		${artworkListFields},
+		site,
+		coordinates
 	},
 	"news": *[_type == "news" && edition._ref == ^._id] | order(publishDate desc) [0...3]{
 		${newsTileFields}
