@@ -40,15 +40,21 @@ export const artworkEntries = (artworks) =>
 		}));
 	});
 
-/** The entries whose artist or title contains `query`, accents aside. */
-export const searchEntries = (entries, query) => {
-	const words = plain(query).split(/\s+/).filter(Boolean);
-	if (!words.length) return entries;
-	return entries.filter(({ artwork, name }) => {
-		const text = plain(`${name} ${artwork.title}`);
-		return words.every((word) => text.includes(word));
-	});
+/**
+ * Whether `text` contains every word of `query`, accents and case aside,
+ * so "hector zam" finds "Héctor Zamora". An empty query matches anything.
+ */
+export const matchesQuery = (text, query) => {
+	const plainText = plain(text);
+	return plain(query)
+		.split(/\s+/)
+		.filter(Boolean)
+		.every((word) => plainText.includes(word));
 };
+
+/** The entries whose artist or title contains `query`, accents aside. */
+export const searchEntries = (entries, query) =>
+	entries.filter(({ artwork, name }) => matchesQuery(`${name} ${artwork.title}`, query));
 
 const collator = new Intl.Collator('en', { sensitivity: 'base' });
 
