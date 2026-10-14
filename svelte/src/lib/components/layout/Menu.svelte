@@ -1,7 +1,6 @@
 <script>
 	import { afterNavigate } from '$app/navigation';
 	import AppLink from '$lib/components/AppLink.svelte';
-	import Close from '$lib/components/icons/Close.svelte';
 	import Logo from '$lib/components/icons/Logo.svelte';
 	import LogoMark from '$lib/components/icons/LogoMark.svelte';
 	import Search from '$lib/components/icons/Search.svelte';
@@ -53,8 +52,12 @@
 		<a href="/" aria-label="Desert X home">
 			<Logo class="h-nav-icon w-auto" />
 		</a>
-		<button aria-label="Close menu" onclick={() => (ui.menuOpen = false)}>
-			<Close class="h-nav-icon w-auto" />
+		<button
+			class="self-center font-mono text-sm uppercase"
+			aria-label="Close menu"
+			onclick={() => (ui.menuOpen = false)}
+		>
+			Close
 		</button>
 	</div>
 

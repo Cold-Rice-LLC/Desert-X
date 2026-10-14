@@ -73,10 +73,13 @@ html {
 }
 
 /* Tailwind's preflight gives buttons the default cursor, and leaves the
-   browser's text-transform: none, so they'd ignore an uppercase parent */
-button {
-	cursor: pointer;
-	text-transform: inherit;
+   browser's text-transform: none, so they'd ignore an uppercase parent.
+   In the base layer so utilities (uppercase, cursor-*) still win. */
+@layer base {
+	button {
+		cursor: pointer;
+		text-transform: inherit;
+	}
 }
 
 /* Search fields without the browser's clear button */
