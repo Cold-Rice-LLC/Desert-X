@@ -34,6 +34,8 @@
 	   close button, and their height */
 	--spacing-nav-top: 2.6rem;
 	--spacing-nav-icon: 3.1rem;
+	/* The nav's height on every page but the homepage */
+	--spacing-nav: 7.5rem;
 	/* Below the nav to a page's content, and its content to the footer */
 	--spacing-page-top: 9.25rem;
 	--spacing-page-bottom: 15rem;

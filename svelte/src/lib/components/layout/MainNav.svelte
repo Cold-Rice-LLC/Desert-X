@@ -29,7 +29,7 @@
 	</header>
 {:else}
 	<header
-		class="sticky top-0 z-10 flex h-[7.5rem] items-center gap-x-[0.8em] bg-white px-gutter text-md"
+		class="sticky top-0 z-10 flex h-nav items-center gap-x-[0.8em] bg-white px-gutter text-md"
 	>
 		<button
 			class="absolute top-1/2 left-edge -translate-y-1/2"
