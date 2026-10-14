@@ -13,3 +13,14 @@ export const formatLongDate = (date) => {
 	const [year, month, day] = date.split('-').map(Number);
 	return `${MONTHS[month - 1]} ${day}, ${year}`;
 };
+
+/**
+ * Two YYYY-MM-DD dates as a range: "Jan 16, 2026 – Feb 28, 2026", or with
+ * `short`, "Jan 16 – Feb 28". Either date on its own if the other's
+ * missing, and empty with neither.
+ */
+export const formatDateRange = (start, end, { short = false } = {}) =>
+	[start, end]
+		.filter(Boolean)
+		.map((date) => (short ? formatLongDate(date).replace(/, \d{4}$/, '') : formatLongDate(date)))
+		.join(' – ');

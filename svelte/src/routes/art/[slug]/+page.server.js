@@ -15,6 +15,7 @@ export async function load({ params }) {
 	const { artwork, landingTitle } = await client.fetch(
 		`{
 			"artwork": *[_type == "artwork" && slug.current == $slug][0]{
+				_id,
 				title,
 				artistCredit,
 				"artistNames": artists[]->title,

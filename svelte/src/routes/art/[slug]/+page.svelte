@@ -1,13 +1,16 @@
 <script>
-	import ArtworkGallery from '$lib/components/ArtworkGallery.svelte';
+	import Gallery from '$lib/components/Gallery.svelte';
 	import Modules from '$lib/components/modules/Modules.svelte';
 
 	let { data } = $props();
 </script>
 
-{#if data.artwork.images?.length}
-	<ArtworkGallery images={data.artwork.images} />
-{/if}
+<!-- Keyed, so moving to another artwork starts its carousel afresh -->
+{#key data.artwork._id}
+	{#if data.artwork.images?.length}
+		<Gallery images={data.artwork.images} />
+	{/if}
+{/key}
 <Modules modules={data.artwork.modules}>
 	<!-- Spaced like a text module, so text straight after sits a line below -->
 	<header class="text-module grid grid-cols-2 px-module">

@@ -6,9 +6,10 @@
 	import ImageFrame from '$lib/components/ImageFrame.svelte';
 
 	/**
-	 * An artwork's images at the top of its page, 4:3 across the middle 16
-	 * of 24 columns, centred in a section that follows the window's height
-	 * below the nav, from 60rem to 100rem, and grows to fit a taller image.
+	 * Images at the top of an artwork or edition page, 4:3 across the middle
+	 * 16 of 24 columns, centred in a section that follows the window's
+	 * height below the nav, from 60rem to 100rem, and grows to fit a taller
+	 * image.
 	 * One image sits on its own; more become a carousel with the current
 	 * slide centred and its neighbours peeking in either side, a column
 	 * apart. Click a neighbour, under a resize cursor pointing its way, or

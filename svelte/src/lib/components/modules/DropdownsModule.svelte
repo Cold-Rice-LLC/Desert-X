@@ -1,13 +1,11 @@
 <script>
-	import Caret from '$lib/components/icons/Caret.svelte';
+	import Dropdown from '$lib/components/Dropdown.svelte';
 	import ModuleHeading from '$lib/components/modules/ModuleHeading.svelte';
 	import Portable from '$lib/components/Portable.svelte';
 
 	/**
-	 * Optional centred heading over a stack of dropdowns, each a native
-	 * <details> so it opens without JavaScript and find-in-page can open it.
-	 * Any number can be open at once. The first title sits one line under
-	 * the heading, so its row has no top padding.
+	 * Optional centred heading over a stack of dropdowns, ruled underneath.
+	 * Any number can be open at once.
 	 */
 	let { module } = $props();
 </script>
@@ -18,27 +16,15 @@
 	{#if module.dropdowns?.length}
 		<div>
 			{#each module.dropdowns as dropdown (dropdown._key)}
-				<details class="group border-b-[2.5px]">
-					<summary
-						class="flex cursor-pointer list-none items-center justify-between py-sm group-first:pt-0"
-					>
-						{dropdown.title}
-						<Caret class="h-[1.8rem] w-auto group-open:rotate-180" />
-					</summary>
+				<Dropdown class="border-b-[2.5px]">
+					{#snippet summary()}{dropdown.title}{/snippet}
 					{#if dropdown.content}
 						<div class="space-y-line pt-[0.5rem] pb-[3rem]">
 							<Portable value={dropdown.content} />
 						</div>
 					{/if}
-				</details>
+				</Dropdown>
 			{/each}
 		</div>
 	{/if}
 </div>
-
-<style>
-	/* Safari's disclosure triangle, which list-none doesn't hide */
-	summary::-webkit-details-marker {
-		display: none;
-	}
-</style>

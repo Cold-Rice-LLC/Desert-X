@@ -1,32 +1,37 @@
 /**
  * GROQ projection for a link built from linkTargetFields in the Studio:
- * internal links come back as the target document's type and slug.
+ * internal links come back as the target document's type and slug. A
+ * location has no page of its own: its slug is its newest edition's.
  */
 export const linkFields = `
 	linkType,
 	externalUrl,
-	"internal": internalLink->{ _id, _type, "slug": slug.current }
+	"internal": internalLink->{
+		_id,
+		_type,
+		"slug": select(
+			_type == "location" => *[_type == "edition" && location._ref == ^._id] | order(year desc)[0].slug.current,
+			slug.current
+		)
+	}
 `;
 
 // Where each landing document lives: pages the site builds itself
 const landingPaths = {
 	newsLanding: '/news',
-	artistsLanding: '/artists',
 	artLanding: '/art',
-	locationsLanding: '/locations',
 	visitLanding: '/visit',
 	searchLanding: '/search'
 };
 
-// Where each linkable document type lives on the site. Provisional until
-// the URL structure is settled.
+// Where each linkable document type lives on the site. A location goes to
+// its newest edition, so one with no editions yet links nowhere.
 const paths = {
 	page: (slug) => `/${slug}`,
 	news: (slug) => `/news/${slug}`,
-	artist: (slug) => `/artists/${slug}`,
 	artwork: (slug) => `/art/${slug}`,
 	edition: (slug) => `/editions/${slug}`,
-	location: (slug) => `/locations/${slug}`
+	location: (slug) => `/editions/${slug}`
 };
 
 /** The href for a link, or null when it points nowhere. */

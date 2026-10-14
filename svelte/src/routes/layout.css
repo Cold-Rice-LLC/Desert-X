@@ -31,6 +31,7 @@
 	--spacing-md: 5rem;
 	--spacing-lg: 7rem;
 	--spacing-xl: 10rem;
+	--spacing-2xl: 15rem;
 
 	/* Screen edge to the nav's hamburger, and to the page content: the nav
 	   title starts at the gutter, so content lines up under it */
@@ -47,7 +48,7 @@
 	--spacing-nav: 7.5rem;
 	/* Below the nav to a page's content, and its content to the footer */
 	--spacing-page-top: 9.25rem;
-	--spacing-page-bottom: 15rem;
+	--spacing-page-bottom: var(--spacing-2xl);
 	/* Side padding of text-led modules: the gutter, unless their page sets
 	   it narrower (news articles run from column 2 to 11) */
 	--spacing-module: var(--spacing-gutter);

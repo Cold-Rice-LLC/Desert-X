@@ -3,6 +3,7 @@
 	import { page as currentPage } from '$app/state';
 	import ArtGrid from '$lib/components/art/ArtGrid.svelte';
 	import ArtList from '$lib/components/art/ArtList.svelte';
+	import ArtworksBar from '$lib/components/art/ArtworksBar.svelte';
 	import Pagination from '$lib/components/Pagination.svelte';
 	import Portable from '$lib/components/Portable.svelte';
 	import SearchField from '$lib/components/SearchField.svelte';
@@ -46,17 +47,12 @@
 
 		<SearchField value={data.query} label="Search artworks" oninput={search} class="mt-lg" />
 
-		<div class="mt-[15rem] grid grid-cols-3">
-			<p>All ({data.count})</p>
-			<p class="text-center uppercase">Artworks</p>
-			<a
-				href={href({ sort: data.descending ? null : 'desc' })}
-				class="justify-self-end"
-				aria-label={data.descending ? 'Z–A, sort A–Z instead' : 'A–Z, sort Z–A instead'}
-			>
-				{data.descending ? 'Z–A' : 'A–Z'}
-			</a>
-		</div>
+		<ArtworksBar
+			count={data.count}
+			descending={data.descending}
+			sortHref={href({ sort: data.descending ? null : 'desc' })}
+			class="mt-2xl"
+		/>
 	</header>
 
 	{#if !data.entries.length}
