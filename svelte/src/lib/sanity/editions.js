@@ -4,8 +4,8 @@ import { richTextFields } from '$lib/sanity/links';
 import { newsTileFields } from '$lib/sanity/news';
 
 /**
- * GROQ projection for an edition shown by EditionContent: its own fields,
- * its artworks, and its three newest news items.
+ * GROQ projection for an edition shown by EditionContent: its own fields
+ * (sponsors included), its artworks, and its three newest news items.
  */
 export const editionFields = `
 	_id,
@@ -16,6 +16,13 @@ export const editionFields = `
 	"location": location->title,
 	images[]{ _key, ${imageFields} },
 	description[]{ ${richTextFields} },
+	sponsorGroups[]{
+		_key,
+		title,
+		fullWidth,
+		logos[defined(image.asset)]{ _key, name, url, image{ ${imageFields} } }
+	},
+	sponsorLists[]{ _key, title, text },
 	"artworks": *[_type == "artwork" && edition._ref == ^._id && defined(slug.current)]{
 		${artworkListFields}
 	},
