@@ -1,4 +1,4 @@
-import { artworkListFields } from '$lib/art';
+import { artworkEntryFields } from '$lib/art';
 import { client } from '$lib/sanity/client';
 import { loadLanding } from '$lib/sanity/landing';
 import { richTextFields } from '$lib/sanity/links';
@@ -13,7 +13,7 @@ export async function load() {
 	const [landing, index] = await Promise.all([
 		loadLanding('searchLanding', 'Search', `intro[]{ ${richTextFields} }`),
 		client.fetch(`{
-			"artworks": *[_type == "artwork" && defined(slug.current)]{ ${artworkListFields} },
+			"artworks": *[_type == "artwork" && defined(slug.current)]{ ${artworkEntryFields} },
 			"editions": *[_type == "edition" && defined(slug.current)]{
 				_id, _type, title, "slug": slug.current, year, "location": location->title
 			},
@@ -21,7 +21,7 @@ export async function load() {
 				(_type == "page" && defined(slug.current)) ||
 				_id in ["newsLanding", "artLanding", "visitLanding"]
 			]{ _id, _type, title, "slug": slug.current },
-			"news": *[_type == "news" && defined(slug.current)]{
+			"news": *[_type == "news" && (defined(slug.current) || (kind == "press" && defined(pressUrl)))]{
 				_id, _type, "kind": coalesce(kind, "news"), title, "slug": slug.current, pressUrl,
 				publishDate
 			}

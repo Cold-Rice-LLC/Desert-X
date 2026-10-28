@@ -1,6 +1,6 @@
 import { imageFields } from '$lib/sanity/images';
 import { richTextFields } from '$lib/sanity/links';
-import { newsLandingFields, newsTileFields } from '$lib/sanity/news';
+import { latestNews, newsLandingFields, newsTileFields } from '$lib/sanity/news';
 
 /** GROQ projection for a modules array, with a branch per module type. */
 export const modulesFields = `
@@ -44,7 +44,7 @@ export const modulesFields = `
 	_type == "newsModule" => {
 		"items": select(
 			show == "selected" => selected[defined(@->_id)]->{ ${newsTileFields} },
-			*[_type == "news"] | order(publishDate desc) [0...3]{ ${newsTileFields} }
+			${latestNews}
 		),
 		${newsLandingFields}
 	},

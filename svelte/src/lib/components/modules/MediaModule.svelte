@@ -23,17 +23,17 @@
 		<ImageFrame
 			image={module.image}
 			aspect={4 / 5}
-			sizes="calc((100vw - 4rem) * 9 / 24)"
+			sizes="calc((100vw - 40px) * 9 / 24)"
 			class="col-span-9 col-start-4"
 		/>
 		<ImageFrame
 			image={module.secondImage}
 			aspect={4 / 5}
-			sizes="calc((100vw - 4rem) * 9 / 24)"
+			sizes="calc((100vw - 40px) * 9 / 24)"
 			class="col-span-9"
 		/>
 	{:else if module.mediaType === 'image'}
-		<ImageFrame image={module.image} sizes="calc((100vw - 4rem) * 2 / 3)" class={span} />
+		<ImageFrame image={module.image} sizes="calc((100vw - 40px) * 2 / 3)" class={span} />
 	{:else if module.mediaType === 'mp4' && module.video}
 		<!-- svelte-ignore a11y_media_has_caption -->
 		<video

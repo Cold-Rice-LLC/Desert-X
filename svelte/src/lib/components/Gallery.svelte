@@ -38,7 +38,7 @@
 		return wrapped > images.length / 2 ? wrapped - images.length : wrapped;
 	};
 
-	const sizes = 'calc((100vw - 4rem) * 2 / 3)';
+	const sizes = 'calc((100vw - 40px) * 2 / 3)';
 	// The section's height, whichever way the images show
 	const height = 'min-h-[clamp(60rem,calc(100svh-var(--spacing-nav)),100rem)]';
 

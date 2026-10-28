@@ -1,15 +1,23 @@
 import { imageFields } from '$lib/sanity/images';
 
-/** GROQ projection for an artwork on the Art landing. */
-export const artworkListFields = `
+/**
+ * GROQ projection for an artwork listed by artist, as search lists them:
+ * what artworkEntries and sortEntries read.
+ */
+export const artworkEntryFields = `
 	_id,
 	title,
 	"slug": slug.current,
 	artistCredit,
 	"artists": artists[]->{ _id, title, sortName },
-	"image": images[0]{ ${imageFields} },
-	"location": edition->location->title,
 	"year": edition->year
+`;
+
+/** GROQ projection for an artwork on the Art landing and edition pages. */
+export const artworkListFields = `
+	${artworkEntryFields},
+	"image": images[0]{ ${imageFields} },
+	"location": edition->location->title
 `;
 
 // Lowercase, without accents, for matching and sorting: "Héctor" is "hector"
@@ -56,14 +64,22 @@ export const matchesQuery = (text, query) => {
 export const searchEntries = (entries, query) =>
 	entries.filter(({ artwork, name }) => matchesQuery(`${name} ${artwork.title}`, query));
 
-const collator = new Intl.Collator('en', { sensitivity: 'base' });
+/** Compares text A–Z, case and accents aside. */
+export const collator = new Intl.Collator('en', { sensitivity: 'base' });
 
 /** The orders artworks can be listed in, by artist first. */
 export const SORTS = ['artist', 'artwork', 'location', 'year'];
 
-/** Artists' names together: "A", "A & B", "A, B & C". */
-export const joinNames = (names) =>
+// Artists' names together: "A", "A & B", "A, B & C"
+const joinNames = (names) =>
 	names.length > 1 ? `${names.slice(0, -1).join(', ')} & ${names.at(-1)}` : (names[0] ?? '');
+
+/**
+ * An artwork's artists as one credit: its Artist Credit, or else all
+ * their names (`artists` with a title each), "A & B".
+ */
+export const artworkCredit = ({ artistCredit, artists }) =>
+	artistCredit || joinNames((artists ?? []).map((artist) => artist?.title).filter(Boolean));
 
 // A title without leading quotes or a leading "The", "A" or "An", for
 // sorting and grouping: "“The End”" goes under E
@@ -84,8 +100,7 @@ const onePerArtwork = (entries) => {
 		.map((entry) => {
 			const artists = (entry.artwork.artists ?? []).filter(Boolean);
 			if (artists.length < 2) return entry;
-			const name = entry.artwork.artistCredit || joinNames(artists.map(({ title }) => title));
-			return { ...entry, artistId: null, name };
+			return { ...entry, artistId: null, name: artworkCredit(entry.artwork) };
 		});
 };
 
@@ -117,6 +132,18 @@ export const sortEntries = (entries, sort = 'artist') =>
 	(sort === 'artist' ? entries : onePerArtwork(entries)).toSorted((a, b) =>
 		orders[sort].reduce((result, compare) => result || compare(a, b), 0)
 	);
+
+/**
+ * Sorted entries with runs by the same artist (or credit) gathered into
+ * one group each, in order, with its name and artworks as `items`.
+ */
+export const groupByArtist = (entries) =>
+	entries.reduce((groups, { artwork, artistId, name }) => {
+		const last = groups.at(-1);
+		if (last?.artistId === artistId && last.name === name) last.items.push(artwork);
+		else groups.push({ artistId, name, items: [artwork] });
+		return groups;
+	}, []);
 
 /**
  * The heading an entry is listed under in a sort: the first letter of its

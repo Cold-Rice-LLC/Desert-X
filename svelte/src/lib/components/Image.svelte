@@ -4,8 +4,10 @@
 	/**
 	 * A Sanity image queried with `imageFields` as an <img> with a srcset in
 	 * the best format the browser takes, lazy by default. `sizes` is how wide
-	 * it displays (default 100vw) so the browser can pick a file, and an
-	 * `aspect` (width / height) crops every file to it around the hotspot.
+	 * it displays (default 100vw) so the browser can pick a file. It's in
+	 * px, not rem: like a media query, it reads rem as the browser's 16px,
+	 * not the root's 10px. An `aspect` (width / height) crops every file to
+	 * it around the hotspot.
 	 *
 	 * Images start transparent and fade in once loaded and decoded, so the
 	 * fade doesn't start with a stalled frame; `loaded` is also set on error
@@ -46,8 +48,7 @@
 	width={sources.width}
 	height={sources.height}
 	{loading}
-	class={className}
-	class:loaded
+	class={[className, 'transition-opacity duration-300', !loaded && 'opacity-0']}
 	onload={() =>
 		el
 			.decode()
@@ -55,15 +56,3 @@
 			.then(() => (loaded = true))}
 	onerror={() => (loaded = true)}
 />
-
-<style>
-	/* The same fade as Tailwind's transition-opacity duration-300, as the
-	   menu and news tiles use */
-	img {
-		transition: opacity 300ms var(--default-transition-timing-function);
-
-		&:not(.loaded) {
-			opacity: 0;
-		}
-	}
-</style>

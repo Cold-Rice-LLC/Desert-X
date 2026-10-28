@@ -1,5 +1,6 @@
 import { error } from '@sveltejs/kit';
 import { SORTS, artworkEntries, searchEntries, sortEntries } from '$lib/art';
+import { pageParam } from '$lib/url';
 
 const PAGE_SIZE = 18;
 
@@ -13,8 +14,7 @@ export function load({ data, url }) {
 	const view = url.searchParams.get('view') === 'list' ? 'list' : 'grid';
 	const sort = SORTS.find((key) => key === url.searchParams.get('sort')) ?? 'artist';
 	const query = url.searchParams.get('q') ?? '';
-	const page = Number(url.searchParams.get('page') ?? 1);
-	if (!Number.isInteger(page) || page < 1) error(404, 'Not found');
+	const page = pageParam(url);
 
 	const { artworks, ...rest } = data;
 	const entries = sortEntries(searchEntries(artworkEntries(artworks), query), sort);

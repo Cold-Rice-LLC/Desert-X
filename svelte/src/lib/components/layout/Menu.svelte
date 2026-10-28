@@ -1,9 +1,9 @@
 <script>
 	import { afterNavigate } from '$app/navigation';
 	import AppLink from '$lib/components/AppLink.svelte';
-	import HamburgerAlt from '$lib/components/icons/HamburgerAlt.svelte';
 	import Logo from '$lib/components/icons/Logo.svelte';
 	import LogoMark from '$lib/components/icons/LogoMark.svelte';
+	import MenuButton from '$lib/components/layout/MenuButton.svelte';
 	import { linkHref } from '$lib/sanity/links';
 	import { ui } from '$lib/ui.svelte.js';
 
@@ -55,13 +55,7 @@
 	aria-label="Menu"
 >
 	<div class="relative flex h-nav shrink-0 items-center pl-gutter">
-		<button
-			class="absolute top-1/2 left-edge -translate-y-1/2"
-			aria-label="Close menu"
-			onclick={() => (ui.menuOpen = false)}
-		>
-			<HamburgerAlt class="h-[1.5rem] w-auto md:h-[1.7rem]" />
-		</button>
+		<MenuButton aria-label="Close menu" onclick={() => (ui.menuOpen = false)} />
 		<button aria-label="Close menu" onclick={() => (ui.menuOpen = false)}>
 			<Logo class="h-[1.6rem] w-auto md:h-base" />
 		</button>

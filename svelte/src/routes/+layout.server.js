@@ -2,22 +2,20 @@ import { client } from '$lib/sanity/client';
 import { imageFields } from '$lib/sanity/images';
 import { linkFields, richTextFields } from '$lib/sanity/links';
 
+// A menu, Donate or footer link
+const navLinkFields = `_key, label, ${linkFields}`;
+
 export async function load() {
 	const settings = await client.fetch(`
 		*[_id == "siteSettings"][0]{
 			siteTitle,
 			metaDescription,
 			ogImage{ ${imageFields} },
-			menuItems[]{
-				_key,
-				label,
-				${linkFields},
-				subItems[]{ _key, label, ${linkFields} }
-			},
+			menuItems[]{ ${navLinkFields}, subItems[]{ ${navLinkFields} } },
 			menuText,
-			donateLink{ label, ${linkFields} },
-			footerLinks1[]{ _key, label, ${linkFields} },
-			footerLinks2[]{ _key, label, ${linkFields} },
+			donateLink{ ${navLinkFields} },
+			footerLinks1[]{ ${navLinkFields} },
+			footerLinks2[]{ ${navLinkFields} },
 			footerText[]{ ${richTextFields} },
 			credits[]{ ${richTextFields} }
 		}

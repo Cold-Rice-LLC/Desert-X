@@ -1,4 +1,5 @@
 <script>
+	import Choice from '$lib/components/Choice.svelte';
 	import ImageFrame from '$lib/components/ImageFrame.svelte';
 	import ModuleHeading from '$lib/components/modules/ModuleHeading.svelte';
 
@@ -24,13 +25,7 @@
 </script>
 
 {#snippet frequencyButton(value, label)}
-	<button
-		class={[frequency === value && 'link-underline']}
-		aria-pressed={frequency === value}
-		onclick={() => (frequency = value)}
-	>
-		{label}
-	</button>
+	<Choice current={frequency === value} onclick={() => (frequency = value)}>{label}</Choice>
 {/snippet}
 
 <div>
@@ -38,7 +33,7 @@
 	<div
 		class={['mx-gutter grid grid-cols-2 gap-base bg-grey-2 p-base', module.heading && 'mt-line']}
 	>
-		<ImageFrame image={module.image} aspect={4 / 3} sizes="calc((100vw - 22.6rem) / 2)" />
+		<ImageFrame image={module.image} aspect={4 / 3} sizes="calc((100vw - 226px) / 2)" />
 
 		<div class="flex flex-col items-start font-mono">
 			{#if module.title}
@@ -56,13 +51,9 @@
 
 			<div role="group" aria-label="Amount" class="mt-line flex flex-wrap gap-x-[0.6em]">
 				{#each module.amounts ?? [] as preset (preset)}
-					<button
-						class={[selected === preset && 'link-underline']}
-						aria-pressed={selected === preset}
-						onclick={() => (selected = preset)}
-					>
+					<Choice current={selected === preset} onclick={() => (selected = preset)}>
 						${preset}
-					</button>
+					</Choice>
 				{/each}
 				{#if selected === 'custom'}
 					<label class="link-underline">

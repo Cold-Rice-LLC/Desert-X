@@ -4,6 +4,18 @@ import { richTextFields } from '$lib/sanity/links';
 import { newsTileFields } from '$lib/sanity/news';
 
 /**
+ * GROQ projection for an edition's artworks, with where they stand for its
+ * map.
+ */
+export const editionArtworksFields = `
+	"artworks": *[_type == "artwork" && edition._ref == ^._id && defined(slug.current)]{
+		${artworkListFields},
+		site,
+		coordinates
+	}
+`;
+
+/**
  * GROQ projection for an edition shown by EditionContent: its own fields
  * (map text and sponsors included), its artworks with where they stand for
  * the map, and its three newest news items.
@@ -25,11 +37,7 @@ export const editionFields = `
 		logos[defined(image.asset)]{ _key, name, url, image{ ${imageFields} } }
 	},
 	sponsorLists[]{ _key, title, text },
-	"artworks": *[_type == "artwork" && edition._ref == ^._id && defined(slug.current)]{
-		${artworkListFields},
-		site,
-		coordinates
-	},
+	${editionArtworksFields},
 	"news": *[_type == "news" && edition._ref == ^._id] | order(publishDate desc) [0...3]{
 		${newsTileFields}
 	}

@@ -1,7 +1,12 @@
-import { artworkEntries, matchesQuery, searchEntries, sortEntries } from '$lib/art';
+import {
+	artworkEntries,
+	collator,
+	groupByArtist,
+	matchesQuery,
+	searchEntries,
+	sortEntries
+} from '$lib/art';
 import { linkHref } from '$lib/sanity/links';
-
-const collator = new Intl.Collator('en', { sensitivity: 'base' });
 
 // Where an edition, page or landing lives, as links to it resolve
 const hrefOf = (document) => linkHref({ linkType: 'internal', internal: document });
@@ -21,19 +26,16 @@ export function load({ data, url }) {
 	const { index, ...rest } = data;
 	if (!query.trim()) return { ...rest, query, groups: null, count: 0 };
 
-	const groups = [];
 	const entries = sortEntries(searchEntries(artworkEntries(index.artworks), query));
-	for (const { artwork, artistId, name } of entries) {
-		const last = groups.at(-1);
-		const row = {
+	const groups = groupByArtist(entries).map(({ name, items }) => ({
+		name,
+		items: items.map((artwork) => ({
 			key: artwork._id,
 			title: artwork.title,
 			href: `/art/${artwork.slug}`,
 			action: 'View artwork'
-		};
-		if (last?.artistId === artistId && last.name === name) last.rows.push(row);
-		else groups.push({ key: `${artistId}-${groups.length}`, artistId, name, rows: [row] });
-	}
+		}))
+	}));
 
 	const editions = index.editions
 		.filter(({ title, location, year }) => matchesQuery(`${title} ${location} ${year}`, query))
@@ -75,7 +77,7 @@ export function load({ data, url }) {
 		['Pages', pages],
 		['News', news]
 	]) {
-		if (rows.length) groups.push({ key: name, name, rows });
+		if (rows.length) groups.push({ name, items: rows });
 	}
 
 	const artworkCount = new Set(entries.map(({ artwork }) => artwork._id)).size;

@@ -1,17 +1,4 @@
-/**
- * A random number generator seeded from a string, so the same seed gives
- * the same numbers on the server and in the browser (mulberry32 over a
- * simple string hash).
- */
-const seededRandom = (seed) => {
-	let state = [...seed].reduce((hash, char) => Math.imul(hash ^ char.charCodeAt(0), 2654435761), 1);
-	return () => {
-		state = (state + 0x6d2b79f5) | 0;
-		let t = Math.imul(state ^ (state >>> 15), 1 | state);
-		t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-		return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-	};
-};
+import { seededRandom, shuffle } from '$lib/random';
 
 /**
  * A linear-gradient mixing a palette's colours, varied by `seed` (a
@@ -23,12 +10,7 @@ export const paletteGradient = (colors, seed) => {
 	if (!colors?.length) return null;
 	const random = seededRandom(seed);
 
-	// Fisher–Yates shuffle
-	const shuffled = [...colors];
-	for (let i = shuffled.length - 1; i > 0; i--) {
-		const j = Math.floor(random() * (i + 1));
-		[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-	}
+	const shuffled = shuffle(colors, random);
 
 	// First and last colours near the ends, the rest spread between them
 	const start = random() * 15;

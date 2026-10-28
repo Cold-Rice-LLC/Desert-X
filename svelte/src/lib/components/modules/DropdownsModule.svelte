@@ -17,7 +17,7 @@
 	{#if module.dropdowns?.length}
 		<div>
 			{#each module.dropdowns as dropdown (dropdown._key)}
-				<Dropdown class="border-b-[2.5px]">
+				<Dropdown class="border-b-[0.25rem]">
 					{#snippet summary()}{dropdown.title}{/snippet}
 					{#if dropdown.content}
 						<div class="space-y-line px-module pt-base pb-md">

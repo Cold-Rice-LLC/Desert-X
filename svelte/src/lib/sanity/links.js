@@ -45,6 +45,9 @@ export const linkHref = (link) => {
 	return slug && paths[_type] ? paths[_type](slug) : null;
 };
 
+/** The attributes for a link that opens in a new tab. */
+export const newTabAttributes = { target: '_blank', rel: 'noopener noreferrer' };
+
 // Opens in a new tab: web URLs only, not mailto:/tel:
 export const isExternalLink = (link) =>
 	link?.linkType === 'external' && /^https?:/.test(link.externalUrl ?? '');

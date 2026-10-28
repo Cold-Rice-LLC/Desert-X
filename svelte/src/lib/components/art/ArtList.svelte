@@ -1,5 +1,6 @@
 <script>
-	import { entryHeading } from '$lib/art';
+	import { entryHeading, groupByArtist } from '$lib/art';
+	import GroupedList from '$lib/components/GroupedList.svelte';
 
 	/**
 	 * Artworks under a heading per letter, location or year, as they're
@@ -10,47 +11,34 @@
 	 */
 	let { entries, sort = 'artist' } = $props();
 
-	// Headings, each with its artists in order, each with their artworks
+	// Headings, each with its entries in order, grouped by artist
 	let sections = $derived(
-		entries.reduce((sections, entry) => {
-			const heading = entryHeading(entry, sort);
-			if (sections.at(-1)?.heading !== heading) sections.push({ heading, artists: [] });
-			const { artists } = sections.at(-1);
-			const last = artists.at(-1);
-			if (last && last.id === entry.artistId && last.name === entry.name) {
-				last.artworks.push(entry.artwork);
-			} else {
-				artists.push({ id: entry.artistId, name: entry.name, artworks: [entry.artwork] });
-			}
-			return sections;
-		}, [])
+		entries
+			.reduce((sections, entry) => {
+				const heading = entryHeading(entry, sort);
+				if (sections.at(-1)?.heading !== heading) sections.push({ heading, entries: [] });
+				sections.at(-1).entries.push(entry);
+				return sections;
+			}, [])
+			.map(({ heading, entries }) => ({ heading, artists: groupByArtist(entries) }))
 	);
 </script>
+
+{#snippet row(artwork)}
+	<a href="/art/{artwork.slug}" class="col-span-6">{artwork.title}</a>
+	{#if artwork.location}
+		<p class="col-span-2">{artwork.location}</p>
+	{/if}
+	{#if artwork.year}
+		<p class="col-start-9">{artwork.year}</p>
+	{/if}
+{/snippet}
 
 <div class="space-y-line px-gutter">
 	{#each sections as { heading, artists } (heading)}
 		<section>
 			<h2>{heading}</h2>
-			<ul>
-				{#each artists as artist, index (`${artist.id}-${index}`)}
-					<li class="grid grid-cols-12 gap-x-base">
-						<p class="col-span-3">{artist.name}</p>
-						<ul class="col-span-9 grid grid-cols-subgrid">
-							{#each artist.artworks as artwork (artwork._id)}
-								<li class="col-span-9 grid grid-cols-subgrid">
-									<a href="/art/{artwork.slug}" class="col-span-6">{artwork.title}</a>
-									{#if artwork.location}
-										<p class="col-span-2">{artwork.location}</p>
-									{/if}
-									{#if artwork.year}
-										<p class="col-start-9">{artwork.year}</p>
-									{/if}
-								</li>
-							{/each}
-						</ul>
-					</li>
-				{/each}
-			</ul>
+			<GroupedList groups={artists} {row} key={(artwork) => artwork._id} />
 		</section>
 	{/each}
 </div>

@@ -18,8 +18,9 @@
 	 * copied side by side so it can wrap without a seam: the second copy is
 	 * the real one, the others inert. Each slide's caption sits bottom left,
 	 * linking to where the slide goes, but not followed when the pointer
-	 * dragged. Tabbing to one stops the row with its slide in the middle. The button bottom right pauses the drift, and with
-	 * reduced motion there's none, and input moves the row without easing.
+	 * dragged. Tabbing to one stops the row with its slide in the middle.
+	 * The button bottom right pauses the drift, and with reduced motion
+	 * there's none, and input moves the row without easing.
 	 */
 	let { slides } = $props();
 

@@ -1,10 +1,10 @@
-import { artworkListFields } from '$lib/art';
 import { today } from '$lib/dates';
 import { client } from '$lib/sanity/client';
 import { loadLanding } from '$lib/sanity/landing';
 import { richTextFields } from '$lib/sanity/links';
 import { modulesFields } from '$lib/sanity/modules';
-import { newsLandingFields, newsTileFields } from '$lib/sanity/news';
+import { editionArtworksFields } from '$lib/sanity/editions';
+import { latestNews, newsLandingFields } from '$lib/sanity/news';
 
 /**
  * The Visit landing and its modules, then every edition that's on today
@@ -25,14 +25,10 @@ export async function load() {
 						"location": location->title,
 						mapText[]{ ${richTextFields} },
 						visitModules[]{ ${modulesFields} },
-						"artworks": *[_type == "artwork" && edition._ref == ^._id && defined(slug.current)]{
-							${artworkListFields},
-							site,
-							coordinates
-						}
+						${editionArtworksFields}
 					},
 				"news": {
-					"items": *[_type == "news"] | order(publishDate desc) [0...3]{ ${newsTileFields} },
+					"items": ${latestNews},
 					${newsLandingFields}
 				}
 			}`,

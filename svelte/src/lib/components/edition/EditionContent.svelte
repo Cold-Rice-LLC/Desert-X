@@ -22,15 +22,15 @@
 
 	// By artist or artwork only, as an edition's artworks share a location and year
 	let sort = $state('artist');
-	let entries = $derived(sortEntries(artworkEntries(edition.artworks ?? []), sort));
+	let allEntries = $derived(artworkEntries(edition.artworks ?? []));
+	let byArtist = $derived(sortEntries(allEntries));
+	let entries = $derived(sort === 'artist' ? byArtist : sortEntries(allEntries, sort));
 
 	// Each artwork's first image, by artist whichever way the grid is sorted,
 	// for an edition without images of its own
 	let images = $derived.by(() => {
 		if (edition.images?.length) return edition.images;
-		const artworks = new Set(
-			sortEntries(artworkEntries(edition.artworks ?? [])).map((entry) => entry.artwork)
-		);
+		const artworks = new Set(byArtist.map((entry) => entry.artwork));
 		return [...artworks]
 			.filter((artwork) => artwork.image?.asset)
 			.map((artwork) => ({ ...artwork.image, _key: artwork._id }));

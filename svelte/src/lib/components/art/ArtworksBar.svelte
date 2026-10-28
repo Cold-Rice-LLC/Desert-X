@@ -1,5 +1,6 @@
 <script>
 	import { SORTS } from '$lib/art';
+	import Choice from '$lib/components/Choice.svelte';
 
 	/**
 	 * The orders a list or grid of artworks can take, "Artist / Artwork /
@@ -14,18 +15,10 @@
 <div role="group" aria-label="Sort artworks" class={['uppercase', className]}>
 	{#each sorts as key, index (key)}
 		{index ? ' / ' : ''}
-		{#if sortHref}
-			<a
-				href={sortHref(key)}
-				class={[key === sort && 'link-underline']}
-				aria-current={key === sort ? 'page' : undefined}>{key}</a
-			>
-		{:else}
-			<button
-				onclick={() => onsort(key)}
-				class={[key === sort && 'link-underline']}
-				aria-pressed={key === sort}>{key}</button
-			>
-		{/if}
+		<Choice
+			href={sortHref?.(key)}
+			onclick={sortHref ? undefined : () => onsort(key)}
+			current={key === sort}>{key}</Choice
+		>
 	{/each}
 </div>

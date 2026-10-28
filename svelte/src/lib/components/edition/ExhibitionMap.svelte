@@ -2,7 +2,7 @@
 	import { PUBLIC_MAPBOX_TOKEN } from '$env/static/public';
 	import { mount, unmount } from 'svelte';
 	import { MediaQuery } from 'svelte/reactivity';
-	import { artworkEntries } from '$lib/art';
+	import { artworkCredit } from '$lib/art';
 	import Close from '$lib/components/icons/Close.svelte';
 	import LogoMark from '$lib/components/icons/LogoMark.svelte';
 	import ModuleHeading from '$lib/components/modules/ModuleHeading.svelte';
@@ -11,9 +11,10 @@
 	/**
 	 * A heading ("Exhibition Map" unless overridden) over a Mapbox map of an
 	 * edition's artworks with coordinates, each marked with the logo's X,
-	 * then `text` and, given `href`, a "Get more Information" link. Choosing an X turns it black and opens a card in the top
-	 * right with the artist, title, site and the edition's `dates`, which
-	 * scrolls if it's taller than the map. The close button, Escape or a
+	 * then `text` and, given `href`, a "Get more Information" link. Choosing
+	 * an X turns it black and opens a card in the top right with the artist,
+	 * title, site and the edition's `dates`, which scrolls if it's taller
+	 * than the map. The close button, Escape or a
 	 * click on the map closes it. The map is recoloured to the site's greys,
 	 * without labels, under a grid that moves with it. Mapbox only loads
 	 * once the map nears the viewport, which also keeps it off the server.
@@ -35,10 +36,7 @@
 			.map((artwork) => ({
 				artwork,
 				lngLat: [artwork.coordinates.lng, artwork.coordinates.lat],
-				artists: artworkEntries([artwork])
-					.map((entry) => entry.name)
-					.filter(Boolean)
-					.join(', ')
+				artists: artworkCredit(artwork)
 			}))
 	);
 
@@ -313,7 +311,6 @@
 {/if}
 
 <style>
-	/* Built by Mapbox, outside Svelte's scope */
 	/* Mapbox's grab cursor, for a map that can't be dragged from lg up.
 	   Scoped to outrank Mapbox's CSS, which loads after this */
 	div :global(.mapboxgl-canvas-container.mapboxgl-interactive) {
@@ -322,6 +319,8 @@
 		}
 	}
 
+	/* The markers, built here for Mapbox outside Svelte's scope. Not
+	   utilities: Mapbox's CSS, unlayered, would outrank them. */
 	:global(.map-marker) {
 		width: 3rem;
 		color: var(--color-white);

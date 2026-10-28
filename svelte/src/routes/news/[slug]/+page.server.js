@@ -5,6 +5,7 @@ import { modulesFields } from '$lib/sanity/modules';
 import { imageFields } from '$lib/sanity/images';
 import { newsLandingFields, newsTileFields } from '$lib/sanity/news';
 import { pageSeo, seoFields } from '$lib/sanity/seo';
+import { shuffle } from '$lib/random';
 
 const RELATED_COUNT = 3;
 
@@ -15,15 +16,6 @@ const RELATED = `select(
 	kind == "press" || !defined(location)
 )`;
 
-const shuffle = (values) => {
-	const shuffled = [...values];
-	for (let i = shuffled.length - 1; i > 0; i--) {
-		const j = Math.floor(Math.random() * (i + 1));
-		[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-	}
-	return shuffled;
-};
-
 /**
  * A news article by slug, with three other news at its end: related ones
  * first, the rest at random, picked afresh on every load. Press has no page
@@ -31,9 +23,8 @@ const shuffle = (values) => {
  * featured image.
  */
 export async function load({ params }) {
-	const { news, landingTitle } = await client.fetch(
-		`{
-			"news": *[_type == "news" && coalesce(kind, "news") == "news" && slug.current == $slug][0]{
+	const news = await client.fetch(
+		`*[_type == "news" && coalesce(kind, "news") == "news" && slug.current == $slug][0]{
 				title,
 				publishDate,
 				modules[]{ ${modulesFields} },
@@ -41,9 +32,7 @@ export async function load({ params }) {
 				featuredImage{ ${imageFields} },
 				${seoFields},
 				"relatedIds": *[_type == "news" && _id != ^._id && ${RELATED}]._id,
-				"otherIds": *[_type == "news" && _id != ^._id && !(${RELATED})]._id
-			},
-			"landingTitle": *[_id == "newsLanding"][0].title
+			"otherIds": *[_type == "news" && _id != ^._id && !(${RELATED})]._id
 		}`,
 		{ slug: params.slug }
 	);
@@ -73,7 +62,7 @@ export async function load({ params }) {
 				}
 			]
 		},
-		navTitle: landingTitle || 'News',
+		navTitle: related.landingTitle || 'News',
 		navHref: '/news',
 		navDetail: formatLongDate(news.publishDate),
 		seo: pageSeo(seo, { title: article.title, description: cardText, image: featuredImage })

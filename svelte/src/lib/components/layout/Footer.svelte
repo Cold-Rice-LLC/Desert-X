@@ -27,7 +27,8 @@
 		{/if}
 	{/each}
 
-	<div class="footer-text col-span-7 col-start-6">
+	<!-- Rich text links are underlined elsewhere, but not here -->
+	<div class="col-span-7 col-start-6 [&_a]:no-underline">
 		{#if footer.text}
 			<Portable value={footer.text} />
 		{/if}
@@ -37,10 +38,3 @@
 		{/if}
 	</div>
 </footer>
-
-<style>
-	/* Rich text links are underlined elsewhere, but not here */
-	.footer-text :global(a) {
-		text-decoration: none;
-	}
-</style>

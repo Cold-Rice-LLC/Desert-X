@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { joinNames } from '$lib/art';
+import { artworkCredit } from '$lib/art';
 import { client } from '$lib/sanity/client';
 import { imageFields } from '$lib/sanity/images';
 import { modulesFields } from '$lib/sanity/modules';
@@ -17,7 +17,7 @@ export async function load({ params }) {
 				_id,
 				title,
 				artistCredit,
-				"artistNames": artists[]->title,
+				"artists": artists[]->{ title },
 				artistInfo,
 				images[]{ _key, ${imageFields} },
 				modules[]{ ${modulesFields} },
@@ -30,11 +30,10 @@ export async function load({ params }) {
 
 	if (!artwork) error(404, 'Not found');
 
-	const { artistCredit, artistNames, ...rest } = artwork;
-	const credit = artistCredit || joinNames((artistNames ?? []).filter(Boolean));
+	const credit = artworkCredit(artwork);
 
 	return {
-		artwork: { ...rest, credit },
+		artwork: { ...artwork, credit },
 		navTitle: landingTitle || 'Art',
 		navHref: '/art',
 		navDetail: credit,

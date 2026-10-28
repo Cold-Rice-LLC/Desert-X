@@ -1,5 +1,6 @@
 <script>
 	import { page as currentPage } from '$app/state';
+	import Choice from '$lib/components/Choice.svelte';
 	import { queryHref } from '$lib/url';
 
 	/**
@@ -17,13 +18,7 @@
 		<ul class="flex gap-x-[0.45em]">
 			{#each { length: pageCount }, i (i)}
 				<li>
-					<a
-						href={href(i + 1)}
-						class={[i + 1 === page && 'link-underline']}
-						aria-current={i + 1 === page ? 'page' : undefined}
-					>
-						{i + 1}
-					</a>
+					<Choice href={href(i + 1)} current={i + 1 === page}>{i + 1}</Choice>
 				</li>
 			{/each}
 		</ul>

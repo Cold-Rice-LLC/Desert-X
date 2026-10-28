@@ -1,12 +1,11 @@
 <script>
-	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { formatDateRange } from '$lib/dates';
 	import Dropdown from '$lib/components/Dropdown.svelte';
 	import EditionContent from '$lib/components/edition/EditionContent.svelte';
 	import ModuleHeading from '$lib/components/modules/ModuleHeading.svelte';
 	import { ui } from '$lib/ui.svelte.js';
-	import { queryHref } from '$lib/url';
+	import { replaceQuery } from '$lib/url';
 
 	/**
 	 * The location's other editions as dropdowns, one open at a time, each
@@ -34,11 +33,7 @@
 	const toggle = (slug, open) => {
 		if (open === (openSlug === slug)) return;
 		if (!open && document.querySelector('details[name="other-editions"][open]')) return;
-		goto(queryHref(page.url, { edition: open ? slug : null }), {
-			replaceState: true,
-			noScroll: true,
-			keepFocus: true
-		});
+		replaceQuery(page.url, { edition: open ? slug : null });
 	};
 
 	$effect(() => {
@@ -75,7 +70,7 @@
 				id="edition-{edition.slug}"
 				name="other-editions"
 				bind:open={() => openSlug === edition.slug, (open) => toggle(edition.slug, open)}
-				summaryClass="mx-gutter border-b-[2.5px]"
+				summaryClass="mx-gutter border-b-[0.25rem]"
 			>
 				{#snippet summary()}
 					<span class="flex gap-x-[0.8em]">

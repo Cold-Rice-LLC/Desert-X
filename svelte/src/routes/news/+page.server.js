@@ -2,6 +2,7 @@ import { error } from '@sveltejs/kit';
 import { client } from '$lib/sanity/client';
 import { loadLanding } from '$lib/sanity/landing';
 import { newsTileFields } from '$lib/sanity/news';
+import { pageParam } from '$lib/url';
 
 const PAGE_SIZE = 12;
 
@@ -17,8 +18,7 @@ const filterConditions = {
  */
 export async function load({ url }) {
 	const filter = url.searchParams.get('filter');
-	const page = Number(url.searchParams.get('page') ?? 1);
-	if (!Number.isInteger(page) || page < 1) error(404, 'Not found');
+	const page = pageParam(url);
 
 	const condition = filter
 		? filterConditions[filter === 'general' ? 'general' : 'location']

@@ -24,7 +24,8 @@
 <details {...rest} {name} bind:open class={['group', className]}>
 	<summary
 		class={[
-			'flex cursor-pointer list-none items-center justify-between py-sm group-first:pt-0',
+			// Safari's disclosure triangle, which list-none doesn't hide
+			'flex cursor-pointer list-none items-center justify-between py-sm group-first:pt-0 [&::-webkit-details-marker]:hidden',
 			summaryClass
 		]}
 	>
@@ -33,10 +34,3 @@
 	</summary>
 	{@render children?.()}
 </details>
-
-<style>
-	/* Safari's disclosure triangle, which list-none doesn't hide */
-	summary::-webkit-details-marker {
-		display: none;
-	}
-</style>

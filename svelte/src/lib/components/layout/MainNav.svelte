@@ -1,7 +1,7 @@
 <script>
 	import AppLink from '$lib/components/AppLink.svelte';
-	import HamburgerAlt from '$lib/components/icons/HamburgerAlt.svelte';
 	import Logo from '$lib/components/icons/Logo.svelte';
+	import MenuButton from '$lib/components/layout/MenuButton.svelte';
 	import { ui } from '$lib/ui.svelte.js';
 
 	/**
@@ -25,14 +25,7 @@
 		home ? 'pointer-events-none -mb-nav text-white *:pointer-events-auto' : 'bg-white'
 	]}
 >
-	<button
-		class="absolute top-1/2 left-edge -translate-y-1/2"
-		aria-label="Open menu"
-		aria-haspopup="dialog"
-		onclick={() => (ui.menuOpen = true)}
-	>
-		<HamburgerAlt class="h-[1.5rem] w-auto md:h-[1.7rem]" />
-	</button>
+	<MenuButton aria-label="Open menu" aria-haspopup="dialog" onclick={() => (ui.menuOpen = true)} />
 	{#if home}
 		<button aria-label="Open menu" aria-haspopup="dialog" onclick={() => (ui.menuOpen = true)}>
 			<Logo class="h-[1.6rem] w-auto md:h-base" />

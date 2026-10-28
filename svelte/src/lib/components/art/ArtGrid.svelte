@@ -14,7 +14,7 @@
 	{#each entries as { artwork, artistId, name } (`${artwork._id}-${artistId}`)}
 		<li>
 			<a href="/art/{artwork.slug}" class="block space-y-xs">
-				<ImageFrame image={artwork.image} aspect={4 / 3} sizes="calc((100vw - 37.6rem) / 3)" />
+				<ImageFrame image={artwork.image} aspect={4 / 3} sizes="calc((100vw - 376px) / 3)" />
 				<p class="text-base">
 					{name}
 					<!-- Padded past the 1-high line box, where tails like g's and accents

@@ -1,10 +1,11 @@
+import { artworkCredit } from '$lib/art';
 import { client } from '$lib/sanity/client';
 import { imageFields } from '$lib/sanity/images';
 import { linkFields } from '$lib/sanity/links';
 import { pageSeo, seoFields } from '$lib/sanity/seo';
 
 // What links to a slide's caption needs from the document it links to
-const linkedFields = `{ _type, title, artistCredit, "artists": artists[]->title }`;
+const linkedFields = `{ _type, title, artistCredit, "artists": artists[]->{ title } }`;
 
 // What a slide shows bottom left: its own Title, or else what it links to,
 // an artwork by its artist then its title in italics, anything else by
@@ -12,10 +13,7 @@ const linkedFields = `{ _type, title, artistCredit, "artists": artists[]->title 
 const caption = ({ title, linked }) => {
 	if (title) return { name: title };
 	if (linked?._type === 'artwork') {
-		return {
-			name: linked.artistCredit ?? linked.artists?.filter(Boolean).join(', '),
-			work: linked.title
-		};
+		return { name: artworkCredit(linked), work: linked.title };
 	}
 	return linked?.title ? { name: linked.title } : null;
 };

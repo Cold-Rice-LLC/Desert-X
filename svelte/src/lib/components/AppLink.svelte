@@ -1,5 +1,5 @@
 <script>
-	import { linkHref, isExternalLink } from '$lib/sanity/links';
+	import { isExternalLink, linkHref, newTabAttributes } from '$lib/sanity/links';
 
 	/**
 	 * Anchor for a Sanity link value. External URLs open in a new tab.
@@ -9,11 +9,6 @@
 	let external = $derived(isExternalLink(link));
 </script>
 
-<a
-	{...rest}
-	href={linkHref(link)}
-	target={external ? '_blank' : undefined}
-	rel={external ? 'noopener noreferrer' : undefined}
->
+<a {...rest} {...external && newTabAttributes} href={linkHref(link)}>
 	{@render children()}
 </a>

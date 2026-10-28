@@ -2,6 +2,7 @@
 	import ImageFrame from '$lib/components/ImageFrame.svelte';
 	import { formatDate } from '$lib/dates';
 	import { paletteGradient } from '$lib/gradient';
+	import { newTabAttributes } from '$lib/sanity/links';
 
 	/**
 	 * A 4:5 news tile. News opens its page, on a gradient from its location's
@@ -25,9 +26,8 @@
 
 {#if item.kind === 'press'}
 	<a
+		{...newTabAttributes}
 		href={item.pressUrl}
-		target="_blank"
-		rel="noopener noreferrer"
 		class="group @container grid aspect-[4/5] grid-rows-1 font-mono text-white *:col-start-1 *:row-start-1"
 	>
 		<ImageFrame image={item.featuredImage} aspect={4 / 5} {sizes} bind:loaded={imageLoaded} />

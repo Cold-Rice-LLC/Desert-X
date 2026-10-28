@@ -1,13 +1,13 @@
 <script>
-	import { goto } from '$app/navigation';
 	import { page as currentPage } from '$app/state';
+	import Choice from '$lib/components/Choice.svelte';
 	import ArtGrid from '$lib/components/art/ArtGrid.svelte';
 	import ArtList from '$lib/components/art/ArtList.svelte';
 	import ArtworksBar from '$lib/components/art/ArtworksBar.svelte';
 	import Pagination from '$lib/components/Pagination.svelte';
 	import Portable from '$lib/components/Portable.svelte';
 	import SearchField from '$lib/components/SearchField.svelte';
-	import { queryHref } from '$lib/url';
+	import { queryHref, replaceQuery } from '$lib/url';
 
 	let { data } = $props();
 
@@ -16,11 +16,7 @@
 
 	// Typing replaces the history entry rather than adding one per letter
 	const search = (event) =>
-		goto(href({ q: event.currentTarget.value }), {
-			replaceState: true,
-			keepFocus: true,
-			noScroll: true
-		});
+		replaceQuery(currentPage.url, { page: null, q: event.currentTarget.value });
 </script>
 
 <h1 class="sr-only">{data.navTitle}</h1>
@@ -32,17 +28,9 @@
 		{/if}
 
 		<nav aria-label="Artwork views" class="mt-line uppercase">
-			<a
-				href={href({ view: null })}
-				class={[data.view === 'grid' && 'link-underline']}
-				aria-current={data.view === 'grid' ? 'page' : undefined}>Grid</a
-			>
+			<Choice href={href({ view: null })} current={data.view === 'grid'}>Grid</Choice>
 			/
-			<a
-				href={href({ view: 'list' })}
-				class={[data.view === 'list' && 'link-underline']}
-				aria-current={data.view === 'list' ? 'page' : undefined}>List</a
-			>
+			<Choice href={href({ view: 'list' })} current={data.view === 'list'}>List</Choice>
 		</nav>
 
 		<SearchField value={data.query} label="Search artworks" oninput={search} class="mt-lg" />
