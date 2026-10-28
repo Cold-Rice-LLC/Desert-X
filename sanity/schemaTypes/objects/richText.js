@@ -2,8 +2,8 @@ import {defineArrayMember, defineType} from 'sanity'
 import {linkTargetFields} from './linkTarget'
 
 /**
- * Shared rich text: paragraphs with italic and links only. Used by the
- * footer text and credits, the text module and schedule items.
+ * Shared rich text: paragraphs with italic and links only, wherever a
+ * field takes formatted text.
  */
 export default defineType({
   name: 'richText',

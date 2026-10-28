@@ -1,7 +1,7 @@
 import {defineField, defineType} from 'sanity'
 import {linkTargetFields, linkTargetSelect, linkTargetSubtitle} from './linkTarget'
 
-/** A label plus a destination. Used by the siteSettings footer link columns. */
+/** A label plus a destination: the Donate Link, menu sub-items and footer links. */
 export default defineType({
   name: 'navLink',
   type: 'object',

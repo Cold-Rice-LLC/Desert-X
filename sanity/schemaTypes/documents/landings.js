@@ -2,6 +2,7 @@ import {defineField, defineType} from 'sanity'
 import {NoteField} from '../../components/NoteField'
 import {moduleMembers} from '../modules'
 import {landingPages} from './landingPages'
+import {modulesField, seoField} from '../objects/fields'
 
 /**
  * Landing pages: pages the site builds itself (a news listing, the search
@@ -36,11 +37,7 @@ const landing = ({name, title, icon, fields = []}) =>
               components: {field: NoteField},
             }),
           ]),
-      defineField({
-        name: 'seo',
-        type: 'seo',
-        title: 'SEO',
-      }),
+      seoField,
     ],
     preview: {
       prepare: () => ({title: `${title} Landing`}),
@@ -66,13 +63,9 @@ const landingFields = {
     }),
   ],
   visitLanding: [
-    defineField({
-      name: 'modules',
-      type: 'array',
-      title: 'Modules',
+    modulesField(moduleMembers, {
       description:
         'General visitor information, shown first. Each edition that’s on (today is between its Start and End Date) follows with its Visit Info and map, then the latest news.',
-      of: moduleMembers,
     }),
   ],
   searchLanding: [

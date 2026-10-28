@@ -1,19 +1,10 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
+import {countLabel, shownWhere} from './objects/fields'
 import {linkTargetFields, linkTargetSelect, linkTargetSubtitle} from './objects/linkTarget'
 
-// Menu items take the usual link fields plus a fourth Link Type, Sub-items:
-// the item then opens its sub-items in the menu instead of following a link
-const menuItemLinkFields = linkTargetFields().map((field) =>
-  field.name === 'linkType'
-    ? {
-        ...field,
-        options: {
-          ...field.options,
-          list: [...field.options.list, {title: 'Sub-items', value: 'subItems'}],
-        },
-      }
-    : field,
-)
+// Menu items take a fourth Link Type, Sub-items: the item then opens its
+// sub-items in the menu instead of following a link
+const menuItemLinkFields = linkTargetFields({types: ['internal', 'external', 'subItems']})
 
 export default defineType({
   name: 'siteSettings',
@@ -85,13 +76,9 @@ export default defineType({
               type: 'array',
               title: 'Sub-items',
               description: 'Sub-items linking to a location get the Desert X mark.',
-              hidden: ({parent}) => parent?.linkType !== 'subItems',
-              validation: (rule) =>
-                rule.custom((value, context) =>
-                  context.parent?.linkType === 'subItems' && !value?.length
-                    ? 'Add at least one sub-item.'
-                    : true,
-                ),
+              ...shownWhere(({parent}) => parent?.linkType === 'subItems', {
+                required: 'Add at least one sub-item.',
+              }),
               of: [defineArrayMember({type: 'navLink'})],
             }),
           ],
@@ -101,7 +88,7 @@ export default defineType({
               title: label,
               subtitle:
                 link.linkType === 'subItems'
-                  ? `${subItems.length} ${subItems.length === 1 ? 'sub-item' : 'sub-items'}`
+                  ? countLabel(subItems.length, 'sub-item')
                   : linkTargetSubtitle(link),
             }),
           },

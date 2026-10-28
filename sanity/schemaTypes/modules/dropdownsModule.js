@@ -1,5 +1,6 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {ChevronDownIcon} from '@sanity/icons'
+import {countLabel, headingField} from '../objects/fields'
 
 export default defineType({
   name: 'dropdownsModule',
@@ -7,11 +8,7 @@ export default defineType({
   title: 'Dropdowns',
   icon: ChevronDownIcon,
   fields: [
-    defineField({
-      name: 'heading',
-      type: 'string',
-      title: 'Heading',
-    }),
+    headingField,
     defineField({
       name: 'dropdowns',
       type: 'array',
@@ -42,7 +39,7 @@ export default defineType({
     select: {heading: 'heading', dropdowns: 'dropdowns'},
     prepare: ({heading, dropdowns = []}) => ({
       title: heading || 'Dropdowns',
-      subtitle: `Dropdowns · ${dropdowns.length}`,
+      subtitle: `Dropdowns · ${countLabel(dropdowns.length, 'dropdown')}`,
     }),
   },
 })

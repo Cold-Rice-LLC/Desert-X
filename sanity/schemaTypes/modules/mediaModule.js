@@ -1,5 +1,6 @@
 import {defineField, defineType} from 'sanity'
 import {ImageIcon} from '@sanity/icons'
+import {shownWhere} from '../objects/fields'
 
 const MEDIA_TYPES = [
   {title: 'Image', value: 'image'},
@@ -8,14 +9,11 @@ const MEDIA_TYPES = [
   {title: 'Vimeo', value: 'vimeo'},
 ]
 
-// Show a field only for the chosen media type, and require it there.
-const forType = (type, message) => ({
-  hidden: ({parent}) => parent?.mediaType !== type,
-  validation: (rule) =>
-    rule.custom((value, context) =>
-      context.parent?.mediaType === type && !value ? message : true,
-    ),
-})
+// Show a field only for the chosen media types, and require it there
+const isType =
+  (...types) =>
+  ({parent}) =>
+    types.includes(parent?.mediaType)
 
 export default defineType({
   name: 'mediaModule',
@@ -36,7 +34,7 @@ export default defineType({
       type: 'image',
       title: 'Image',
       options: {hotspot: true},
-      ...forType('image', 'Choose an image.'),
+      ...shownWhere(isType('image'), {required: 'Choose an image.'}),
     }),
     defineField({
       name: 'secondImage',
@@ -44,39 +42,34 @@ export default defineType({
       title: 'Second Image',
       description: 'Optional. The two images sit side by side, both cropped to 4:5.',
       options: {hotspot: true},
-      hidden: ({parent}) => parent?.mediaType !== 'image',
+      ...shownWhere(isType('image')),
     }),
     defineField({
       name: 'video',
       type: 'file',
       title: 'Video',
       options: {accept: 'video/mp4'},
-      ...forType('mp4', 'Choose a video.'),
+      ...shownWhere(isType('mp4'), {required: 'Choose a video.'}),
     }),
     defineField({
       name: 'youtubeId',
       type: 'string',
       title: 'YouTube ID',
       description: 'The 11 characters after "v=" in the video’s URL.',
-      hidden: ({parent}) => parent?.mediaType !== 'youtube',
-      validation: (rule) =>
-        rule.custom((value, context) => {
-          if (context.parent?.mediaType !== 'youtube') return true
-          if (!value) return 'YouTube ID is required.'
-          return /^[\w-]{11}$/.test(value) ? true : 'A YouTube ID is 11 characters.'
-        }),
+      ...shownWhere(isType('youtube'), {
+        required: 'YouTube ID is required.',
+        check: (value) => /^[\w-]{11}$/.test(value) || 'A YouTube ID is 11 characters.',
+      }),
     }),
     defineField({
       name: 'vimeoUrl',
       type: 'url',
       title: 'Vimeo URL',
-      hidden: ({parent}) => parent?.mediaType !== 'vimeo',
-      validation: (rule) =>
-        rule.custom((value, context) => {
-          if (context.parent?.mediaType !== 'vimeo') return true
-          if (!value) return 'Vimeo URL is required.'
-          return /^https:\/\/(player\.)?vimeo\.com\//.test(value) ? true : 'Use a vimeo.com link.'
-        }),
+      ...shownWhere(isType('vimeo'), {
+        required: 'Vimeo URL is required.',
+        check: (value) =>
+          /^https:\/\/(player\.)?vimeo\.com\//.test(value) || 'Use a vimeo.com link.',
+      }),
     }),
     defineField({
       name: 'poster',
@@ -84,7 +77,7 @@ export default defineType({
       title: 'Poster',
       description: 'Shown before the video plays.',
       options: {hotspot: true},
-      hidden: ({parent}) => !['mp4', 'youtube', 'vimeo'].includes(parent?.mediaType),
+      ...shownWhere(isType('mp4', 'youtube', 'vimeo')),
     }),
     defineField({
       name: 'caption',

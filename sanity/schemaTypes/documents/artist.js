@@ -1,5 +1,6 @@
 import {defineField, defineType} from 'sanity'
 import {UserIcon} from '@sanity/icons'
+import {titleSlugFields} from '../objects/fields'
 
 export default defineType({
   name: 'artist',
@@ -7,19 +8,7 @@ export default defineType({
   title: 'Artist',
   icon: UserIcon,
   fields: [
-    defineField({
-      name: 'title',
-      type: 'string',
-      title: 'Name',
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'slug',
-      type: 'slug',
-      title: 'Slug',
-      options: {source: 'title'},
-      validation: (rule) => rule.required(),
-    }),
+    ...titleSlugFields({title: {title: 'Name'}}),
     defineField({
       name: 'sortName',
       type: 'string',

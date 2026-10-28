@@ -2,8 +2,12 @@ import {defineArrayMember, defineField, defineType} from 'sanity'
 import {DocumentIcon} from '@sanity/icons'
 import {pageModuleMembers} from '../modules'
 import {linkTargetFields, linkTargetSelect, linkTargetSubtitle} from '../objects/linkTarget'
+import {modulesField, seoField, shownWhere, titleSlugFields} from '../objects/fields'
 
-const isHomepage = (document) => ['homepage', 'drafts.homepage'].includes(document?._id)
+/** The homepage's ids, published and draft: a page with no slug of its own. */
+export const HOMEPAGE_IDS = ['homepage', 'drafts.homepage']
+
+const isHomepage = (document) => HOMEPAGE_IDS.includes(document?._id)
 
 export default defineType({
   name: 'page',
@@ -11,22 +15,8 @@ export default defineType({
   title: 'Page',
   icon: DocumentIcon,
   fields: [
-    defineField({
-      name: 'title',
-      type: 'string',
-      title: 'Title',
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'slug',
-      type: 'slug',
-      title: 'Slug',
-      options: {source: 'title'},
-      hidden: ({document}) => isHomepage(document),
-      validation: (rule) =>
-        rule.custom((value, context) =>
-          isHomepage(context.document) || value?.current ? true : 'Required',
-        ),
+    ...titleSlugFields({
+      slug: shownWhere(({document}) => !isHomepage(document), {required: 'Slug is required.'}),
     }),
     defineField({
       name: 'slides',
@@ -68,16 +58,7 @@ export default defineType({
         }),
       ],
     }),
-    defineField({
-      name: 'modules',
-      type: 'array',
-      title: 'Modules',
-      of: pageModuleMembers,
-    }),
-    defineField({
-      name: 'seo',
-      type: 'seo',
-      title: 'SEO',
-    }),
+    modulesField(pageModuleMembers),
+    seoField,
   ],
 })

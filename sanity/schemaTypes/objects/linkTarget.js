@@ -1,15 +1,25 @@
 import {defineField} from 'sanity'
+import {landingPages} from '../documents/landingPages'
+import {shownWhere} from './fields'
+
+const LINK_TYPE_TITLES = {
+  internal: 'Internal',
+  external: 'External',
+  subItems: 'Sub-items',
+}
+
+const linkTypeIs =
+  (type) =>
+  ({parent}) =>
+    parent?.linkType === type
 
 /**
  * Where a link points, with no label of its own. Pass `required: true` for
  * links that must point somewhere; left optional, an untouched link renders
- * as no link. `types` narrows the destinations on offer, and `schemes`
- * widens the URL schemes an external link accepts.
+ * as no link. `types` sets the Link Types on offer (menu items add
+ * Sub-items), and `schemes` widens the URL schemes an external link
+ * accepts.
  */
-const LINK_TYPE_TITLES = {
-  internal: 'Internal',
-  external: 'External',
-}
 
 export const linkTargetFields = ({
   required = false,
@@ -45,17 +55,10 @@ export const linkTargetFields = ({
       {type: 'location'},
       {type: 'artwork'},
       {type: 'news'},
-      {type: 'newsLanding'},
-      {type: 'artLanding'},
-      {type: 'visitLanding'},
-      {type: 'searchLanding'},
+      ...landingPages.map(({name}) => ({type: name})),
     ],
     options: {disableNew: true},
-    hidden: ({parent}) => parent?.linkType !== 'internal',
-    validation: (rule) =>
-      rule.custom((value, context) =>
-        context.parent?.linkType === 'internal' && !value ? 'Choose a page.' : true,
-      ),
+    ...shownWhere(linkTypeIs('internal'), {required: 'Choose a page.'}),
   }),
   defineField({
     name: 'externalUrl',
@@ -64,18 +67,14 @@ export const linkTargetFields = ({
     description: schemes
       ? 'A full URL, or a mailto:/tel: address. Opens in a new tab.'
       : 'A full URL. Opens in a new tab.',
-    hidden: ({parent}) => parent?.linkType !== 'external',
     // `url` allows http/https only unless told otherwise — rich text links
     // also reach inboxes and phone numbers.
-    validation: (rule) =>
-      (schemes ? rule.uri({scheme: schemes}) : rule).custom((value, context) =>
-        context.parent?.linkType === 'external' && !value ? 'External URL is required.' : true,
-      ),
+    ...shownWhere(linkTypeIs('external'), {
+      required: 'External URL is required.',
+      rule: (rule) => (schemes ? rule.uri({scheme: schemes}) : rule),
+    }),
   }),
 ]
-
-/** Whether a link object points anywhere. */
-export const hasLink = (link) => ['internal', 'external'].includes(link?.linkType)
 
 /**
  * Shared preview select for a link destination — internalTitle reaches

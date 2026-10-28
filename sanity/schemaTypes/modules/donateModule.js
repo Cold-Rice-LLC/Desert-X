@@ -1,5 +1,6 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {HeartIcon} from '@sanity/icons'
+import {headingField} from '../objects/fields'
 
 // A designed donate card: the visitor picks one-time or monthly and an
 // amount here, and Donate opens the Blackbaud form at /donate/checkout
@@ -10,11 +11,7 @@ export default defineType({
   title: 'Donate',
   icon: HeartIcon,
   fields: [
-    defineField({
-      name: 'heading',
-      type: 'string',
-      title: 'Heading',
-    }),
+    headingField,
     defineField({
       name: 'image',
       type: 'image',

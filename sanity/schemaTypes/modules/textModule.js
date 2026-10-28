@@ -1,6 +1,7 @@
 import {defineField, defineType} from 'sanity'
 import {TextIcon} from '@sanity/icons'
 import {blocksToText} from '../objects/richText'
+import {headingField} from '../objects/fields'
 
 export default defineType({
   name: 'textModule',
@@ -8,11 +9,7 @@ export default defineType({
   title: 'Text',
   icon: TextIcon,
   fields: [
-    defineField({
-      name: 'heading',
-      type: 'string',
-      title: 'Heading',
-    }),
+    headingField,
     defineField({
       name: 'text',
       type: 'richText',

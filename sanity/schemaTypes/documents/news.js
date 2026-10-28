@@ -1,13 +1,12 @@
 import {defineField, defineType} from 'sanity'
 import {DocumentTextIcon} from '@sanity/icons'
 import {moduleMembers} from '../modules'
+import {modulesField, seoField, shownWhere, titleSlugFields} from '../objects/fields'
 
 // Press items link out to the article, so they have no page of their own:
 // these fields only apply to one kind or the other
 const isPress = ({document}) => document?.kind === 'press'
 const isNews = (context) => !isPress(context)
-const requiredFor = (applies, message) => (rule) =>
-  rule.custom((value, context) => (applies(context) && !value ? message : true))
 
 // Roughly what fits on a tile in the mono type
 const CARD_TEXT_LIMIT = 150
@@ -34,20 +33,7 @@ export default defineType({
       initialValue: 'news',
       validation: (rule) => rule.required(),
     }),
-    defineField({
-      name: 'title',
-      type: 'string',
-      title: 'Title',
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'slug',
-      type: 'slug',
-      title: 'Slug',
-      options: {source: 'title'},
-      hidden: isPress,
-      validation: requiredFor(isNews, 'Slug is required.'),
-    }),
+    ...titleSlugFields({slug: shownWhere(isNews, {required: 'Slug is required.'})}),
     defineField({
       name: 'publishDate',
       type: 'date',
@@ -68,7 +54,7 @@ export default defineType({
       name: 'edition',
       type: 'reference',
       title: 'Edition',
-      description: 'Optional. Shows this on the edition’s page, under Read More.',
+      description: 'Optional. Shows this in the News on the edition’s page.',
       to: [{type: 'edition'}],
       options: {disableNew: true},
     }),
@@ -86,44 +72,30 @@ export default defineType({
       type: 'string',
       title: 'Publication',
       description: 'Where the article ran, e.g. Art Review.',
-      hidden: isNews,
-      validation: requiredFor(isPress, 'Publication is required.'),
+      ...shownWhere(isPress, {required: 'Publication is required.'}),
     }),
     defineField({
       name: 'pressUrl',
       type: 'url',
       title: 'Article URL',
-      hidden: isNews,
-      validation: requiredFor(isPress, 'Article URL is required.'),
+      ...shownWhere(isPress, {required: 'Article URL is required.'}),
     }),
     defineField({
       name: 'featuredImage',
       type: 'image',
       title: 'Featured Image',
       options: {hotspot: true},
-      hidden: isNews,
-      validation: requiredFor(isPress, 'Featured Image is required.'),
+      ...shownWhere(isPress, {required: 'Featured Image is required.'}),
     }),
     defineField({
       name: 'logo',
       type: 'image',
       title: 'Logo',
       description: "The publication's logo, shown over the image. White, ideally an SVG.",
-      hidden: isNews,
-      validation: requiredFor(isPress, 'Logo is required.'),
+      ...shownWhere(isPress, {required: 'Logo is required.'}),
     }),
-    defineField({
-      name: 'modules',
-      type: 'array',
-      title: 'Modules',
-      of: moduleMembers,
-      hidden: isPress,
-    }),
-    defineField({
-      name: 'seo',
-      type: 'seo',
-      title: 'SEO',
-    }),
+    modulesField(moduleMembers, {hidden: isPress}),
+    seoField,
   ],
   orderings: [
     {

@@ -1,6 +1,7 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {ClockIcon} from '@sanity/icons'
 import {blocksToText} from '../objects/richText'
+import {countLabel, headingField} from '../objects/fields'
 
 export default defineType({
   name: 'scheduleModule',
@@ -8,11 +9,7 @@ export default defineType({
   title: 'Schedule',
   icon: ClockIcon,
   fields: [
-    defineField({
-      name: 'heading',
-      type: 'string',
-      title: 'Heading',
-    }),
+    headingField,
     defineField({
       name: 'items',
       type: 'array',
@@ -48,7 +45,7 @@ export default defineType({
     select: {heading: 'heading', items: 'items'},
     prepare: ({heading, items = []}) => ({
       title: heading || 'Schedule',
-      subtitle: `Schedule · ${items.length} ${items.length === 1 ? 'item' : 'items'}`,
+      subtitle: `Schedule · ${countLabel(items.length, 'item')}`,
     }),
   },
 })

@@ -1,6 +1,7 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {CalendarIcon} from '@sanity/icons'
 import {moduleMembers} from '../modules'
+import {countLabel, seoField, titleSlugFields} from '../objects/fields'
 
 export default defineType({
   name: 'edition',
@@ -8,20 +9,9 @@ export default defineType({
   title: 'Edition',
   icon: CalendarIcon,
   fields: [
-    defineField({
-      name: 'title',
-      type: 'string',
-      title: 'Title',
-      description: 'e.g. Coachella Valley 2025',
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'slug',
-      type: 'slug',
-      title: 'Slug',
-      description: 'The location then the year, e.g. california-2025.',
-      options: {source: 'title'},
-      validation: (rule) => rule.required(),
+    ...titleSlugFields({
+      title: {description: 'e.g. Coachella Valley 2025'},
+      slug: {description: 'The location then the year, e.g. california-2025.'},
     }),
     defineField({
       name: 'location',
@@ -158,7 +148,7 @@ export default defineType({
               title: title || 'Untitled Group',
               subtitle: [
                 fullWidth ? 'Full width' : 'Half width',
-                `${logos?.length ?? 0} logo${logos?.length === 1 ? '' : 's'}`,
+                countLabel(logos?.length, 'logo'),
               ].join(' · '),
               media,
             }),
@@ -198,11 +188,7 @@ export default defineType({
       ],
       validation: (rule) => rule.max(4),
     }),
-    defineField({
-      name: 'seo',
-      type: 'seo',
-      title: 'SEO',
-    }),
+    seoField,
   ],
   orderings: [
     {

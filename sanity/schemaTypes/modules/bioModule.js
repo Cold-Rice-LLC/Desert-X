@@ -1,5 +1,6 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {UserIcon} from '@sanity/icons'
+import {countLabel, headingField} from '../objects/fields'
 
 export default defineType({
   name: 'bioModule',
@@ -7,11 +8,7 @@ export default defineType({
   title: 'Bios',
   icon: UserIcon,
   fields: [
-    defineField({
-      name: 'heading',
-      type: 'string',
-      title: 'Heading',
-    }),
+    headingField,
     defineField({
       name: 'bios',
       type: 'array',
@@ -57,7 +54,7 @@ export default defineType({
     select: {heading: 'heading', bios: 'bios'},
     prepare: ({heading, bios = []}) => ({
       title: heading || 'Bios',
-      subtitle: `Bios · ${bios.length} ${bios.length === 1 ? 'bio' : 'bios'}`,
+      subtitle: `Bios · ${countLabel(bios.length, 'bio')}`,
     }),
   },
 })

@@ -1,6 +1,7 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {ImageIcon} from '@sanity/icons'
 import {moduleMembers} from '../modules'
+import {modulesField, seoField, titleSlugFields} from '../objects/fields'
 
 export default defineType({
   name: 'artwork',
@@ -8,19 +9,10 @@ export default defineType({
   title: 'Artwork',
   icon: ImageIcon,
   fields: [
-    defineField({
-      name: 'title',
-      type: 'string',
-      title: 'Title',
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'slug',
-      type: 'slug',
-      title: 'Slug',
-      description: 'Add the year when another artwork already has the title, e.g. mirage-2020.',
-      options: {source: 'title'},
-      validation: (rule) => rule.required(),
+    ...titleSlugFields({
+      slug: {
+        description: 'Add the year when another artwork already has the title, e.g. mirage-2020.',
+      },
     }),
     defineField({
       name: 'artists',
@@ -58,12 +50,7 @@ export default defineType({
       of: [defineArrayMember({type: 'image', options: {hotspot: true}})],
       options: {layout: 'grid'},
     }),
-    defineField({
-      name: 'modules',
-      type: 'array',
-      title: 'Modules',
-      of: moduleMembers,
-    }),
+    modulesField(moduleMembers),
     defineField({
       name: 'site',
       type: 'text',
@@ -78,11 +65,7 @@ export default defineType({
       title: 'Coordinates',
       description: 'For the map.',
     }),
-    defineField({
-      name: 'seo',
-      type: 'seo',
-      title: 'SEO',
-    }),
+    seoField,
   ],
   preview: {
     select: {

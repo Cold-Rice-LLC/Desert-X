@@ -1,6 +1,9 @@
 import {defineArrayMember} from 'sanity'
 
-/** The modules on offer in every `modules` array (page, news). */
+/**
+ * The modules on offer in every `modules` array: artworks, news, the Visit
+ * landing and editions' Visit Info. Pages get a few more (see below).
+ */
 export const moduleMembers = [
   defineArrayMember({type: 'textModule'}),
   defineArrayMember({type: 'scheduleModule'}),

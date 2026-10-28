@@ -10,6 +10,7 @@ import {
 } from '@sanity/icons'
 import DocumentsPane from 'sanity-plugin-documents-pane'
 import {landings} from './schemaTypes/documents/landings'
+import {HOMEPAGE_IDS} from './schemaTypes/documents/page'
 
 const publishedId = (document) => document?.displayed?._id?.replace('drafts.', '')
 
@@ -69,7 +70,8 @@ export const myStructure = (S) =>
                 .child(
                   S.documentTypeList('page')
                     .title('All pages')
-                    .filter('_type == "page" && _id != "homepage" && _id != "drafts.homepage"'),
+                    .filter('_type == "page" && !(_id in $homepageIds)')
+                    .params({homepageIds: HOMEPAGE_IDS}),
                 ),
             ]),
         ),

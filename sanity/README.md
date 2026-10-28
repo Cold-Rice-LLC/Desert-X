@@ -1,9 +1,14 @@
-# Sanity Clean Content Studio
+# Desert X Studio
 
-Congratulations, you have now installed the Sanity Content Studio, an open-source real-time content editing environment connected to the Sanity backend.
+The Sanity Studio for the Desert X site. The site itself is in `../svelte`.
 
-Now you can do the following things:
+```sh
+npm run dev      # the Studio at localhost:3333
+npm run deploy   # deploy the Studio
+```
 
-- [Read “getting started” in the docs](https://www.sanity.io/docs/introduction/getting-started?utm_source=readme)
-- [Join the Sanity community](https://www.sanity.io/community/join?utm_source=readme)
-- [Extend and build plugins](https://www.sanity.io/docs/content-studio/extending?utm_source=readme)
+- **Singletons:** Site Settings, the Homepage (a `page` with the id `homepage`) and the landing pages (`newsLanding`, `artLanding`, `visitLanding`, `searchLanding`, listed in `schemaTypes/documents/landingPages.js`) each have one fixed document, laid out in `myStructure.js`.
+- **Shared schema pieces:** `schemaTypes/objects/fields.js` (title and slug, heading, SEO, modules, fields shown for one case) and `schemaTypes/objects/linkTarget.js` (link fields).
+- **Scripts**, run with `npx sanity exec scripts/<name>.js --with-user-token`:
+  - `createLandings.js` creates any missing landing documents. Safe to rerun.
+  - `migrate*.js` and `linkNewsEditions.js` imported content from the old desertx.org. They dry-run by default and write with `--import`. They replace documents, so don't rerun them over edited content.

@@ -1,6 +1,7 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {CommentIcon} from '@sanity/icons'
 import {blocksToText} from '../objects/richText'
+import {countLabel, headingField} from '../objects/fields'
 
 export default defineType({
   name: 'interviewModule',
@@ -8,11 +9,7 @@ export default defineType({
   title: 'Interview',
   icon: CommentIcon,
   fields: [
-    defineField({
-      name: 'heading',
-      type: 'string',
-      title: 'Heading',
-    }),
+    headingField,
     defineField({
       name: 'exchanges',
       type: 'array',
@@ -50,7 +47,7 @@ export default defineType({
     select: {heading: 'heading', exchanges: 'exchanges'},
     prepare: ({heading, exchanges = []}) => ({
       title: heading || 'Interview',
-      subtitle: `Interview · ${exchanges.length} ${exchanges.length === 1 ? 'exchange' : 'exchanges'}`,
+      subtitle: `Interview · ${countLabel(exchanges.length, 'exchange')}`,
     }),
   },
 })
