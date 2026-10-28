@@ -76,7 +76,7 @@ export default defineType({
       name: 'cardText',
       type: 'text',
       title: 'Card Text',
-      description: `Replaces the title, location and date on the news tile, exactly as typed. Up to ${CARD_TEXT_LIMIT} characters.`,
+      description: `Replaces the title, location and date on the news tile, exactly as typed. Up to ${CARD_TEXT_LIMIT} characters; the tile fits 17 to a line, and cuts off after 13 lines, blank lines included.`,
       rows: 6,
       hidden: isPress,
       validation: (rule) => rule.max(CARD_TEXT_LIMIT),

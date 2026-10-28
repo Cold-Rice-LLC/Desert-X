@@ -8,7 +8,10 @@
 	 * palette (or the General one), showing its Card Text or else its title,
 	 * location and date. Press opens the article in a new tab: its image
 	 * with the publication's logo over it, which on hover or focus gives way
-	 * to the image blurred under the date, publication and title.
+	 * to the image blurred under the date, publication, title and Read More.
+	 * Either text and its padding scale with the tile: the monospaced font
+	 * fits 17 characters to a line, and 13 lines down. Past that, news text
+	 * is cut, and press titles lose lines so Read More stays.
 	 */
 	let { item, generalPalette, sizes } = $props();
 
@@ -25,7 +28,7 @@
 		href={item.pressUrl}
 		target="_blank"
 		rel="noopener noreferrer"
-		class="group grid aspect-[4/5] font-mono text-white *:col-start-1 *:row-start-1"
+		class="group @container grid aspect-[4/5] grid-rows-1 font-mono text-white *:col-start-1 *:row-start-1"
 	>
 		<ImageFrame image={item.featuredImage} aspect={4 / 5} {sizes} bind:loaded={imageLoaded} />
 		{#if item.logo?.url}
@@ -38,29 +41,38 @@
 				]}
 			/>
 		{/if}
+		<!-- As the news tile's text, with the bottom padding taking what's left
+		     under 13 lines, so a title cut to fit ends on a whole line -->
 		<div
-			class="hidden flex-col space-y-line p-base backdrop-blur-2xl group-hover:flex group-focus-visible:flex"
+			class="hidden min-h-0 flex-col space-y-line p-[6cqi] pb-[calc(119cqi-13lh)] text-[length:calc(88cqi/(17*0.62))] leading-none wrap-anywhere backdrop-blur-2xl group-hover:flex group-focus-visible:flex"
 		>
 			<p>{date}</p>
 			<p><span class="uppercase">Featured</span><br />{item.publication}</p>
-			<p>{item.title}</p>
+			<p class="min-h-0 overflow-hidden">{item.title}</p>
 			<p class="mt-auto">Read More</p>
 		</div>
 	</a>
 {:else}
+	<!-- The text sits in its own element, as only a descendant can size itself
+	     to the tile with container units: 17 of the mono font's 0.62em-wide
+	     characters across what the 6cqi padding leaves, 13 lines down -->
 	<a
 		href="/news/{item.slug}"
-		class="block aspect-[4/5] space-y-line overflow-hidden bg-grey-3 p-base font-mono text-white"
+		class="@container block aspect-[4/5] bg-grey-3 font-mono text-white"
 		style:background-image={gradient}
 	>
-		{#if item.cardText}
-			<p class="whitespace-pre-line">{item.cardText}</p>
-		{:else}
-			<p>{item.title}</p>
-			{#if item.location}
-				<p>{item.location.title}</p>
+		<div
+			class="max-h-[calc(13lh+12cqi)] space-y-line overflow-hidden p-[6cqi] text-[length:calc(88cqi/(17*0.62))] leading-none wrap-anywhere"
+		>
+			{#if item.cardText}
+				<p class="whitespace-pre-line">{item.cardText}</p>
+			{:else}
+				<p>{item.title}</p>
+				{#if item.location}
+					<p>{item.location.title}</p>
+				{/if}
+				<p>{date}</p>
 			{/if}
-			<p>{date}</p>
-		{/if}
+		</div>
 	</a>
 {/if}
