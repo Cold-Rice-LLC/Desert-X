@@ -5,6 +5,7 @@
 	import Logo from '$lib/components/icons/Logo.svelte';
 	import LogoMark from '$lib/components/icons/LogoMark.svelte';
 	import Search from '$lib/components/icons/Search.svelte';
+	import { linkHref } from '$lib/sanity/links';
 	import { ui } from '$lib/ui.svelte.js';
 
 	/**
@@ -12,10 +13,11 @@
 	 * so focus stays inside, Escape closes it and the page behind is inert.
 	 * Items whose Link Type is Sub-items open them in place of the menu text;
 	 * the rest are plain links. Sub-items linking to a location get the
-	 * Desert X mark. Always rendered, so it can fade on opacity alone: while
-	 * closed it's transparent, ignores the pointer and is inert, and it's
-	 * fixed and stacked above the nav so the fade-out isn't cut off when the
-	 * dialog leaves the top layer.
+	 * Desert X mark; one that goes nowhere, like a location with no editions
+	 * yet, shows faded as plain text. Always rendered, so it can
+	 * fade on opacity alone: while closed it's transparent, ignores the
+	 * pointer and is inert, and it's fixed and stacked above the nav so the
+	 * fade-out isn't cut off when the dialog leaves the top layer.
 	 */
 	let { menu } = $props();
 
@@ -84,13 +86,20 @@
 	{#if active}
 		<ul id="menu-sub-items" class="mt-md flex flex-wrap gap-x-[0.8em] px-gutter">
 			{#each active.subItems ?? [] as subItem (subItem._key)}
+				{#snippet label()}
+					{#if subItem.internal?._type === 'location'}
+						<LogoMark class="h-[0.5em] w-auto" />
+					{/if}
+					{subItem.label}
+				{/snippet}
 				<li>
-					<AppLink link={subItem} class="flex items-center gap-[0.3em]">
-						{#if subItem.internal?._type === 'location'}
-							<LogoMark class="h-[0.5em] w-auto" />
-						{/if}
-						{subItem.label}
-					</AppLink>
+					{#if linkHref(subItem)}
+						<AppLink link={subItem} class="flex items-center gap-[0.3em]">
+							{@render label()}
+						</AppLink>
+					{:else}
+						<span class="flex items-center gap-[0.3em] opacity-30">{@render label()}</span>
+					{/if}
 				</li>
 			{/each}
 		</ul>
