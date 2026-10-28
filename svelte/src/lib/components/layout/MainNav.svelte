@@ -8,7 +8,7 @@
 	 * Sticky (not fixed) so other sticky elements further down a page can
 	 * take its place. The hamburger sits in the left margin, so what follows
 	 * starts at the content gutter: the logo at the text's cap height on the
-	 * homepage, the page's title elsewhere. On the homepage it floats in
+	 * homepage, which opens the menu too, the page's title elsewhere. On the homepage it floats in
 	 * white over the hero, taking no space and letting clicks through
 	 * between its links; elsewhere it sits on white. Its height is fixed, so
 	 * pages without a title don't collapse it. With an `href` the title is a
@@ -34,9 +34,9 @@
 		<HamburgerAlt class="h-[1.5rem] w-auto md:h-[1.7rem]" />
 	</button>
 	{#if home}
-		<a href="/" aria-label="Desert X home">
+		<button aria-label="Open menu" aria-haspopup="dialog" onclick={() => (ui.menuOpen = true)}>
 			<Logo class="h-[1.6rem] w-auto md:h-base" />
-		</a>
+		</button>
 	{:else if title && href}
 		<a {href}>{title}</a>
 	{:else if title}
