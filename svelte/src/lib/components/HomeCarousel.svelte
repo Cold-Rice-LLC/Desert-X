@@ -15,10 +15,11 @@
 	 *
 	 * The row is moved with a transform every frame, never scrolled, and is
 	 * copied side by side so it can wrap without a seam: the second copy is
-	 * the real one, the others inert. Slides with a link are links, but not
-	 * when the pointer dragged. Tabbing to one stops the row with it in the
-	 * middle. The button bottom left pauses the drift, and with reduced
-	 * motion there's none, and input moves the row without easing.
+	 * the real one, the others inert. Each slide's caption sits bottom left:
+	 * its title, then Read More, one link to where the slide goes, but not
+	 * followed when the pointer dragged. Tabbing to one stops the row with its slide
+	 * in the middle. The button bottom right pauses the drift, and with
+	 * reduced motion there's none, and input moves the row without easing.
 	 */
 	let { slides } = $props();
 
@@ -166,7 +167,7 @@
 		const onfocusin = (event) => {
 			if (!event.target.matches(':focus-visible')) return;
 			focused = true;
-			const slide = event.target.getBoundingClientRect();
+			const slide = event.target.closest('[data-slide]').getBoundingClientRect();
 			const box = section.getBoundingClientRect();
 			target = current + box.left + box.width / 2 - (slide.left + slide.width / 2);
 		};
@@ -219,6 +220,11 @@
 	};
 </script>
 
+{#snippet caption({ name, work })}
+	{name}
+	{#if work}<i>{work}</i>{/if}
+{/snippet}
+
 {#snippet picture(image, index)}
 	<Image
 		{image}
@@ -245,11 +251,24 @@
 		{#each { length: copies }, copy (copy)}
 			<div class="flex shrink-0" inert={copy !== 1}>
 				{#each slides as slide, index (slide._key)}
-					{#if linkHref(slide)}
-						<AppLink link={slide} class="shrink-0">{@render picture(slide.image, index)}</AppLink>
-					{:else}
+					<div class="relative shrink-0" data-slide>
 						{@render picture(slide.image, index)}
-					{/if}
+						{#if linkHref(slide)}
+							<AppLink
+								link={slide}
+								class="absolute inset-x-edge bottom-edge flex w-fit items-baseline gap-lg text-md text-white"
+							>
+								{#if slide.caption}
+									<span class="link-underline">{@render caption(slide.caption)}</span>
+								{/if}
+								<span class="shrink-0">Read More</span>
+							</AppLink>
+						{:else if slide.caption}
+							<p class="absolute inset-x-edge bottom-edge text-md text-white">
+								{@render caption(slide.caption)}
+							</p>
+						{/if}
+					</div>
 				{/each}
 			</div>
 		{/each}
@@ -257,7 +276,7 @@
 
 	{#if !prefersReducedMotion.current}
 		<button
-			class="absolute bottom-edge left-edge font-mono text-sm text-white uppercase"
+			class="absolute right-edge bottom-edge font-mono text-sm text-white uppercase"
 			onclick={() => (paused = !paused)}
 		>
 			{paused ? 'Play' : 'Pause'}

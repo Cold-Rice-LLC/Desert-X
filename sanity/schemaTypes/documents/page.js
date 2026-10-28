@@ -50,10 +50,20 @@ export default defineType({
               validation: (rule) => rule.required(),
             }),
             ...linkTargetFields(),
+            defineField({
+              name: 'title',
+              type: 'string',
+              title: 'Title',
+              description:
+                'Shown bottom left of the slide, beside Read More. Leave empty for the linked artwork’s artist and title, or the linked page’s title.',
+            }),
           ],
           preview: {
-            select: {media: 'image', ...linkTargetSelect},
-            prepare: ({media, ...link}) => ({title: linkTargetSubtitle(link) || 'No link', media}),
+            select: {media: 'image', title: 'title', ...linkTargetSelect},
+            prepare: ({media, title, ...link}) => ({
+              title: title || linkTargetSubtitle(link) || 'No link',
+              media,
+            }),
           },
         }),
       ],
