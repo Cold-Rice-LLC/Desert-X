@@ -13,7 +13,7 @@
 	 * Renders a modules array in order, picking a component by type. Types
 	 * without a component go to the `custom` snippet, given the module, so a
 	 * page can slot its own sections in among them (the Visit page's maps),
-	 * or are skipped. Modules sit 10rem apart, or one blank line between
+	 * or are skipped. Modules sit 10rem apart, or two blank lines between
 	 * consecutive text modules. `children` comes first, spaced like a module
 	 * (a news article's title). `narrow` runs text-led modules from column 2
 	 * to 11 of the 12-column grid, as news does.
@@ -52,7 +52,7 @@
 		}
 
 		> :global(.text-module + .text-module) {
-			margin-top: var(--spacing-line);
+			margin-top: calc(2 * var(--spacing-line));
 		}
 
 		/* Column 2 to 11 of the 12-column grid inside the screen edges */
