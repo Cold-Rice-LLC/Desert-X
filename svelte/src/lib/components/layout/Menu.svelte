@@ -52,13 +52,6 @@
 		<a href="/" aria-label="Desert X home">
 			<Logo class="h-nav-icon w-auto" />
 		</a>
-		<button
-			class="self-center font-mono text-sm uppercase"
-			aria-label="Close menu"
-			onclick={() => (ui.menuOpen = false)}
-		>
-			Close
-		</button>
 	</div>
 
 	<ul class="mt-md flex justify-between px-gutter">
@@ -96,13 +89,4 @@
 	{:else if menu.text}
 		<p class="mt-md px-gutter">{menu.text}</p>
 	{/if}
-
-	<div class="mt-auto flex items-center gap-md px-edge pb-edge">
-		<a href="/search" aria-label="Search">
-			<Search class="h-[4rem] w-auto" />
-		</a>
-		{#if menu.donateLink?.label}
-			<AppLink link={menu.donateLink}>{menu.donateLink.label}</AppLink>
-		{/if}
-	</div>
 </dialog>
