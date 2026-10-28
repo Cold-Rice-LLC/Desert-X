@@ -55,7 +55,7 @@ export default defineType({
               type: 'string',
               title: 'Title',
               description:
-                'Shown bottom left of the slide, beside Read More. Leave empty for the linked artwork’s artist and title, or the linked page’s title.',
+                'Shown bottom left of the slide, linking to where it goes. Leave empty for the linked artwork’s artist and title, or the linked page’s title.',
             }),
           ],
           preview: {

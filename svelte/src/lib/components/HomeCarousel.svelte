@@ -1,6 +1,6 @@
 <script>
 	import { prefersReducedMotion } from 'svelte/motion';
-	import { SvelteSet } from 'svelte/reactivity';
+	import { MediaQuery, SvelteSet } from 'svelte/reactivity';
 	import AppLink from '$lib/components/AppLink.svelte';
 	import Image from '$lib/components/Image.svelte';
 	import { croppedSize } from '$lib/sanity/images';
@@ -9,29 +9,35 @@
 	/**
 	 * The homepage: a row of images at the window's full height that drifts
 	 * right to left and loops. The page doesn't scroll; a wheel or trackpad
-	 * pushes the row instead, and a drag (or a swipe in either direction)
-	 * pulls it, both easing out. It keeps drifting whichever way it was last
-	 * pushed.
+	 * pushes the row instead, and a mouse drag pulls it, both easing out. A
+	 * finger (swiping in either direction) holds the row and moves it with
+	 * it, then lets go at the speed it was moving. It keeps drifting
+	 * whichever way it was last pushed.
 	 *
 	 * The row is moved with a transform every frame, never scrolled, and is
 	 * copied side by side so it can wrap without a seam: the second copy is
-	 * the real one, the others inert. Each slide's caption sits bottom left:
-	 * its title, then Read More, one link to where the slide goes, but not
-	 * followed when the pointer dragged. Tabbing to one stops the row with its slide
-	 * in the middle. The button bottom right pauses the drift, and with
+	 * the real one, the others inert. Each slide's caption sits bottom left,
+	 * linking to where the slide goes, but not followed when the pointer
+	 * dragged. Tabbing to one stops the row with its slide in the middle. The button bottom right pauses the drift, and with
 	 * reduced motion there's none, and input moves the row without easing.
 	 */
 	let { slides } = $props();
 
-	// Drift, in px/s, and the time constant the row eases toward where it's
-	// been pushed with, in s: about 6% of the way each frame at 60fps
-	const speed = 45;
+	// Drift, in px/s, slower on phones, where it crosses the screen sooner,
+	// and the time constant the row eases toward where it's been pushed
+	// with, in s: about 6% of the way each frame at 60fps. 48rem is
+	// Tailwind's md.
+	const md = new MediaQuery('width >= 48rem');
+	const speed = $derived(md.current ? 45 : 30);
 	const ease = 0.27;
 	// A wheel moves the row this many times its distance, and a drag this
 	const wheelFactor = 0.6;
 	const dragFactor = 2;
 	// A pointer that travels further than this is dragging, not clicking
 	const clickSlop = 8;
+	// A finger lifted this long, in ms, after it last moved has stopped, and
+	// doesn't fling the row
+	const flingWindow = 100;
 
 	// Enough copies to fill the window wherever the row has wrapped to,
 	// remeasured once it's known
@@ -115,7 +121,7 @@
 			last = time;
 			const reduced = prefersReducedMotion.current;
 
-			if (!paused && !focused && !reduced) target += direction * speed * dt;
+			if (!paused && !focused && !pointer?.touch && !reduced) target += direction * speed * dt;
 			current = reduced ? target : current + (target - current) * (1 - Math.exp(-dt / ease));
 
 			// Wrap by whole copies to keep the real one starting in view. Not
@@ -142,24 +148,46 @@
 
 		const onpointerdown = (event) => {
 			if (event.button !== 0) return;
-			pointer = { id: event.pointerId, x: event.clientX, y: event.clientY, travel: 0 };
+			pointer = {
+				id: event.pointerId,
+				touch: event.pointerType === 'touch',
+				x: event.clientX,
+				y: event.clientY,
+				time: event.timeStamp,
+				velocity: 0,
+				travel: 0
+			};
 			dragged = false;
 		};
 
 		// Whichever axis moved most, so a phone's vertical swipe works too:
-		// left or up moves the row on, right or down back
+		// left or up moves the row on, right or down back. A finger moves the
+		// row as far as it moves, keeping any push in flight, and its speed
+		// is smoothed over the last few moves.
 		const onpointermove = (event) => {
 			if (event.pointerId !== pointer?.id) return;
 			const dx = event.clientX - pointer.x;
 			const dy = event.clientY - pointer.y;
-			pointer = { ...pointer, x: event.clientX, y: event.clientY };
+			const distance = Math.abs(dx) > Math.abs(dy) ? dx : dy;
+			const dt = (event.timeStamp - pointer.time) / 1000;
+			pointer = { ...pointer, x: event.clientX, y: event.clientY, time: event.timeStamp };
 			pointer.travel += Math.hypot(dx, dy);
 			if (pointer.travel > clickSlop) dragged = true;
-			push((Math.abs(dx) > Math.abs(dy) ? dx : dy) * dragFactor);
+			if (!pointer.touch) return push(distance * dragFactor);
+			current += distance;
+			target += distance;
+			if (distance) direction = Math.sign(distance);
+			if (dt > 0) pointer.velocity = 0.7 * (distance / dt) + 0.3 * pointer.velocity;
 		};
 
+		// Easing out over the time constant from the finger's speed carries
+		// on at that speed
 		const onpointerup = (event) => {
-			if (event.pointerId === pointer?.id) pointer = undefined;
+			if (event.pointerId !== pointer?.id) return;
+			if (pointer.touch && event.timeStamp - pointer.time < flingWindow) {
+				push(pointer.velocity * ease);
+			}
+			pointer = undefined;
 		};
 
 		// Bring a slide tabbed to into the middle, and hold it there. Not one
@@ -253,18 +281,15 @@
 				{#each slides as slide, index (slide._key)}
 					<div class="relative shrink-0" data-slide>
 						{@render picture(slide.image, index)}
-						{#if linkHref(slide)}
+						{#if slide.caption && linkHref(slide)}
 							<AppLink
 								link={slide}
-								class="absolute inset-x-edge bottom-edge flex w-fit items-baseline gap-lg text-md text-white"
+								class="absolute inset-x-edge bottom-edge w-fit text-base text-white link-underline"
 							>
-								{#if slide.caption}
-									<span class="link-underline">{@render caption(slide.caption)}</span>
-								{/if}
-								<span class="shrink-0">Read More</span>
+								{@render caption(slide.caption)}
 							</AppLink>
 						{:else if slide.caption}
-							<p class="absolute inset-x-edge bottom-edge text-md text-white">
+							<p class="absolute inset-x-edge bottom-edge text-base text-white">
 								{@render caption(slide.caption)}
 							</p>
 						{/if}

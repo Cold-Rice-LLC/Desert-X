@@ -12,10 +12,10 @@
 	--text-md--line-height: 1;
 	--text-lg: 7rem;
 	--text-lg--line-height: 1;
-	/* The menu's links and text: scales with the viewport so the top-level
-	   links fit on one line */
-	--text-menu: 5vw;
-	--text-menu--line-height: 0.95;
+	/* The menu's links and text: stacked on phones, then from md up scaled
+	   with the viewport so the top-level links fit on one line (see :root) */
+	--text-menu: 4.8rem;
+	--text-menu--line-height: 1;
 
 	--color-black: #000000;
 	--color-white: #ffffff;
@@ -34,9 +34,10 @@
 	--spacing-2xl: 15rem;
 
 	/* Screen edge to the nav's hamburger, and to the page content: the nav
-	   title starts at the gutter, so content lines up under it */
+	   title starts at the gutter, so content lines up under it. Tighter to
+	   the smaller hamburger on phones (see :root). */
 	--spacing-edge: 2rem;
-	--spacing-gutter: 6.8rem;
+	--spacing-gutter: 5.4rem;
 	/* One line of the current text: the gap between paragraphs, headings
 	   and the text under them, and consecutive text modules */
 	--spacing-line: 1lh;
@@ -66,6 +67,16 @@
 
 html {
 	font-size: 10px;
+}
+
+/* Theme values that change with the viewport. 48rem is Tailwind's md, in
+   the browser's 16px rem as media queries use. */
+:root {
+	@media (width >= 48rem) {
+		--spacing-gutter: 6.8rem;
+		--text-menu: 5vw;
+		--text-menu--line-height: 0.95;
+	}
 }
 
 /* Tailwind's preflight gives buttons the default cursor, and leaves the
