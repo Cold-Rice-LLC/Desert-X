@@ -1,12 +1,9 @@
 import { error } from '@sveltejs/kit';
+import { joinNames } from '$lib/art';
 import { client } from '$lib/sanity/client';
 import { imageFields } from '$lib/sanity/images';
 import { modulesFields } from '$lib/sanity/modules';
 import { pageSeo, seoFields } from '$lib/sanity/seo';
-
-// "A", "A & B", "A, B & C"
-const joinNames = (names) =>
-	names.length > 1 ? `${names.slice(0, -1).join(', ')} & ${names.at(-1)}` : (names[0] ?? '');
 
 /**
  * An artwork by slug. Its artists' names show beside it and in the nav,

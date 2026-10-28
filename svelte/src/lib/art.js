@@ -58,23 +58,74 @@ export const searchEntries = (entries, query) =>
 
 const collator = new Intl.Collator('en', { sensitivity: 'base' });
 
+/** The orders artworks can be listed in, by artist first. */
+export const SORTS = ['artist', 'artwork', 'location', 'year'];
+
+/** Artists' names together: "A", "A & B", "A, B & C". */
+export const joinNames = (names) =>
+	names.length > 1 ? `${names.slice(0, -1).join(', ')} & ${names.at(-1)}` : (names[0] ?? '');
+
+// A title without leading quotes or a leading "The", "A" or "An", for
+// sorting and grouping: "“The End”" goes under E
+const titleKey = (title) =>
+	plain(title)
+		.replace(/^[^a-z0-9]+/, '')
+		.replace(/^(the|an?)\s+/, '');
+
 /**
- * Entries by artist, A–Z or Z–A (`descending`), and each artist's artworks
- * oldest first either way.
+ * One entry per artwork, for the orders that aren't by artist, so an
+ * artwork by several artists shows once under its Artist Credit, or else
+ * all their names.
  */
-export const sortEntries = (entries, descending = false) => {
-	const direction = descending ? -1 : 1;
-	return entries.toSorted(
-		(a, b) =>
-			direction * collator.compare(plain(a.sortName), plain(b.sortName)) ||
-			direction * collator.compare(a.name, b.name) ||
-			(a.artwork.year ?? 0) - (b.artwork.year ?? 0) ||
-			collator.compare(a.artwork.title, b.artwork.title)
-	);
+const onePerArtwork = (entries) => {
+	const seen = new Set();
+	return entries
+		.filter(({ artwork }) => !seen.has(artwork._id) && seen.add(artwork._id))
+		.map((entry) => {
+			const artists = (entry.artwork.artists ?? []).filter(Boolean);
+			if (artists.length < 2) return entry;
+			const name = entry.artwork.artistCredit || joinNames(artists.map(({ title }) => title));
+			return { ...entry, artistId: null, name };
+		});
 };
 
-/** The letter an entry is grouped under: its sort name's first, or #. */
-export const entryLetter = (entry) => {
-	const letter = plain(entry.sortName).charAt(0).toUpperCase();
+const byArtist = (a, b) =>
+	collator.compare(plain(a.sortName), plain(b.sortName)) || collator.compare(a.name, b.name);
+const byTitle = (a, b) => collator.compare(titleKey(a.artwork.title), titleKey(b.artwork.title));
+const oldestFirst = (a, b) => (a.artwork.year ?? 0) - (b.artwork.year ?? 0);
+// Newest first, artworks without a year last
+const newestFirst = (a, b) => (b.artwork.year ?? 0) - (a.artwork.year ?? 0);
+// A–Z, artworks without a location last
+const byLocation = (a, b) =>
+	!a.artwork.location - !b.artwork.location ||
+	collator.compare(a.artwork.location ?? '', b.artwork.location ?? '');
+
+const orders = {
+	artist: [byArtist, oldestFirst, byTitle],
+	artwork: [byTitle, byArtist],
+	location: [byLocation, newestFirst, byArtist, byTitle],
+	year: [newestFirst, byArtist, byTitle]
+};
+
+/**
+ * Entries in one of the SORTS: by artist A–Z, each artist's artworks
+ * oldest first; by artwork title A–Z, articles aside; by location A–Z,
+ * then newest first; or by year, newest first. Ties go by artist, then
+ * title. Only the artist order lists an artwork under each of its artists.
+ */
+export const sortEntries = (entries, sort = 'artist') =>
+	(sort === 'artist' ? entries : onePerArtwork(entries)).toSorted((a, b) =>
+		orders[sort].reduce((result, compare) => result || compare(a, b), 0)
+	);
+
+/**
+ * The heading an entry is listed under in a sort: the first letter of its
+ * sort name or title (or #), its location, or its year.
+ */
+export const entryHeading = (entry, sort = 'artist') => {
+	if (sort === 'location') return entry.artwork.location ?? 'Other';
+	if (sort === 'year') return entry.artwork.year ? String(entry.artwork.year) : 'Other';
+	const text = sort === 'artwork' ? titleKey(entry.artwork.title) : plain(entry.sortName);
+	const letter = text.charAt(0).toUpperCase();
 	return /[A-Z]/.test(letter) ? letter : '#';
 };

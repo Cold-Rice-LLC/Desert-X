@@ -48,9 +48,8 @@
 		<SearchField value={data.query} label="Search artworks" oninput={search} class="mt-lg" />
 
 		<ArtworksBar
-			count={data.count}
-			descending={data.descending}
-			sortHref={href({ sort: data.descending ? null : 'desc' })}
+			sort={data.sort}
+			sortHref={(sort) => href({ sort: sort === 'artist' ? null : sort })}
 			class="mt-2xl"
 		/>
 	</header>
@@ -58,7 +57,7 @@
 	{#if !data.entries.length}
 		<p class="px-gutter">No artworks found.</p>
 	{:else if data.view === 'list'}
-		<ArtList entries={data.entries} />
+		<ArtList entries={data.entries} sort={data.sort} />
 	{:else}
 		<ArtGrid entries={data.entries} />
 		<Pagination page={data.page} pageCount={data.pageCount} class="mt-md" />

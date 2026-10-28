@@ -1,35 +1,36 @@
 <script>
-	import { entryLetter } from '$lib/art';
+	import { entryHeading } from '$lib/art';
 
 	/**
-	 * Artworks under a heading per letter, only for letters with artists. Each
-	 * artist is a row on the 12-column grid: their name across 3 columns, and
-	 * their artworks stacked beside it, the title across 6, then location
-	 * across 2 and year. Entries arrive sorted.
+	 * Artworks under a heading per letter, location or year, as they're
+	 * sorted (`sort`), only for headings with artworks. Each artist is a row
+	 * on the 12-column grid: their name across 3 columns, and their artworks
+	 * stacked beside it, the title across 6, then location across 2 and
+	 * year. Entries arrive sorted.
 	 */
-	let { entries } = $props();
+	let { entries, sort = 'artist' } = $props();
 
-	// Letters, each with its artists in order, each with their artworks
-	let letters = $derived(
-		entries.reduce((letters, entry) => {
-			const letter = entryLetter(entry);
-			if (letters.at(-1)?.letter !== letter) letters.push({ letter, artists: [] });
-			const { artists } = letters.at(-1);
+	// Headings, each with its artists in order, each with their artworks
+	let sections = $derived(
+		entries.reduce((sections, entry) => {
+			const heading = entryHeading(entry, sort);
+			if (sections.at(-1)?.heading !== heading) sections.push({ heading, artists: [] });
+			const { artists } = sections.at(-1);
 			const last = artists.at(-1);
 			if (last && last.id === entry.artistId && last.name === entry.name) {
 				last.artworks.push(entry.artwork);
 			} else {
 				artists.push({ id: entry.artistId, name: entry.name, artworks: [entry.artwork] });
 			}
-			return letters;
+			return sections;
 		}, [])
 	);
 </script>
 
 <div class="space-y-line px-gutter">
-	{#each letters as { letter, artists } (letter)}
+	{#each sections as { heading, artists } (heading)}
 		<section>
-			<h2>{letter}</h2>
+			<h2>{heading}</h2>
 			<ul>
 				{#each artists as artist, index (`${artist.id}-${index}`)}
 					<li class="grid grid-cols-12 gap-x-base">

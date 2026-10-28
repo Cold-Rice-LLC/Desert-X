@@ -20,11 +20,12 @@
 	 */
 	let { edition, news, children } = $props();
 
-	let descending = $state(false);
-	let entries = $derived(sortEntries(artworkEntries(edition.artworks ?? []), descending));
+	// By artist or artwork only, as an edition's artworks share a location and year
+	let sort = $state('artist');
+	let entries = $derived(sortEntries(artworkEntries(edition.artworks ?? []), sort));
 
-	// Each artwork's first image, A–Z whichever way the grid is sorted, for an
-	// edition without images of its own
+	// Each artwork's first image, by artist whichever way the grid is sorted,
+	// for an edition without images of its own
 	let images = $derived.by(() => {
 		if (edition.images?.length) return edition.images;
 		const artworks = new Set(
@@ -58,9 +59,9 @@
 	{#if entries.length}
 		<section aria-label="Artworks" class="space-y-md">
 			<ArtworksBar
-				count={edition.artworks.length}
-				{descending}
-				onsort={() => (descending = !descending)}
+				sorts={['artist', 'artwork']}
+				{sort}
+				onsort={(key) => (sort = key)}
 				class="px-gutter"
 			/>
 			<ArtGrid {entries} />
