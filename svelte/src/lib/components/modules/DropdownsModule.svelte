@@ -5,7 +5,8 @@
 
 	/**
 	 * Optional centred heading over a stack of dropdowns, ruled underneath.
-	 * Any number can be open at once.
+	 * Any number can be open at once. What opens is inset from the rules by
+	 * the module's own side padding.
 	 */
 	let { module } = $props();
 </script>
@@ -19,7 +20,7 @@
 				<Dropdown class="border-b-[2.5px]">
 					{#snippet summary()}{dropdown.title}{/snippet}
 					{#if dropdown.content}
-						<div class="space-y-line pt-[0.5rem] pb-[3rem]">
+						<div class="space-y-line px-module pt-base pb-md">
 							<Portable value={dropdown.content} />
 						</div>
 					{/if}
