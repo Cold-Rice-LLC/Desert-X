@@ -68,7 +68,6 @@ export async function load({ params }) {
 				{
 					_key: 'related-news',
 					_type: 'newsModule',
-					heading: 'Related News',
 					...related,
 					items: shuffle(related.items)
 				}

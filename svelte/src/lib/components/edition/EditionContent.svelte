@@ -69,9 +69,7 @@
 
 	<Sponsors groups={edition.sponsorGroups ?? []} lists={edition.sponsorLists ?? []} />
 
-	<NewsModule
-		module={{ _type: 'newsModule', heading: 'Read More', items: edition.news, ...news }}
-	/>
+	<NewsModule module={{ _type: 'newsModule', items: edition.news, ...news }} />
 
 	{@render children?.()}
 </div>

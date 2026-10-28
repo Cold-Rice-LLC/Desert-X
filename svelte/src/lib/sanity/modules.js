@@ -42,7 +42,6 @@ export const modulesFields = `
 		}
 	},
 	_type == "newsModule" => {
-		heading,
 		"items": select(
 			show == "selected" => selected[defined(@->_id)]->{ ${newsTileFields} },
 			*[_type == "news"] | order(publishDate desc) [0...3]{ ${newsTileFields} }

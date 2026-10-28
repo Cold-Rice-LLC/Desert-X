@@ -10,12 +10,6 @@ export default defineType({
   icon: DocumentTextIcon,
   fields: [
     defineField({
-      name: 'heading',
-      type: 'string',
-      title: 'Heading',
-      description: 'Leave empty for "News".',
-    }),
-    defineField({
       name: 'show',
       type: 'string',
       title: 'Show',
@@ -48,9 +42,9 @@ export default defineType({
     }),
   ],
   preview: {
-    select: {heading: 'heading', show: 'show', selected: 'selected'},
-    prepare: ({heading, show, selected = []}) => ({
-      title: heading || 'News',
+    select: {show: 'show', selected: 'selected'},
+    prepare: ({show, selected = []}) => ({
+      title: 'News',
       subtitle: show === 'selected' ? `News · ${selected.length} selected` : 'News · Latest',
     }),
   },
