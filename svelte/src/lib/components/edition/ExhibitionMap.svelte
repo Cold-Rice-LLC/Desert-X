@@ -1,6 +1,7 @@
 <script>
 	import { PUBLIC_MAPBOX_TOKEN } from '$env/static/public';
 	import { mount, unmount } from 'svelte';
+	import { MediaQuery } from 'svelte/reactivity';
 	import { artworkEntries } from '$lib/art';
 	import Close from '$lib/components/icons/Close.svelte';
 	import LogoMark from '$lib/components/icons/LogoMark.svelte';
@@ -8,19 +9,23 @@
 	import Portable from '$lib/components/Portable.svelte';
 
 	/**
-	 * An Exhibition Map heading over a Mapbox map of an edition's artworks
-	 * with coordinates, each marked with the logo's X, then `text`. Choosing
-	 * an X flies the map to it, turns it black and opens a card in the top
+	 * A heading ("Exhibition Map" unless overridden) over a Mapbox map of an
+	 * edition's artworks with coordinates, each marked with the logo's X,
+	 * then `text` and, given `href`, a "Get more Information" link. Choosing an X turns it black and opens a card in the top
 	 * right with the artist, title, site and the edition's `dates`, which
 	 * scrolls if it's taller than the map. The close button, Escape or a
-	 * click on the map closes it. The map is
-	 * recoloured to the site's greys, without labels, under a grid that
-	 * moves with it. Mapbox only loads once the map nears the viewport,
-	 * which also keeps it off the server, and the wheel zooms only with
-	 * Ctrl/⌘ held, so the page scrolls past. Left out with no located
+	 * click on the map closes it. The map is recoloured to the site's greys,
+	 * without labels, under a grid that moves with it. Mapbox only loads
+	 * once the map nears the viewport, which also keeps it off the server.
+	 * From lg up the map is locked, framed on every X and refit as it
+	 * resizes. Below lg it pans with two fingers and zooms with a pinch,
+	 * and choosing an X flies the map to it. Left out with no located
 	 * artworks.
 	 */
-	let { artworks, dates, text } = $props();
+	let { artworks, dates, text, href, heading = 'Exhibition Map' } = $props();
+
+	// Tailwind's lg: rem in a media query is the browser's 16px, not the root's
+	const locked = new MediaQuery('width >= 64rem');
 
 	const style = 'mapbox://styles/mapbox/light-v11';
 
@@ -58,7 +63,7 @@
 	function select(id) {
 		selectedId = id;
 		const pin = located.find((p) => p.artwork._id === id);
-		if (pin && map) {
+		if (pin && map && !locked.current) {
 			// Keeps the chosen X clear of the card in the top right
 			const gap = 40;
 			map.flyTo({
@@ -141,18 +146,46 @@
 		}
 	}
 
+	// Every X in view: the opening view, and the locked map's at any size
+	const view = () =>
+		located.length > 1
+			? { bounds: bounds(located), fitBoundsOptions: { padding: 80, maxZoom: 13 } }
+			: { center: located[0].lngLat, zoom: 13 };
+
+	function frame(instance) {
+		const { bounds, fitBoundsOptions, ...camera } = view();
+		if (bounds) instance.fitBounds(bounds, { ...fitBoundsOptions, animate: false });
+		else instance.jumpTo(camera);
+	}
+
+	// The gestures that move the map, off from lg up
+	const handlers = [
+		'dragPan',
+		'scrollZoom',
+		'boxZoom',
+		'doubleClickZoom',
+		'keyboard',
+		'touchZoomRotate'
+	];
+
+	// Cooperative gestures go off first: disabling a handler with them on
+	// detaches its "use two fingers" hint, and enabling it never puts it back
+	$effect(() => {
+		if (!map) return;
+		const lock = locked.current;
+		map.setCooperativeGestures(!lock);
+		for (const handler of handlers) map[handler][lock ? 'disable' : 'enable']();
+		if (lock) frame(map);
+		else map.touchZoomRotate.disableRotation();
+	});
+
 	function createMap(mapboxgl) {
 		mapboxgl.accessToken = PUBLIC_MAPBOX_TOKEN;
-
-		const view =
-			located.length > 1
-				? { bounds: bounds(located), fitBoundsOptions: { padding: 80, maxZoom: 13 } }
-				: { center: located[0].lngLat, zoom: 13 };
 
 		const instance = new mapboxgl.Map({
 			container: mapEl,
 			style,
-			...view,
+			...view(),
 			cooperativeGestures: true,
 			dragRotate: false,
 			pitchWithRotate: false,
@@ -160,6 +193,7 @@
 			attributionControl: false
 		});
 		instance.touchZoomRotate.disableRotation();
+		instance.on('resize', () => locked.current && frame(instance));
 		instance.addControl(new mapboxgl.AttributionControl({ compact: true }), 'bottom-right');
 
 		// Before the first render, so the light style never flashes
@@ -227,7 +261,7 @@
 
 {#if located.length}
 	<section>
-		<ModuleHeading heading="Exhibition Map" />
+		<ModuleHeading {heading} />
 
 		<div class="mt-line px-gutter">
 			<div bind:this={frameEl} class="relative h-[80vh] overflow-hidden bg-grey-2">
@@ -271,12 +305,23 @@
 					<Portable value={text} />
 				</div>
 			{/if}
+			{#if href}
+				<p class="mt-base">Get more <a {href} class="link-underline">Information</a></p>
+			{/if}
 		</div>
 	</section>
 {/if}
 
 <style>
 	/* Built by Mapbox, outside Svelte's scope */
+	/* Mapbox's grab cursor, for a map that can't be dragged from lg up.
+	   Scoped to outrank Mapbox's CSS, which loads after this */
+	div :global(.mapboxgl-canvas-container.mapboxgl-interactive) {
+		@media (width >= 64rem) {
+			cursor: default;
+		}
+	}
+
 	:global(.map-marker) {
 		width: 3rem;
 		color: var(--color-white);

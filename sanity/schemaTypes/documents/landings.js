@@ -1,5 +1,6 @@
 import {defineField, defineType} from 'sanity'
 import {NoteField} from '../../components/NoteField'
+import {moduleMembers} from '../modules'
 import {landingPages} from './landingPages'
 
 /**
@@ -62,6 +63,16 @@ const landingFields = {
       type: 'richText',
       title: 'Intro',
       description: 'Shown above the list and grid of artworks.',
+    }),
+  ],
+  visitLanding: [
+    defineField({
+      name: 'modules',
+      type: 'array',
+      title: 'Modules',
+      description:
+        'General visitor information, shown first. Each edition that’s on (today is between its Start and End Date) follows with its Visit Info and map, then the latest news.',
+      of: moduleMembers,
     }),
   ],
   searchLanding: [

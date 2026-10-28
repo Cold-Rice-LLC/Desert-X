@@ -1,5 +1,6 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {CalendarIcon} from '@sanity/icons'
+import {moduleMembers} from '../modules'
 
 export default defineType({
   name: 'edition',
@@ -72,6 +73,14 @@ export default defineType({
       title: 'Map Text',
       description:
         'Shown under the exhibition map, e.g. a link to the app. The map shows the artworks with coordinates.',
+    }),
+    defineField({
+      name: 'visitModules',
+      type: 'array',
+      title: 'Visit Info',
+      description:
+        'Shown on the Visit page while the edition is on (today is between its Start and End Date), under its name and above its map: e.g. Hours and Dates, Getting There, Accessibility as dropdowns.',
+      of: moduleMembers,
     }),
     defineField({
       name: 'sponsorGroups',
