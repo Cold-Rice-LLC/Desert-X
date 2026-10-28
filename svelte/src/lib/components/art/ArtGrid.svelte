@@ -3,7 +3,7 @@
 
 	/**
 	 * Artwork tiles three across, between the gutters: the first image at
-	 * 4:3, then the artist and the title. An artwork by two artists has a
+	 * 4:3, then the artist and the title in the smaller text. An artwork by two artists has a
 	 * tile under each.
 	 */
 	let { entries } = $props();
@@ -14,7 +14,7 @@
 		<li>
 			<a href="/art/{artwork.slug}" class="block space-y-xs">
 				<ImageFrame image={artwork.image} aspect={4 / 3} sizes="calc((100vw - 37.6rem) / 3)" />
-				<p>{name}<br />{artwork.title}</p>
+				<p class="text-base">{name}<br />{artwork.title}</p>
 			</a>
 		</li>
 	{/each}
