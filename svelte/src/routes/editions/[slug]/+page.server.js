@@ -1,4 +1,5 @@
 import { error } from '@sveltejs/kit';
+import { editionStatus } from '$lib/dates';
 import { client } from '$lib/sanity/client';
 import { editionFields } from '$lib/sanity/editions';
 import { newsLandingFields } from '$lib/sanity/news';
@@ -6,7 +7,8 @@ import { pageSeo, seoFields } from '$lib/sanity/seo';
 
 /**
  * An edition by slug, with every other edition at its location, newest
- * first, for Other Editions. The nav shows its year and location.
+ * first, for Other Editions. The nav shows its location after Upcoming,
+ * On View or, once it's over, its year (see editionStatus).
  * Shared, it shows its title, the start of its description and its first
  * image.
  */
@@ -31,7 +33,7 @@ export async function load({ params }) {
 	return {
 		edition,
 		news,
-		navTitle: String(edition.year),
+		navTitle: editionStatus(edition),
 		navDetail: edition.location,
 		seo: pageSeo(edition.seo, {
 			title: edition.title,

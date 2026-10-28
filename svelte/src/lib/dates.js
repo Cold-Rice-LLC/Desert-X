@@ -1,3 +1,18 @@
+/** Today as YYYY-MM-DD, in UTC. */
+export const today = () => new Date().toISOString().slice(0, 10);
+
+/**
+ * Where an edition stands today, for the nav: "Upcoming" before its start
+ * date, "On View" from its start to its end date, and its year once it's
+ * over or without both dates.
+ */
+export const editionStatus = ({ year, startDate, endDate }) => {
+	const now = today();
+	if (startDate && now < startDate) return 'Upcoming';
+	if (startDate && endDate && now <= endDate) return 'On View';
+	return String(year);
+};
+
 /** A YYYY-MM-DD date as the site shows it: "MM DD YYYY". */
 export const formatDate = (date) => {
 	if (!date) return '';

@@ -1,4 +1,5 @@
 import { artworkListFields } from '$lib/art';
+import { today } from '$lib/dates';
 import { client } from '$lib/sanity/client';
 import { loadLanding } from '$lib/sanity/landing';
 import { richTextFields } from '$lib/sanity/links';
@@ -11,8 +12,6 @@ import { newsLandingFields, newsTileFields } from '$lib/sanity/news';
  * with its Visit Info and what its map needs, then the three newest news.
  */
 export async function load() {
-	const today = new Date().toISOString().slice(0, 10);
-
 	const [landing, results] = await Promise.all([
 		loadLanding('visitLanding', 'Visit', `modules[]{ ${modulesFields} }`),
 		client.fetch(
@@ -37,7 +36,7 @@ export async function load() {
 					${newsLandingFields}
 				}
 			}`,
-			{ today }
+			{ today: today() }
 		)
 	]);
 
