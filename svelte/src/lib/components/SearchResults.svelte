@@ -1,7 +1,7 @@
 <script>
 	/**
-	 * Search results under a row of the count, "Search Results" and a link
-	 * clearing the search (`clearHref`). Each group is a row on the 12-column
+	 * Search results under "25 Results / Clear", the link clearing the search
+	 * (`clearHref`). Each group is a row on the 12-column
 	 * grid, as in the artworks list: its name (an artist, or Editions, Pages
 	 * or News) across 3 columns, and its rows stacked beside it, each title
 	 * across 6 and its link at the end. The title links there too, kept out
@@ -12,10 +12,10 @@
 </script>
 
 <section aria-label="Search results" class={['space-y-md', className]}>
-	<div class="grid grid-cols-3">
-		<p>({count})</p>
-		<h2 class="text-center uppercase">Search Results</h2>
-		<a href={clearHref} class="justify-self-end link-underline">Clear</a>
+	<div class="uppercase">
+		<h2 class="inline">{count} {count === 1 ? 'Result' : 'Results'}</h2>
+		/
+		<a href={clearHref} class="link-underline">Clear</a>
 	</div>
 
 	{#if groups.length}
