@@ -4,8 +4,8 @@
 	 * (`clearHref`). Each group is a row on the 12-column
 	 * grid, as in the artworks list: its name (an artist, or Editions, Pages
 	 * or News) across 3 columns, and its rows stacked beside it, each title
-	 * across 6 and its link at the end. The title links there too, kept out
-	 * of the tab order so each result is one stop. Press opens in a new tab.
+	 * across 6 and its link at the end, the whole row one link. Press opens
+	 * in a new tab.
 	 * `class` goes on the section.
 	 */
 	let { groups, count, query, clearHref, class: className } = $props();
@@ -29,8 +29,10 @@
 							{@const rel = row.external ? 'noopener' : undefined}
 							<li class="col-span-9 grid grid-cols-subgrid">
 								{#if row.href}
-									<a href={row.href} {target} {rel} tabindex="-1" class="col-span-6">{row.title}</a>
-									<a href={row.href} {target} {rel} class="col-span-3">{row.action}</a>
+									<a href={row.href} {target} {rel} class="col-span-9 grid grid-cols-subgrid">
+										<span class="col-span-6">{row.title}</span>
+										<span class="col-span-3">{row.action}</span>
+									</a>
 								{:else}
 									<p class="col-span-6">{row.title}</p>
 								{/if}
