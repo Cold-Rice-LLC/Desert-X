@@ -12,7 +12,8 @@
 	 * image.
 	 * One image sits on its own; more become a carousel with the current
 	 * slide centred and its neighbours peeking in either side, a column
-	 * apart. Click a neighbour, under a resize cursor pointing its way, or
+	 * apart. Three or more loop round, so the last peeks in left of the
+	 * first. Click a neighbour, under a resize cursor pointing its way, or
 	 * use the arrow keys to move; a mouse can't drag it, but touch screens
 	 * still swipe.
 	 *
@@ -25,6 +26,18 @@
 	let active = $state(0);
 	let swiper;
 
+	// Two would show the same image on both sides
+	let loop = $derived(images.length > 2);
+
+	// How far an image is from the current one, minus to the left, going
+	// round the shorter way when the carousel loops
+	const offset = (index) => {
+		const ahead = index - active;
+		if (!loop) return ahead;
+		const wrapped = (ahead + images.length) % images.length;
+		return wrapped > images.length / 2 ? wrapped - images.length : wrapped;
+	};
+
 	const sizes = 'calc((100vw - 4rem) * 2 / 3)';
 	// The section's height, whichever way the images show
 	const height = 'min-h-[clamp(60rem,calc(100svh-var(--spacing-nav)),100rem)]';
@@ -34,9 +47,10 @@
 			modules: [A11y, Keyboard],
 			slidesPerView: 'auto',
 			centeredSlides: true,
+			loop,
 			simulateTouch: false,
 			keyboard: { enabled: true },
-			on: { slideChange: ({ activeIndex }) => (active = activeIndex) }
+			on: { realIndexChange: ({ realIndex }) => (active = realIndex) }
 		});
 		return () => swiper.destroy();
 	};
@@ -51,16 +65,16 @@
 				<div
 					class={[
 						'swiper-slide slide',
-						index < active && 'cursor-w-resize',
-						index > active && 'cursor-e-resize'
+						offset(index) < 0 && 'cursor-w-resize',
+						offset(index) > 0 && 'cursor-e-resize'
 					]}
-					onclick={() => swiper.slideTo(index)}
+					onclick={() => swiper.slideToLoop(index)}
 				>
 					<ImageFrame
 						{image}
 						aspect={4 / 3}
 						{sizes}
-						loading={Math.abs(index - active) <= 1 ? 'eager' : 'lazy'}
+						loading={Math.abs(offset(index)) <= 1 ? 'eager' : 'lazy'}
 					/>
 				</div>
 			{/each}
