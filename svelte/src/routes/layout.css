@@ -40,11 +40,7 @@
 	/* One line of the current text: the gap between paragraphs, headings
 	   and the text under them, and consecutive text modules */
 	--spacing-line: 1lh;
-	/* The homepage nav and the menu: window top to the logo, hamburger and
-	   close button, and their height */
-	--spacing-nav-top: var(--spacing-base);
-	--spacing-nav-icon: 3.1rem;
-	/* The nav's height on every page but the homepage */
+	/* The nav's height, and the menu's top bar */
 	--spacing-nav: 7.5rem;
 	/* Below the nav to a page's content, and its content to the footer */
 	--spacing-page-top: 9.25rem;

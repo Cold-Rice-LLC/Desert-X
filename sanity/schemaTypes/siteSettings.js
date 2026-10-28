@@ -1,5 +1,5 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
-import {hasLink, linkTargetFields, linkTargetSelect, linkTargetSubtitle} from './objects/linkTarget'
+import {linkTargetFields, linkTargetSelect, linkTargetSubtitle} from './objects/linkTarget'
 
 // Menu items take the usual link fields plus a fourth Link Type, Sub-items:
 // the item then opens its sub-items in the menu instead of following a link
@@ -57,29 +57,10 @@ export default defineType({
       fieldset: 'metadata',
     }),
     defineField({
-      name: 'announcementBar',
-      type: 'object',
-      title: 'Announcement Bar',
-      description: 'Shown across the top of the site. Leave the text empty to hide it.',
-      options: {collapsible: true, collapsed: false},
-      fields: [
-        defineField({
-          name: 'text',
-          type: 'string',
-          title: 'Text',
-        }),
-        ...linkTargetFields(),
-        defineField({
-          name: 'linkLabel',
-          type: 'string',
-          title: 'Link Label',
-          hidden: ({parent}) => !hasLink(parent),
-          validation: (rule) =>
-            rule.custom((value, context) =>
-              hasLink(context.parent) && !value ? 'Link Label is required.' : true,
-            ),
-        }),
-      ],
+      name: 'donateLink',
+      type: 'navLink',
+      title: 'Donate Link',
+      description: 'The grey button at the top right of the nav, on every page.',
     }),
     defineField({
       name: 'menuItems',
@@ -134,13 +115,6 @@ export default defineType({
       description: 'Shown under the menu items until one with sub-items is opened.',
       fieldset: 'menu',
       rows: 3,
-    }),
-    defineField({
-      name: 'donateLink',
-      type: 'navLink',
-      title: 'Donate Link',
-      description: 'Bottom left of the menu.',
-      fieldset: 'menu',
     }),
     // One field per footer column, left and right.
     ...[1, 2].map((n) =>

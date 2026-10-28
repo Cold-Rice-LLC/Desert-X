@@ -4,7 +4,6 @@
 	import NProgress from 'nprogress';
 	import { beforeNavigate } from '$app/navigation';
 	import { page } from '$app/state';
-	import AnnouncementBar from '$lib/components/layout/AnnouncementBar.svelte';
 	import Footer from '$lib/components/layout/Footer.svelte';
 	import MainNav from '$lib/components/layout/MainNav.svelte';
 	import Menu from '$lib/components/layout/Menu.svelte';
@@ -37,18 +36,11 @@
 		const { navTitle, navHref, navDetail } = page.data;
 		return { title: navTitle, href: navHref, detail: navDetail };
 	});
-
-	// Closed in this visit; the cookie covers later page loads
-	let announcementClosed = $state(false);
 </script>
 
 <Seo defaults={data.seo} />
 
-{#if home && data.announcement && !data.announcementDismissed && !announcementClosed}
-	<AnnouncementBar announcement={data.announcement} onclose={() => (announcementClosed = true)} />
-{/if}
-
-<MainNav {home} {...nav} />
+<MainNav {home} {...nav} donateLink={data.donateLink} />
 
 <Menu menu={data.menu} />
 

@@ -1,6 +1,7 @@
 <script>
 	import { afterNavigate } from '$app/navigation';
 	import AppLink from '$lib/components/AppLink.svelte';
+	import HamburgerAlt from '$lib/components/icons/HamburgerAlt.svelte';
 	import Logo from '$lib/components/icons/Logo.svelte';
 	import LogoMark from '$lib/components/icons/LogoMark.svelte';
 	import Search from '$lib/components/icons/Search.svelte';
@@ -48,10 +49,17 @@
 	class="pointer-events-none fixed inset-0 z-20 m-0 flex size-full max-h-none max-w-none flex-col bg-white text-menu text-black opacity-0 transition-opacity duration-300 open:pointer-events-auto open:opacity-100"
 	aria-label="Menu"
 >
-	<div class="flex items-start justify-between px-edge pt-nav-top">
-		<a href="/" aria-label="Desert X home">
-			<Logo class="h-nav-icon w-auto" />
-		</a>
+	<div class="relative flex h-nav shrink-0 items-center pl-gutter">
+		<button
+			class="absolute top-1/2 left-edge -translate-y-1/2"
+			aria-label="Close menu"
+			onclick={() => (ui.menuOpen = false)}
+		>
+			<HamburgerAlt class="h-[1.7rem] w-auto" />
+		</button>
+		<button aria-label="Close menu" onclick={() => (ui.menuOpen = false)}>
+			<Logo class="h-base w-auto" />
+		</button>
 	</div>
 
 	<ul class="mt-md flex justify-between px-gutter">
