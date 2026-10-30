@@ -15,7 +15,9 @@
 
 	// Vimeo's page and player URLs both end in the video's id
 	let vimeoId = $derived(module.vimeoUrl?.match(/(\d+)(?:[/?#]|$)/)?.[1]);
-	let poster = $derived(module.poster?.asset && urlFor(module.poster).width(1600).url());
+	let poster = $derived(
+		module.poster?.asset && urlFor(module.poster).width(1600).auto('format').url()
+	);
 </script>
 
 <figure class="grid grid-cols-24 px-edge">
@@ -41,6 +43,7 @@
 			{poster}
 			controls
 			playsinline
+			preload={poster ? 'none' : 'metadata'}
 			class={['aspect-video w-full bg-black', span]}
 		></video>
 	{:else if module.mediaType === 'youtube' && module.youtubeId}
@@ -49,6 +52,7 @@
 			title={module.caption ?? 'YouTube video'}
 			allow="autoplay; fullscreen; picture-in-picture"
 			allowfullscreen
+			loading="lazy"
 			class={['aspect-video w-full', span]}
 		></iframe>
 	{:else if module.mediaType === 'vimeo' && vimeoId}
@@ -57,6 +61,7 @@
 			title={module.caption ?? 'Vimeo video'}
 			allow="autoplay; fullscreen; picture-in-picture"
 			allowfullscreen
+			loading="lazy"
 			class={['aspect-video w-full', span]}
 		></iframe>
 	{/if}

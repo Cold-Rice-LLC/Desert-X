@@ -12,7 +12,8 @@
 	 * Images start transparent and fade in once loaded and decoded, so the
 	 * fade doesn't start with a stalled frame; `loaded` is also set on error
 	 * so a broken file doesn't stay blank. Pass `loading="eager"` for
-	 * above-the-fold images so they load straight away. Bind `loaded` to fade
+	 * above-the-fold images so they load straight away, and
+	 * `fetchpriority="high"` on the one most likely to be the page's largest. Bind `loaded` to fade
 	 * something else in with it. Other attributes, like `class`, pass
 	 * through to the <img>.
 	 */

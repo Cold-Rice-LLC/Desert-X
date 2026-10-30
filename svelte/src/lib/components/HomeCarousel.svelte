@@ -50,7 +50,8 @@
 	// moves into view, so slides within three windows' widths of it, and two
 	// either side of those, are switched to eager by index, loading every
 	// copy. They're decoded on the way in too: one decoded as it comes into
-	// view can hold up that frame, or show blank for it.
+	// view can hold up that frame, or show blank for it. The real copy's
+	// first slide, the one in view on load, is fetched ahead of the rest.
 	const near = new SvelteSet();
 	const indexes = new WeakMap();
 	const neighbours = 2;
@@ -254,11 +255,12 @@
 	{#if work}<i>{work}</i>{/if}
 {/snippet}
 
-{#snippet picture(image, index)}
+{#snippet picture(image, index, copy)}
 	<Image
 		{image}
 		sizes={sizes(image)}
 		loading={near.has(index) ? 'eager' : 'lazy'}
+		fetchpriority={copy === 1 && index === 0 ? 'high' : undefined}
 		class="h-full w-auto max-w-none"
 		{@attach nearby(index)}
 	/>
@@ -281,7 +283,7 @@
 			<div class="flex shrink-0" inert={copy !== 1}>
 				{#each slides as slide, index (slide._key)}
 					<div class="relative shrink-0" data-slide>
-						{@render picture(slide.image, index)}
+						{@render picture(slide.image, index, copy)}
 						{#if slide.caption && linkHref(slide)}
 							<AppLink
 								link={slide}

@@ -12,7 +12,12 @@ export const newsTileFields = `
 	pressUrl,
 	"location": location->{ title, "palette": palette[].hex },
 	featuredImage{ ${imageFields} },
-	"logo": logo{ "url": asset->url, "alt": asset->altText }
+	"logo": logo{
+		"url": asset->url,
+		"alt": asset->altText,
+		"width": asset->metadata.dimensions.width,
+		"height": asset->metadata.dimensions.height
+	}
 `;
 
 /** GROQ for the three newest news items, as tiles. */

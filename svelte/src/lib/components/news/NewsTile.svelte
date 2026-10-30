@@ -35,6 +35,9 @@
 			<img
 				src={item.logo.url}
 				alt={item.logo.alt ?? item.publication ?? ''}
+				width={item.logo.width}
+				height={item.logo.height}
+				loading="lazy"
 				class={[
 					'w-[60%] place-self-center transition-opacity duration-300 group-hover:hidden group-focus-visible:hidden',
 					item.featuredImage?.asset && !imageLoaded && 'opacity-0'

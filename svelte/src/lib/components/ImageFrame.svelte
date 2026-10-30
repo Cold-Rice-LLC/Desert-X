@@ -6,13 +6,30 @@
 	 * its place while it loads. With an `aspect` (width / height) the frame
 	 * takes that ratio and the image files are cropped to it; otherwise
 	 * `class` sizes it. Without an image the grey frame holds its place.
-	 * `sizes` and `loading` pass to Image, and `loaded` binds to it.
+	 * `sizes`, `loading` and `fetchpriority` pass to Image, and `loaded`
+	 * binds to it.
 	 */
-	let { image, aspect, sizes, loading, loaded = $bindable(false), class: className } = $props();
+	let {
+		image,
+		aspect,
+		sizes,
+		loading,
+		fetchpriority,
+		loaded = $bindable(false),
+		class: className
+	} = $props();
 </script>
 
 <figure class={['overflow-hidden bg-grey-1', className]} style:aspect-ratio={aspect}>
 	{#if image?.asset}
-		<Image {image} {aspect} {sizes} {loading} bind:loaded class="size-full object-cover" />
+		<Image
+			{image}
+			{aspect}
+			{sizes}
+			{loading}
+			{fetchpriority}
+			bind:loaded
+			class="size-full object-cover"
+		/>
 	{/if}
 </figure>
