@@ -2,9 +2,9 @@ import { seededRandom, shuffle } from '$lib/random';
 
 /**
  * A linear-gradient mixing a palette's colours, varied by `seed` (a
- * document id): the colours' order, where each one sits, and a slight tilt
- * off vertical. The same seed always gives the same gradient. Null without
- * a palette.
+ * document id): the colours' order and where each one sits, top to
+ * bottom. The same seed always gives the same gradient. Null without a
+ * palette.
  */
 export const paletteGradient = (colors, seed) => {
 	if (!colors?.length) return null;
@@ -22,7 +22,6 @@ export const paletteGradient = (colors, seed) => {
 		return start + (end - start) * share;
 	});
 
-	const angle = 180 + (random() * 40 - 20);
 	const colorStops = shuffled.map((color, i) => `${color} ${stops[i].toFixed(1)}%`);
-	return `linear-gradient(${angle.toFixed(1)}deg, ${colorStops.join(', ')})`;
+	return `linear-gradient(${colorStops.join(', ')})`;
 };
