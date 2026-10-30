@@ -13,7 +13,8 @@
 	 * One image sits on its own; more become a carousel with the current
 	 * slide centred and its neighbours peeking in either side, a column
 	 * apart. Three or more loop round, so the last peeks in left of the
-	 * first. Click a neighbour, under a resize cursor pointing its way, or
+	 * first; three are doubled, as Swiper's loop would otherwise put both
+	 * others on the left. Click a neighbour, under a resize cursor pointing its way, or
 	 * use the arrow keys to move; a mouse can't drag it, but touch screens
 	 * still swipe.
 	 *
@@ -30,13 +31,19 @@
 	// Two would show the same image on both sides
 	let loop = $derived(images.length > 2);
 
+	let slides = $derived(
+		(images.length === 3 ? [0, 1] : [0]).flatMap((copy) =>
+			images.map((image) => ({ image, key: `${image._key}-${copy}` }))
+		)
+	);
+
 	// How far an image is from the current one, minus to the left, going
 	// round the shorter way when the carousel loops
 	const offset = (index) => {
 		const ahead = index - active;
 		if (!loop) return ahead;
-		const wrapped = (ahead + images.length) % images.length;
-		return wrapped > images.length / 2 ? wrapped - images.length : wrapped;
+		const wrapped = (ahead + slides.length) % slides.length;
+		return wrapped > slides.length / 2 ? wrapped - slides.length : wrapped;
 	};
 
 	const sizes = 'calc((100vw - 40px) * 2 / 3)';
@@ -60,7 +67,7 @@
 {#if images.length > 1}
 	<div class={['swiper w-full items-center', height]} {@attach carousel}>
 		<div class="swiper-wrapper">
-			{#each images as image, index (image._key)}
+			{#each slides as { image, key }, index (key)}
 				<!-- The arrow keys move it too (Swiper's Keyboard module) -->
 				<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
 				<div
