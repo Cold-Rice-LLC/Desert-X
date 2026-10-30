@@ -3,7 +3,6 @@
 	import { mount, unmount } from 'svelte';
 	import { MediaQuery } from 'svelte/reactivity';
 	import { artworkCredit } from '$lib/art';
-	import Close from '$lib/components/icons/Close.svelte';
 	import LogoMark from '$lib/components/icons/LogoMark.svelte';
 	import ImageFrame from '$lib/components/ImageFrame.svelte';
 	import ModuleHeading from '$lib/components/modules/ModuleHeading.svelte';
@@ -14,7 +13,7 @@
 	 * edition's artworks with coordinates, each marked with the logo's X,
 	 * then `text` and, given `href`, a "View Edition" link. Choosing
 	 * an X turns it black and opens a card in the top right with the artist,
-	 * title, thumbnail and a See Details link, which scrolls if it's taller
+	 * title (up to two lines), thumbnail and a See Details link, which scrolls if it's taller
 	 * than the map. The close button, Escape or a
 	 * click on the map closes it. The map is recoloured to the site's greys,
 	 * without labels, under a grid that moves with it. Mapbox only loads
@@ -275,20 +274,25 @@
 					>
 						<div class="flex items-start justify-between gap-base">
 							<p>
-								{#if selected.artists}{selected.artists}<br />{/if}{selected.artwork.title}
+								{selected.artists}
+								<cite class="-my-[0.1em] line-clamp-2 py-[0.1em]">{selected.artwork.title}</cite>
 							</p>
-							<button
-								type="button"
-								aria-label="Close"
-								class="mt-[0.15em] size-[0.7em] shrink-0"
-								onclick={() => (selectedId = null)}
-							>
-								<Close class="size-full" />
+							<button type="button" aria-label="Close" onclick={() => (selectedId = null)}>
+								X
 							</button>
 						</div>
-						{#if selected.artwork.thumbnail?.asset}
-							<ImageFrame image={selected.artwork.thumbnail} aspect={4 / 3} sizes="400px" />
-						{/if}
+						<!-- Keyed so a new artwork's image fades in on the grey frame, not
+						     over the last one's -->
+						{#key selected.artwork._id}
+							{#if selected.artwork.thumbnail?.asset}
+								<ImageFrame
+									image={selected.artwork.thumbnail}
+									aspect={4 / 3}
+									sizes="400px"
+									loading="eager"
+								/>
+							{/if}
+						{/key}
 						<p>See <a href="/art/{selected.artwork.slug}" class="link-underline">Details</a></p>
 					</section>
 				{/if}
