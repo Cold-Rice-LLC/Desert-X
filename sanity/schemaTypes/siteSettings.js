@@ -14,6 +14,8 @@ export default defineType({
     {
       name: 'metadata',
       title: 'Metadata',
+      description:
+        'What search results and shared links show for any page that doesn’t set its own (each page’s SEO section overrides these).',
       options: {collapsible: true, collapsed: false},
     },
     {
@@ -44,7 +46,10 @@ export default defineType({
     defineField({
       name: 'ogImage',
       type: 'image',
-      title: 'OG Image',
+      title: 'Share Image',
+      description:
+        'Shown when a link to the site is shared, for pages with no image of their own. Cropped to 1200 × 630 around the hotspot.',
+      options: {hotspot: true},
       fieldset: 'metadata',
     }),
     defineField({

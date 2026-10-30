@@ -11,7 +11,7 @@
 	/**
 	 * A heading ("Exhibition Map" unless overridden) over a Mapbox map of an
 	 * edition's artworks with coordinates, each marked with the logo's X,
-	 * then `text` and, given `href`, a "Get more Information" link. Choosing
+	 * then `text` and, given `href`, a "View Edition" link. Choosing
 	 * an X turns it black and opens a card in the top right with the artist,
 	 * title, site and the edition's `dates`, which scrolls if it's taller
 	 * than the map. The close button, Escape or a
@@ -270,7 +270,7 @@
 					<section
 						bind:this={cardEl}
 						aria-label="Installation"
-						class="absolute top-base right-base z-10 max-h-[calc(100%-2*var(--spacing-base))] w-[40rem] space-y-line overflow-y-auto overscroll-contain bg-white p-base font-mono"
+						class="absolute top-base right-base z-10 max-h-[calc(100%-2*var(--spacing-base))] w-[40rem] space-y-line overflow-y-auto overscroll-contain [scrollbar-width:none] bg-white p-base font-mono"
 					>
 						<div class="flex items-start justify-between gap-base">
 							<p class="uppercase">Installation</p>
@@ -304,7 +304,7 @@
 				</div>
 			{/if}
 			{#if href}
-				<p class="mt-base">Get more <a {href} class="link-underline">Information</a></p>
+				<p class="mt-base">View <a {href} class="link-underline">Edition</a></p>
 			{/if}
 		</div>
 	</section>
