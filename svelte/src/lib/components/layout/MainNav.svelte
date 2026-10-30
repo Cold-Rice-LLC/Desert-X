@@ -13,8 +13,8 @@
 	 * between its links; elsewhere it sits on white. Its height is fixed, so
 	 * pages without a title don't collapse it. With an `href` the title is a
 	 * link up a level, like a breadcrumb; `detail` follows it, e.g. a news
-	 * article's date. `donateLink` is a grey button at the right edge, in
-	 * the smaller text on phones so it fits beside the logo.
+	 * article's date. `donateLink` is an underlined link at the right edge,
+	 * in the smaller text on phones so it fits beside the logo.
 	 */
 	let { home, title, href, detail, donateLink } = $props();
 </script>
@@ -39,10 +39,7 @@
 		<p>{detail}</p>
 	{/if}
 	{#if donateLink?.label}
-		<AppLink
-			link={donateLink}
-			class="ml-auto bg-grey-2 px-[0.5rem] py-[0.3rem] text-sm text-black md:px-[0.7rem] md:py-[0.4rem] md:text-md"
-		>
+		<AppLink link={donateLink} class="ml-auto text-sm link-underline md:text-md">
 			{donateLink.label}
 		</AppLink>
 	{/if}

@@ -56,7 +56,7 @@ export default defineType({
       name: 'donateLink',
       type: 'navLink',
       title: 'Donate Link',
-      description: 'The grey button at the top right of the nav, on every page.',
+      description: 'The underlined link at the top right of the nav, on every page.',
     }),
     defineField({
       name: 'menuItems',
