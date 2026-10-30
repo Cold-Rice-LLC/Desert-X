@@ -4,7 +4,8 @@
 	/**
 	 * "All / Filter" over a list. All goes to `allHref`, clearing the
 	 * filters; Filter shows a row of `options` as links, each `{ key,
-	 * label, href, current }`. Open while a filter is on (`active`). `label` names the <nav>, and `class` goes on it.
+	 * label, href, current }`. Open while a filter is on (`active`).
+	 * `label` names the <nav>, and `class` goes on it.
 	 */
 	let { label, allHref, options, active, class: className } = $props();
 
