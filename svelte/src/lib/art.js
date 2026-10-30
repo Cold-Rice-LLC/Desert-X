@@ -1,4 +1,5 @@
 import { imageFields } from '$lib/sanity/images';
+import { fuzzySearch, plain } from '$lib/search';
 
 /**
  * GROQ projection for an artwork listed by artist, as search lists them:
@@ -17,15 +18,9 @@ export const artworkEntryFields = `
 export const artworkListFields = `
 	${artworkEntryFields},
 	"image": images[0]{ ${imageFields} },
-	"location": edition->location->title
+	"location": edition->location->title,
+	"locationSlug": edition->location->slug.current
 `;
-
-// Lowercase, without accents, for matching and sorting: "Héctor" is "hector"
-const plain = (text) =>
-	(text ?? '')
-		.normalize('NFD')
-		.replace(/[\u0300-\u036f]/g, '')
-		.toLowerCase();
 
 /**
  * One entry per artist of each artwork, so an artwork by two artists is
@@ -49,26 +44,16 @@ export const artworkEntries = (artworks) =>
 	});
 
 /**
- * Whether `text` contains every word of `query`, accents and case aside,
- * so "hector zam" finds "Héctor Zamora". An empty query matches anything.
+ * The entries matching `query` (see fuzzySearch) by artist or title, or
+ * with `details` by the artwork's location and year too.
  */
-export const matchesQuery = (text, query) => {
-	const plainText = plain(text);
-	return plain(query)
-		.split(/\s+/)
-		.filter(Boolean)
-		.every((word) => plainText.includes(word));
-};
-
-/** The entries whose artist or title contains `query`, accents aside. */
-export const searchEntries = (entries, query) =>
-	entries.filter(({ artwork, name }) => matchesQuery(`${name} ${artwork.title}`, query));
+export const searchEntries = (entries, query, { details = false } = {}) =>
+	fuzzySearch(entries, query, ({ artwork, name }) =>
+		[name, artwork.title, ...(details ? [artwork.location, artwork.year] : [])].join(' ')
+	);
 
 /** Compares text A–Z, case and accents aside. */
 export const collator = new Intl.Collator('en', { sensitivity: 'base' });
-
-/** The orders artworks can be listed in, by artist first. */
-export const SORTS = ['artist', 'artwork', 'location', 'year'];
 
 // Artists' names together: "A", "A & B", "A, B & C"
 const joinNames = (names) =>
@@ -82,7 +67,7 @@ export const artworkCredit = ({ artistCredit, artists }) =>
 	artistCredit || joinNames((artists ?? []).map((artist) => artist?.title).filter(Boolean));
 
 // A title without leading quotes or a leading "The", "A" or "An", for
-// sorting and grouping: "“The End”" goes under E
+// sorting: "“The End”" sorts under E
 const titleKey = (title) =>
 	plain(title)
 		.replace(/^[^a-z0-9]+/, '')
@@ -110,23 +95,18 @@ const byTitle = (a, b) => collator.compare(titleKey(a.artwork.title), titleKey(b
 const oldestFirst = (a, b) => (a.artwork.year ?? 0) - (b.artwork.year ?? 0);
 // Newest first, artworks without a year last
 const newestFirst = (a, b) => (b.artwork.year ?? 0) - (a.artwork.year ?? 0);
-// A–Z, artworks without a location last
-const byLocation = (a, b) =>
-	!a.artwork.location - !b.artwork.location ||
-	collator.compare(a.artwork.location ?? '', b.artwork.location ?? '');
 
 const orders = {
 	artist: [byArtist, oldestFirst, byTitle],
 	artwork: [byTitle, byArtist],
-	location: [byLocation, newestFirst, byArtist, byTitle],
 	year: [newestFirst, byArtist, byTitle]
 };
 
 /**
- * Entries in one of the SORTS: by artist A–Z, each artist's artworks
- * oldest first; by artwork title A–Z, articles aside; by location A–Z,
- * then newest first; or by year, newest first. Ties go by artist, then
- * title. Only the artist order lists an artwork under each of its artists.
+ * Entries in a `sort`: by artist A–Z, each artist's artworks oldest
+ * first; by artwork title A–Z, articles aside; or by year, newest first.
+ * Ties go by artist, then title. Only the artist order lists an artwork
+ * under each of its artists.
  */
 export const sortEntries = (entries, sort = 'artist') =>
 	(sort === 'artist' ? entries : onePerArtwork(entries)).toSorted((a, b) =>
@@ -144,15 +124,3 @@ export const groupByArtist = (entries) =>
 		else groups.push({ artistId, name, items: [artwork] });
 		return groups;
 	}, []);
-
-/**
- * The heading an entry is listed under in a sort: the first letter of its
- * sort name or title (or #), its location, or its year.
- */
-export const entryHeading = (entry, sort = 'artist') => {
-	if (sort === 'location') return entry.artwork.location ?? 'Other';
-	if (sort === 'year') return entry.artwork.year ? String(entry.artwork.year) : 'Other';
-	const text = sort === 'artwork' ? titleKey(entry.artwork.title) : plain(entry.sortName);
-	const letter = text.charAt(0).toUpperCase();
-	return /[A-Z]/.test(letter) ? letter : '#';
-};

@@ -4,7 +4,7 @@ import { loadLanding } from '$lib/sanity/landing';
 import { newsTileFields } from '$lib/sanity/news';
 import { pageParam } from '$lib/url';
 
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 24;
 
 // Press is always General. News with no kind predates the field: it's news.
 const filterConditions = {
@@ -13,8 +13,8 @@ const filterConditions = {
 };
 
 /**
- * One page of news, newest first, optionally filtered to General or one
- * location by `?filter=`; `?page=` picks the page.
+ * News, newest first, optionally filtered to General or one location by
+ * `?filter=`; `?page=` is how many batches of 24 to show (see LoadMore).
  */
 export async function load({ url }) {
 	const filter = url.searchParams.get('filter');
@@ -23,19 +23,18 @@ export async function load({ url }) {
 	const condition = filter
 		? filterConditions[filter === 'general' ? 'general' : 'location']
 		: 'true';
-	const start = (page - 1) * PAGE_SIZE;
 
 	const [landing, results] = await Promise.all([
 		loadLanding('newsLanding', 'News', '"generalPalette": generalPalette[].hex'),
 		client.fetch(
 			`{
 				"total": count(*[_type == "news" && ${condition}]),
-				"items": *[_type == "news" && ${condition}] | order(publishDate desc) [$start...$end]{
+				"items": *[_type == "news" && ${condition}] | order(publishDate desc) [0...$end]{
 					${newsTileFields}
 				},
 				"locations": *[_type == "location"] | order(title asc){ title, "slug": slug.current }
 			}`,
-			{ filter, start, end: start + PAGE_SIZE }
+			{ filter, end: page * PAGE_SIZE }
 		)
 	]);
 

@@ -1,12 +1,6 @@
-import {
-	artworkEntries,
-	collator,
-	groupByArtist,
-	matchesQuery,
-	searchEntries,
-	sortEntries
-} from '$lib/art';
+import { artworkEntries, collator, groupByArtist, searchEntries, sortEntries } from '$lib/art';
 import { linkHref } from '$lib/sanity/links';
+import { fuzzySearch } from '$lib/search';
 
 // Where an edition, page or landing lives, as links to it resolve
 const hrefOf = (document) => linkHref({ linkType: 'internal', internal: document });
@@ -16,7 +10,7 @@ const hrefOf = (document) => linkHref({ linkType: 'internal', internal: document
  * each artist a group, then editions newest first, pages and landings
  * A–Z, and news newest first. Each row has its title, where it goes and
  * the words linking there; press goes off the site, to its article.
- * Titles and names only, accents aside (see matchesQuery). No query, no
+ * Titles and names only, forgiving typos (see fuzzySearch). No query, no
  * results. The count is of things found, so an artwork by two artists
  * counts once.
  */
@@ -37,8 +31,11 @@ export function load({ data, url }) {
 		}))
 	}));
 
-	const editions = index.editions
-		.filter(({ title, location, year }) => matchesQuery(`${title} ${location} ${year}`, query))
+	const editions = fuzzySearch(
+		index.editions,
+		query,
+		({ title, location, year }) => `${title} ${location} ${year}`
+	)
 		.toSorted((a, b) => b.year - a.year)
 		.map((edition) => ({
 			key: edition._id,
@@ -52,14 +49,14 @@ export function load({ data, url }) {
 	const landingHrefs = new Set(
 		index.pages.filter(({ _type }) => _type !== 'page').map((landing) => hrefOf(landing))
 	);
-	const pages = index.pages
-		.filter((page) => page._type !== 'page' || !landingHrefs.has(hrefOf(page)))
-		.filter(({ title }) => matchesQuery(title, query))
+	const reachable = index.pages.filter(
+		(page) => page._type !== 'page' || !landingHrefs.has(hrefOf(page))
+	);
+	const pages = fuzzySearch(reachable, query, ({ title }) => title)
 		.toSorted((a, b) => collator.compare(a.title, b.title))
 		.map((page) => ({ key: page._id, title: page.title, href: hrefOf(page), action: 'View page' }));
 
-	const news = index.news
-		.filter(({ title }) => matchesQuery(title, query))
+	const news = fuzzySearch(index.news, query, ({ title }) => title)
 		.toSorted((a, b) => (b.publishDate ?? '').localeCompare(a.publishDate ?? ''))
 		.map((item) => {
 			const press = item.kind === 'press';

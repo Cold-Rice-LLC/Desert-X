@@ -34,6 +34,7 @@
 		"@portabletext/svelte": "^3.0.1",
 		"@sanity/client": "^7.22.0",
 		"@sanity/image-url": "^2.1.1",
+		"fuse.js": "^7.5.0",
 		"mapbox-gl": "^3.33.0",
 		"nprogress": "^0.2.0",
 		"swiper": "^14.3.0"

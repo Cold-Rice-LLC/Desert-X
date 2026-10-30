@@ -1,21 +1,21 @@
 <script>
-	import { entryHeading, groupByArtist } from '$lib/art';
+	import { groupByArtist } from '$lib/art';
 	import GroupedList from '$lib/components/GroupedList.svelte';
 
 	/**
-	 * Artworks under a heading per letter, location or year, as they're
-	 * sorted (`sort`), only for headings with artworks. Each artist is a row
-	 * on the 12-column grid: their name across 3 columns, and their artworks
-	 * stacked beside it, the title across 6, then location across 2 and
-	 * year. Entries arrive sorted.
+	 * Artworks under a heading per year, newest first, with Other for those
+	 * without one. Each artist is a row on the 12-column grid: their name
+	 * across 3 columns, and their artworks stacked beside it, the title
+	 * across 6, then location across 2 and year. Entries arrive sorted by
+	 * year.
 	 */
-	let { entries, sort = 'artist' } = $props();
+	let { entries } = $props();
 
 	// Headings, each with its entries in order, grouped by artist
 	let sections = $derived(
 		entries
 			.reduce((sections, entry) => {
-				const heading = entryHeading(entry, sort);
+				const heading = entry.artwork.year ? String(entry.artwork.year) : 'Other';
 				if (sections.at(-1)?.heading !== heading) sections.push({ heading, entries: [] });
 				sections.at(-1).entries.push(entry);
 				return sections;
