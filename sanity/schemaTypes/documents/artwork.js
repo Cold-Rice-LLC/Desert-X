@@ -50,6 +50,14 @@ export default defineType({
       of: [defineArrayMember({type: 'image', options: {hotspot: true}})],
       options: {layout: 'grid'},
     }),
+    defineField({
+      name: 'thumbnail',
+      type: 'image',
+      title: 'Thumbnail',
+      description:
+        'Optional. Shown on the exhibition map when the artwork is chosen, cropped to 4:3. Without one, the first image is used.',
+      options: {hotspot: true},
+    }),
     modulesField(moduleMembers),
     defineField({
       name: 'site',

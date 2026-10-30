@@ -54,7 +54,7 @@
 		</div>
 	{/if}
 
-	<ExhibitionMap artworks={edition.artworks ?? []} {dates} text={edition.mapText} />
+	<ExhibitionMap artworks={edition.artworks ?? []} text={edition.mapText} />
 
 	{#if entries.length}
 		<section aria-label="Artworks" class="space-y-md">

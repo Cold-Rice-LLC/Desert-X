@@ -5,6 +5,7 @@
 	import { artworkCredit } from '$lib/art';
 	import Close from '$lib/components/icons/Close.svelte';
 	import LogoMark from '$lib/components/icons/LogoMark.svelte';
+	import ImageFrame from '$lib/components/ImageFrame.svelte';
 	import ModuleHeading from '$lib/components/modules/ModuleHeading.svelte';
 	import Portable from '$lib/components/Portable.svelte';
 
@@ -13,7 +14,7 @@
 	 * edition's artworks with coordinates, each marked with the logo's X,
 	 * then `text` and, given `href`, a "View Edition" link. Choosing
 	 * an X turns it black and opens a card in the top right with the artist,
-	 * title, site and the edition's `dates`, which scrolls if it's taller
+	 * title, thumbnail and a See Details link, which scrolls if it's taller
 	 * than the map. The close button, Escape or a
 	 * click on the map closes it. The map is recoloured to the site's greys,
 	 * without labels, under a grid that moves with it. Mapbox only loads
@@ -23,7 +24,7 @@
 	 * and choosing an X flies the map to it. Left out with no located
 	 * artworks.
 	 */
-	let { artworks, dates, text, href, heading = 'Exhibition Map' } = $props();
+	let { artworks, text, href, heading = 'Exhibition Map' } = $props();
 
 	// Tailwind's lg: rem in a media query is the browser's 16px, not the root's
 	const locked = new MediaQuery('width >= 64rem');
@@ -270,10 +271,12 @@
 					<section
 						bind:this={cardEl}
 						aria-label="Installation"
-						class="absolute top-base right-base z-10 max-h-[calc(100%-2*var(--spacing-base))] w-[40rem] space-y-line overflow-y-auto overscroll-contain [scrollbar-width:none] bg-white p-base font-mono"
+						class="absolute top-base right-base z-10 max-h-[calc(100%-2*var(--spacing-base))] w-[40rem] space-y-line overflow-y-auto overscroll-contain bg-white p-base font-mono [scrollbar-width:none]"
 					>
 						<div class="flex items-start justify-between gap-base">
-							<p class="uppercase">Installation</p>
+							<p>
+								{#if selected.artists}{selected.artists}<br />{/if}{selected.artwork.title}
+							</p>
 							<button
 								type="button"
 								aria-label="Close"
@@ -283,17 +286,10 @@
 								<Close class="size-full" />
 							</button>
 						</div>
-						<p>
-							<a href="/art/{selected.artwork.slug}">
-								{#if selected.artists}{selected.artists}<br />{/if}{selected.artwork.title}
-							</a>
-						</p>
-						{#if selected.artwork.site}
-							<p class="whitespace-pre-line">{selected.artwork.site}</p>
+						{#if selected.artwork.thumbnail?.asset}
+							<ImageFrame image={selected.artwork.thumbnail} aspect={4 / 3} sizes="400px" />
 						{/if}
-						{#if dates}
-							<p>{dates}</p>
-						{/if}
+						<p>See <a href="/art/{selected.artwork.slug}" class="link-underline">Details</a></p>
 					</section>
 				{/if}
 			</div>

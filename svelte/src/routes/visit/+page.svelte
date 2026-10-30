@@ -1,5 +1,4 @@
 <script>
-	import { formatDateRange } from '$lib/dates';
 	import ExhibitionMap from '$lib/components/edition/ExhibitionMap.svelte';
 	import Modules from '$lib/components/modules/Modules.svelte';
 
@@ -23,7 +22,6 @@
 	{#snippet custom({ edition })}
 		<ExhibitionMap
 			artworks={edition.artworks}
-			dates={formatDateRange(edition.startDate, edition.endDate)}
 			text={edition.mapText}
 			href="/editions/{edition.slug}"
 			heading="Desert X {edition.location} Exhibition Map"
