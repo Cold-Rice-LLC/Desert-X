@@ -21,9 +21,9 @@
 	 * From lg up the map is locked, framed on every X and refit as it
 	 * resizes. Below lg it pans with two fingers and zooms with a pinch,
 	 * and choosing an X flies the map to it. Left out with no located
-	 * artworks.
+	 * artworks. `class` passes to its section.
 	 */
-	let { artworks, text, href, heading = 'Exhibition Map' } = $props();
+	let { artworks, text, href, heading = 'Exhibition Map', class: className } = $props();
 
 	// Tailwind's lg: rem in a media query is the browser's 16px, not the root's
 	const locked = new MediaQuery('width >= 64rem');
@@ -258,7 +258,7 @@
 <svelte:window onkeydown={(event) => event.key === 'Escape' && (selectedId = null)} />
 
 {#if located.length}
-	<section>
+	<section class={className}>
 		<ModuleHeading {heading} />
 
 		<div class="mt-line px-gutter">

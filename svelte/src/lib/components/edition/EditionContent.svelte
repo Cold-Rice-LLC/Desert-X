@@ -11,12 +11,12 @@
 
 	/**
 	 * An edition, as its page shows it and as Other Editions shows it when
-	 * opened: the gallery, the dates and description, the exhibition map, its
-	 * artworks, its sponsors and up to three news items, sections a 2xl step
-	 * apart. The gallery is the edition's images, or else each artwork's
-	 * first. Sections with nothing to show are left out. `children` follows
-	 * as another section. `news` holds the News landing fields the news tiles
-	 * need.
+	 * opened: the gallery, the dates and description, the exhibition map and
+	 * its artworks (the map after them from lg up), its sponsors and up to
+	 * three news items, sections a 2xl step apart. The gallery is the
+	 * edition's images, or else each artwork's first. Sections with nothing
+	 * to show are left out. `children` follows as another section. `news`
+	 * holds the News landing fields the news tiles need.
 	 */
 	let { edition, news, children } = $props();
 
@@ -54,18 +54,20 @@
 		</div>
 	{/if}
 
-	<ExhibitionMap artworks={edition.artworks ?? []} text={edition.mapText} />
-
 	{#if entries.length}
-		<section aria-label="Artworks" class="space-y-md">
-			<ArtworksBar
-				sorts={['artist', 'artwork']}
-				{sort}
-				onsort={(key) => (sort = key)}
-				class="px-gutter"
-			/>
-			<ArtGrid {entries} />
-		</section>
+		<div class="flex flex-col gap-2xl">
+			<ExhibitionMap artworks={edition.artworks} text={edition.mapText} class="lg:order-last" />
+
+			<section aria-label="Artworks" class="space-y-md">
+				<ArtworksBar
+					sorts={['artist', 'artwork']}
+					{sort}
+					onsort={(key) => (sort = key)}
+					class="px-gutter"
+				/>
+				<ArtGrid {entries} />
+			</section>
+		</div>
 	{/if}
 
 	<Sponsors groups={edition.sponsorGroups ?? []} lists={edition.sponsorLists ?? []} />
