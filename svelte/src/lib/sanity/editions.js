@@ -36,7 +36,7 @@ export const editionFields = `
 		fullWidth,
 		logos[defined(image.asset)]{ _key, name, url, image{ ${imageFields} } }
 	},
-	sponsorLists[]{ _key, title, text },
+	sponsorLists[]{ _key, title, text[]{ ${richTextFields} } },
 	${editionArtworksFields},
 	"news": *[_type == "news" && edition._ref == ^._id] | order(publishDate desc) [0...3]{
 		${newsTileFields}

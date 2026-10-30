@@ -2,6 +2,7 @@ import {defineArrayMember, defineField, defineType} from 'sanity'
 import {CalendarIcon} from '@sanity/icons'
 import {moduleMembers} from '../modules'
 import {countLabel, seoField, titleSlugFields} from '../objects/fields'
+import {blocksToText} from '../objects/richText'
 
 export default defineType({
   name: 'edition',
@@ -175,14 +176,15 @@ export default defineType({
             }),
             defineField({
               name: 'text',
-              type: 'text',
+              type: 'richText',
               title: 'Text',
-              description: 'Shown as typed, one name per line.',
-              rows: 10,
+              description:
+                'One name per line. Select a name to link it, e.g. to the sponsor’s website.',
             }),
           ],
           preview: {
-            select: {title: 'title', subtitle: 'text'},
+            select: {title: 'title', text: 'text'},
+            prepare: ({title, text}) => ({title, subtitle: blocksToText(text)}),
           },
         }),
       ],

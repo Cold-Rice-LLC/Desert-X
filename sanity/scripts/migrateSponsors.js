@@ -10,12 +10,16 @@ import {SITE, client, fetchDocument, key, pendingImage, uploadImage} from './lib
  * composites for blank gaps, then checked by eye. Logos are named after
  * what the composites show, which doesn't always match the page's lists;
  * links come from the page's list of the same name. The lists under the
- * logos are the page's Galleries, Cultural, Media and Hotel Partners.
+ * logos are the page's Galleries, Cultural, Media and Hotel Partners, one
+ * rich text line per name, linked where the page links that name. Lists
+ * still stored as plain text are converted the same way, keeping the
+ * Studio's own lines.
  *
  * By default it's a dry run: it writes what it would set to
  * scripts/migrateSponsors.dry-run.json and touches nothing. With --import
- * it sets each field only where it's still empty, so re-running never
- * overwrites what editors have changed.
+ * it sets each field only where it's still empty, or the lists where
+ * they're still plain text, so re-running never overwrites what editors
+ * have changed.
  *
  *   npx sanity exec scripts/migrateSponsors.js --with-user-token
  *   npx sanity exec scripts/migrateSponsors.js --with-user-token -- --import
@@ -171,6 +175,23 @@ const linesOf = (paragraph) => {
 }
 
 /**
+ * Rich text with a line per name, each linked to the page's link of the
+ * same text if there is one.
+ */
+const listBlocks = (names, links) =>
+  names.map((text) => {
+    const url = links.get(text)
+    const link = url && {_key: key(), _type: 'link', linkType: 'external', externalUrl: url}
+    return {
+      _key: key(),
+      _type: 'block',
+      style: 'normal',
+      markDefs: link ? [link] : [],
+      children: [{_key: key(), _type: 'span', text, marks: link ? [link._key] : []}],
+    }
+  })
+
+/**
  * The page's links by their text, its composites' URLs by file name, and
  * the names under each of its list headings.
  */
@@ -201,7 +222,7 @@ const readPage = (document) => {
 
 const main = async () => {
   const editions = await client.fetch(
-    `*[_id in $ids]{ _id, "hasGroups": count(sponsorGroups) > 0, "hasLists": count(sponsorLists) > 0 }`,
+    `*[_id in $ids]{ _id, "hasGroups": count(sponsorGroups) > 0, sponsorLists }`,
     {ids: PAGES.map((page) => page.editionId)},
   )
 
@@ -238,16 +259,33 @@ const main = async () => {
       }
     })
 
-    const sponsorLists = LIST_TITLES.filter((title) => lists.has(title)).map((title) => ({
-      _key: key(),
-      _type: 'sponsorList',
-      title,
-      text: lists.get(title).join('\n'),
-    }))
+    // The Studio's lists, if it has any, else the page's
+    const plainText = edition.sponsorLists?.some((list) => typeof list.text === 'string')
+    const sponsorLists = edition.sponsorLists?.length
+      ? edition.sponsorLists.map((list) =>
+          typeof list.text === 'string'
+            ? {
+                ...list,
+                text: listBlocks(
+                  list.text
+                    .split('\n')
+                    .map((line) => line.trim())
+                    .filter(Boolean),
+                  links,
+                ),
+              }
+            : list,
+        )
+      : LIST_TITLES.filter((title) => lists.has(title)).map((title) => ({
+          _key: key(),
+          _type: 'sponsorList',
+          title,
+          text: listBlocks(lists.get(title), links),
+        }))
 
     const set = {
       ...(!edition.hasGroups && {sponsorGroups}),
-      ...(!edition.hasLists && sponsorLists.length && {sponsorLists}),
+      ...((!edition.sponsorLists?.length || plainText) && sponsorLists.length && {sponsorLists}),
     }
     patches.push({_id: edition._id, set, warnings})
     const logoCount = sponsorGroups.reduce((count, group) => count + group.logos.length, 0)
