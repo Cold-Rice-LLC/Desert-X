@@ -5,8 +5,9 @@
 
 	/**
 	 * Site footer, on every page but the homepage. On the 12-column grid:
-	 * search in column 1, the two link columns centred in columns 2 and 4,
-	 * and the text, copyright and credits across columns 6–12. Everything
+	 * search in column 1, the two link columns centred in columns 2 and 4
+	 * (the locations, then Site Settings' links), and the text, copyright
+	 * and credits across columns 6–12. Everything
 	 * sits on the bottom edge.
 	 */
 	let { footer } = $props();

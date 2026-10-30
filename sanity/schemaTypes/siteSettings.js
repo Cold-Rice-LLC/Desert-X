@@ -108,16 +108,17 @@ export default defineType({
       fieldset: 'menu',
       rows: 3,
     }),
-    // One field per footer column, left and right.
-    ...[1, 2].map((n) =>
-      defineField({
-        name: `footerLinks${n}`,
-        type: 'array',
-        title: `Links ${n}`,
-        fieldset: 'footer',
-        of: [defineArrayMember({type: 'navLink'})],
-      }),
-    ),
+    // The footer's second column; the first lists the locations. Named for
+    // when both were links, so its content didn't need moving.
+    defineField({
+      name: 'footerLinks2',
+      type: 'array',
+      title: 'Links',
+      description:
+        'The footer’s second column. The first lists each location, linking to its newest edition.',
+      fieldset: 'footer',
+      of: [defineArrayMember({type: 'navLink'})],
+    }),
     defineField({
       name: 'footerText',
       type: 'richText',

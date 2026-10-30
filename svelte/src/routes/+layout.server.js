@@ -5,21 +5,36 @@ import { linkFields, richTextFields } from '$lib/sanity/links';
 // A menu, Donate or footer link
 const navLinkFields = `_key, label, ${linkFields}`;
 
+// A location's editions, from inside a projection of the location
+const editionsOf = '*[_type == "edition" && location._ref == ^._id]';
+
 export async function load() {
-	const settings = await client.fetch(`
-		*[_id == "siteSettings"][0]{
+	const { settings, locations } = await client.fetch(`{
+		"settings": *[_id == "siteSettings"][0]{
 			siteTitle,
 			metaDescription,
 			ogImage{ ${imageFields} },
 			menuItems[]{ ${navLinkFields}, subItems[]{ ${navLinkFields} } },
 			menuText,
 			donateLink{ ${navLinkFields} },
-			footerLinks1[]{ ${navLinkFields} },
 			footerLinks2[]{ ${navLinkFields} },
 			footerText[]{ ${richTextFields} },
 			credits[]{ ${richTextFields} }
-		}
-	`);
+		},
+		// For the footer: each location with an edition, oldest first, as a
+		// link to its newest edition, like a menu link to a location
+		"locations": *[_type == "location" && count(${editionsOf}) > 0]{
+			"_key": _id,
+			"label": title,
+			"linkType": "internal",
+			"internal": {
+				_id,
+				_type,
+				"slug": ${editionsOf} | order(year desc)[0].slug.current
+			},
+			"since": ${editionsOf} | order(year asc)[0].year
+		} | order(since asc)
+	}`);
 
 	return {
 		// What pages fall back to for their head tags
@@ -33,7 +48,7 @@ export async function load() {
 			text: settings?.menuText
 		},
 		footer: {
-			links: [settings?.footerLinks1 ?? [], settings?.footerLinks2 ?? []],
+			links: [locations, settings?.footerLinks2 ?? []],
 			text: settings?.footerText,
 			credits: settings?.credits
 		},
