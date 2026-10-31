@@ -14,8 +14,9 @@
 	 * between its links; elsewhere it sits on white. Its height is fixed, so
 	 * pages without a title don't collapse it. With an `href` the title is a
 	 * link up a level, like a breadcrumb; `detail` follows it, e.g. a news
-	 * article's date. `donateLink` is an underlined link at the right edge,
-	 * in the smaller text on phones.
+	 * article's date or an artwork's artists, cut to one line on phones.
+	 * `donateLink` is an underlined link at the right edge, in the smaller
+	 * text on phones.
 	 */
 	let { home, title, href, detail, donateLink } = $props();
 </script>
@@ -37,7 +38,7 @@
 		<p>{title}</p>
 	{/if}
 	{#if detail}
-		<p>{detail}</p>
+		<p class="min-w-0 truncate md:overflow-visible md:whitespace-normal">{detail}</p>
 	{/if}
 	{#if donateLink?.label}
 		<AppLink link={donateLink} class="ml-auto text-sm link-underline md:text-md">
