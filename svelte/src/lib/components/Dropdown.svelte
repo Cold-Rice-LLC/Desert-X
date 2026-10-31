@@ -30,7 +30,7 @@
 		]}
 	>
 		{@render summary()}
-		<Caret class="h-[1.8rem] w-auto group-open:rotate-180" />
+		<Caret class="h-[1.4rem] w-auto group-open:rotate-180 md:h-[1.8rem]" />
 	</summary>
 	{@render children?.()}
 </details>

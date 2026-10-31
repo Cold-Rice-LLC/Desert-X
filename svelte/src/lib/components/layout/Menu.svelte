@@ -1,6 +1,7 @@
 <script>
 	import { afterNavigate } from '$app/navigation';
 	import AppLink from '$lib/components/AppLink.svelte';
+	import Footer from '$lib/components/layout/Footer.svelte';
 	import Logo from '$lib/components/icons/Logo.svelte';
 	import LogoMark from '$lib/components/icons/LogoMark.svelte';
 	import MenuButton from '$lib/components/layout/MenuButton.svelte';
@@ -14,15 +15,16 @@
 	 * Type is Sub-items open them in place of the menu text: under the item
 	 * on phones, pushing the rest down, and under the whole row from md up,
 	 * placed against the row so they stay nested in their item's list. The
-	 * rest are plain links. The menu text is left off phones, and the menu
-	 * scrolls if it runs past the screen. Sub-items linking to
+	 * rest are plain links. The menu text is left off phones, which have the
+	 * site footer at the bottom instead, and the menu scrolls if it runs
+	 * past the screen. Sub-items linking to
 	 * a location get the Desert X mark; one that goes nowhere, like a
 	 * location with no editions yet, shows faded as plain text. Always
 	 * rendered, so it can fade on opacity alone: while closed it's transparent, ignores the
 	 * pointer and is inert, and it's fixed and stacked above the nav so the
 	 * fade-out isn't cut off when the dialog leaves the top layer.
 	 */
-	let { menu } = $props();
+	let { menu, footer } = $props();
 
 	let dialog;
 	let activeKey = $state(null);
@@ -107,4 +109,6 @@
 	{#if menu.text && !active}
 		<p class="mt-md hidden px-gutter md:block">{menu.text}</p>
 	{/if}
+
+	<Footer {footer} class="pt-md md:hidden" />
 </dialog>

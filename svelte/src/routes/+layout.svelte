@@ -42,7 +42,7 @@
 
 <MainNav {home} {...nav} donateLink={data.donateLink} />
 
-<Menu menu={data.menu} />
+<Menu menu={data.menu} footer={data.footer} />
 
 {@render children()}
 
