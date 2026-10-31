@@ -5,7 +5,7 @@
 
 	/**
 	 * Optional centred heading over a list of bios. On phones each bio
-	 * stacks: the 4:5 image across half the width, its text, then the bio
+	 * stacks: the 4:5 image across the full width, its text, then the bio
 	 * text. From md up it's a 12-column row: the image, its text beside it,
 	 * and the bio text across the right half.
 	 */
@@ -22,8 +22,8 @@
 					<ImageFrame
 						image={bio.image}
 						aspect={4 / 5}
-						sizes="(width >= 768px) calc((100vw - 136px) / 4), calc((100vw - 40px) / 2)"
-						class="w-1/2 md:col-span-3 md:w-auto"
+						sizes="(width >= 768px) calc((100vw - 136px) / 4), calc(100vw - 40px)"
+						class="md:col-span-3"
 					/>
 					{#if bio.imageText}
 						<p class="whitespace-pre-line md:col-span-3 md:pl-[6rem]">{bio.imageText}</p>
