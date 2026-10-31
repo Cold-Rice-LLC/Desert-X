@@ -19,7 +19,7 @@
 		<a
 			{...item.external && newTabAttributes}
 			href={item.href}
-			class="col-span-8 grid grid-cols-subgrid md:col-span-9"
+			class="col-span-8 grid grid-cols-subgrid link-fade md:col-span-9"
 		>
 			<span class="col-span-6">{item.title}</span>
 			<span class="col-span-2 md:col-span-3">

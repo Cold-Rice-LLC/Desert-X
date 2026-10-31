@@ -94,7 +94,7 @@
 			aria-hidden="true"
 			class="sr-only"
 		/>
-		<button disabled={sending} class="uppercase">Sign up</button>
+		<button disabled={sending} class="uppercase link-fade">Sign up</button>
 	</form>
 
 	<!-- Always there, so screen readers announce what arrives in it -->

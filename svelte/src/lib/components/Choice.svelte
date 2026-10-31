@@ -12,11 +12,11 @@
 	<a
 		{...rest}
 		{href}
-		class={[current && 'link-underline']}
+		class={[current ? 'link-underline' : 'link-fade']}
 		aria-current={current ? 'page' : undefined}>{@render children()}</a
 	>
 {:else}
-	<button {...rest} class={[current && 'link-underline']} aria-pressed={current}
+	<button {...rest} class={[current ? 'link-underline' : 'link-fade']} aria-pressed={current}
 		>{@render children()}</button
 	>
 {/if}

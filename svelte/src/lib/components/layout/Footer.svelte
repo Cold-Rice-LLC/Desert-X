@@ -21,7 +21,7 @@
 		className
 	]}
 >
-	<a href="/search" aria-label="Search">
+	<a href="/search" aria-label="Search" class="link-fade">
 		<Search class="h-[1.6rem] w-auto md:h-[2.4rem]" />
 	</a>
 
@@ -29,14 +29,14 @@
 		{#if links.length}
 			<ul class={['text-center', i ? 'md:col-start-4' : 'md:col-start-2']}>
 				{#each links as link (link._key)}
-					<li><AppLink {link}>{link.label}</AppLink></li>
+					<li><AppLink {link} class="link-fade">{link.label}</AppLink></li>
 				{/each}
 			</ul>
 		{/if}
 	{/each}
 
-	<!-- Rich text links are underlined elsewhere, but not here -->
-	<div class="col-span-7 col-start-6 hidden md:block [&_a]:no-underline">
+	<!-- Rich text links are underlined elsewhere, but not here, so they fade instead -->
+	<div class="col-span-7 col-start-6 hidden md:block [&_a]:no-underline [&_a]:link-fade">
 		{#if footer.text}
 			<Portable value={footer.text} />
 		{/if}

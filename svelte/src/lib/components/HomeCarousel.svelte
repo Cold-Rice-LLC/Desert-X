@@ -304,7 +304,7 @@
 
 	{#if !prefersReducedMotion.current}
 		<button
-			class="absolute right-edge bottom-edge font-mono text-sm text-white uppercase"
+			class="absolute right-edge bottom-edge font-mono text-sm text-white uppercase link-fade"
 			onclick={() => (paused = !paused)}
 		>
 			{paused ? 'Play' : 'Pause'}

@@ -16,9 +16,15 @@
 
 <nav aria-label={label} class={['space-y-line px-gutter', className]}>
 	<p class="uppercase">
-		<a href={allHref} class={[!open && 'link-underline']} onclick={() => (open = false)}>All</a>
+		<a href={allHref} class={[open ? 'link-fade' : 'link-underline']} onclick={() => (open = false)}
+			>All</a
+		>
 		/
-		<button class={[open && 'link-underline']} aria-expanded={open} onclick={() => (open = !open)}>
+		<button
+			class={[open ? 'link-underline' : 'link-fade']}
+			aria-expanded={open}
+			onclick={() => (open = !open)}
+		>
 			Filter
 		</button>
 	</p>

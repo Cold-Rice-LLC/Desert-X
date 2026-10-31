@@ -68,7 +68,7 @@
 			<li>
 				{#if item.linkType === 'subItems'}
 					<button
-						class={[item._key === activeKey && 'link-underline']}
+						class={[item._key === activeKey ? 'link-underline' : 'link-fade']}
 						aria-expanded={item._key === activeKey}
 						aria-controls="menu-sub-items"
 						onclick={() => (activeKey = item._key === activeKey ? null : item._key)}
@@ -89,7 +89,7 @@
 								{/snippet}
 								<li>
 									{#if linkHref(subItem)}
-										<AppLink link={subItem} class="flex items-center gap-[0.3em]">
+										<AppLink link={subItem} class="flex items-center gap-[0.3em] link-fade">
 											{@render label()}
 										</AppLink>
 									{:else}
@@ -100,7 +100,7 @@
 						</ul>
 					{/if}
 				{:else}
-					<AppLink link={item}>{item.label}</AppLink>
+					<AppLink link={item} class="link-fade">{item.label}</AppLink>
 				{/if}
 			</li>
 		{/each}

@@ -32,7 +32,7 @@
 			<Logo class="h-[1.6rem] w-auto md:h-base" />
 		</button>
 	{:else if title && href}
-		<a {href}>{title}</a>
+		<a {href} class="link-fade">{title}</a>
 	{:else if title}
 		<p>{title}</p>
 	{/if}

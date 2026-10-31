@@ -75,7 +75,7 @@
 						/>
 					</label>
 				{:else}
-					<button onclick={() => (selected = 'custom')}>Custom amount</button>
+					<button class="link-fade" onclick={() => (selected = 'custom')}>Custom amount</button>
 				{/if}
 			</div>
 

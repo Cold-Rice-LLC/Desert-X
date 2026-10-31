@@ -281,7 +281,12 @@
 								{selected.artists}
 								<cite class="-my-[0.1em] line-clamp-2 py-[0.1em]">{selected.artwork.title}</cite>
 							</p>
-							<button type="button" aria-label="Close" onclick={() => (selectedId = null)}>
+							<button
+								type="button"
+								aria-label="Close"
+								class="link-fade"
+								onclick={() => (selectedId = null)}
+							>
 								X
 							</button>
 						</div>

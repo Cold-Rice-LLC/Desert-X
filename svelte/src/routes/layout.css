@@ -59,11 +59,29 @@
 	--underline-thickness: 0.05em;
 }
 
-/* The site's underline for links and the like */
+/* The site's underline for links and the like. On hover it comes off, but
+   only on what's clickable, not e.g. the donate module's amount field. */
 @utility link-underline {
 	text-decoration-line: underline;
 	text-underline-offset: var(--underline-offset);
 	text-decoration-thickness: var(--underline-thickness);
+
+	&:is(a, button):hover {
+		@media (hover: hover) {
+			text-decoration-line: none;
+		}
+	}
+}
+
+/* The hover for links and buttons without an underline: they fade */
+@utility link-fade {
+	transition: opacity 0.3s var(--default-transition-timing-function);
+
+	&:not(:disabled):hover {
+		@media (hover: hover) {
+			opacity: 50%;
+		}
+	}
 }
 
 html {

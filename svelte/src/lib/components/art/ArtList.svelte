@@ -26,7 +26,7 @@
 </script>
 
 {#snippet row(artwork)}
-	<a href="/art/{artwork.slug}" class="col-span-5 md:col-span-6">{artwork.title}</a>
+	<a href="/art/{artwork.slug}" class="col-span-5 link-fade md:col-span-6">{artwork.title}</a>
 	{#if artwork.location}
 		<p class="col-span-3 md:col-span-2">{artwork.location}</p>
 	{/if}
