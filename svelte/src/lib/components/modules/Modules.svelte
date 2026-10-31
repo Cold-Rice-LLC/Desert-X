@@ -5,6 +5,7 @@
 	import InterviewModule from '$lib/components/modules/InterviewModule.svelte';
 	import MediaModule from '$lib/components/modules/MediaModule.svelte';
 	import NewsModule from '$lib/components/modules/NewsModule.svelte';
+	import NewsletterModule from '$lib/components/modules/NewsletterModule.svelte';
 	import PeopleListModule from '$lib/components/modules/PeopleListModule.svelte';
 	import ScheduleModule from '$lib/components/modules/ScheduleModule.svelte';
 	import TextModule from '$lib/components/modules/TextModule.svelte';
@@ -29,6 +30,7 @@
 		interviewModule: InterviewModule,
 		mediaModule: MediaModule,
 		newsModule: NewsModule,
+		newsletterModule: NewsletterModule,
 		scheduleModule: ScheduleModule
 	};
 </script>

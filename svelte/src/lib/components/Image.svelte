@@ -50,8 +50,9 @@
 	height={sources.height}
 	{loading}
 	class={[className, 'transition-opacity duration-300', !loaded && 'opacity-0']}
-	onload={() =>
-		el
+	onload={(event) =>
+		// The event's element, as `el` is gone if it finishes after unmounting
+		event.currentTarget
 			.decode()
 			.catch(() => {})
 			.then(() => (loaded = true))}

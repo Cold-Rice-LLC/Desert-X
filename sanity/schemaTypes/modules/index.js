@@ -16,10 +16,11 @@ export const moduleMembers = [
 
 /**
  * Pages also get the News module (news articles show related news on their
- * own) and the Donate module.
+ * own), the Donate module and the Newsletter Signup.
  */
 export const pageModuleMembers = [
   ...moduleMembers,
   defineArrayMember({type: 'newsModule'}),
   defineArrayMember({type: 'donateModule'}),
+  defineArrayMember({type: 'newsletterModule'}),
 ]

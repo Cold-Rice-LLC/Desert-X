@@ -55,6 +55,10 @@ export const modulesFields = `
 		text,
 		amounts
 	},
+	_type == "newsletterModule" => {
+		heading,
+		text[]{ ${richTextFields} }
+	},
 	_type == "interviewModule" => {
 		heading,
 		exchanges[]{
