@@ -6,9 +6,10 @@
 
 	/**
 	 * An edition's sponsors under a Sponsors heading: each group a grey panel
-	 * of logos, two groups side by side unless one is full width, then up to
-	 * four lists of names, a line each and linked where set, a quarter of
-	 * the grid each. Logos fit one box per width, so wordmarks and marks
+	 * of logos, stacked on phones and from md up two side by side unless one
+	 * is full width, then up to four lists of names, a line each and linked
+	 * where set, stacked on phones and a quarter of the grid each from md
+	 * up. Logos fit one box per width, so wordmarks and marks
 	 * come out about the same size, and any white background multiplies away
 	 * into the grey. They spread wider in a full-width group, and a logo's
 	 * link opens in a new tab. Left out when there's nothing to show.
@@ -25,9 +26,9 @@
 
 		<div class="mt-line space-y-md px-gutter text-base">
 			{#if shownGroups.length}
-				<div class="grid grid-cols-2 gap-x-base gap-y-md">
+				<div class="grid gap-x-base gap-y-md md:grid-cols-2">
 					{#each shownGroups as group (group._key)}
-						<div class={['flex flex-col gap-line', group.fullWidth && 'col-span-2']}>
+						<div class={['flex flex-col gap-line', group.fullWidth && 'md:col-span-2']}>
 							{#if group.title}
 								<h3>{group.title}</h3>
 							{/if}
@@ -65,9 +66,9 @@
 			{/if}
 
 			{#if shownLists.length}
-				<div class="grid grid-cols-12 gap-x-base">
+				<div class="grid gap-x-base gap-y-md md:grid-cols-12">
 					{#each shownLists as list (list._key)}
-						<div class="col-span-3">
+						<div class="md:col-span-3">
 							{#if list.title}
 								<h3 class="mb-line">{list.title}</h3>
 							{/if}

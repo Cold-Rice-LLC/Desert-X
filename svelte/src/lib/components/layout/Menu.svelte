@@ -54,7 +54,7 @@
 	class="pointer-events-none fixed inset-0 z-20 m-0 flex size-full max-h-none max-w-none flex-col overflow-y-auto bg-white text-menu text-black opacity-0 transition-opacity duration-300 open:pointer-events-auto open:opacity-100"
 	aria-label="Menu"
 >
-	<div class="relative flex h-nav shrink-0 items-center pl-gutter">
+	<div class="relative flex h-nav shrink-0 items-center gap-x-[0.8em] px-edge text-md md:pl-gutter">
 		<MenuButton aria-label="Close menu" onclick={() => (ui.menuOpen = false)} />
 		<button aria-label="Close menu" onclick={() => (ui.menuOpen = false)}>
 			<Logo class="h-[1.6rem] w-auto md:h-base" />

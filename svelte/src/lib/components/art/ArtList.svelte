@@ -4,10 +4,11 @@
 
 	/**
 	 * Artworks under a heading per year, newest first, with Other for those
-	 * without one. Each artist is a row on the 12-column grid: their name
-	 * across 3 columns, and their artworks stacked beside it, the title
-	 * across 6, then location across 2 and year. Entries arrive sorted by
-	 * year.
+	 * without one. Each artist is a row (see GroupedList), their artworks
+	 * stacked beside their name: the title across 5 columns and the location
+	 * across 3 on phones, which leave the year to the heading, and from md
+	 * up the title across 6, the location across 2 and the year. Entries
+	 * arrive sorted by year.
 	 */
 	let { entries } = $props();
 
@@ -25,12 +26,12 @@
 </script>
 
 {#snippet row(artwork)}
-	<a href="/art/{artwork.slug}" class="col-span-6">{artwork.title}</a>
+	<a href="/art/{artwork.slug}" class="col-span-5 md:col-span-6">{artwork.title}</a>
 	{#if artwork.location}
-		<p class="col-span-2">{artwork.location}</p>
+		<p class="col-span-3 md:col-span-2">{artwork.location}</p>
 	{/if}
 	{#if artwork.year}
-		<p class="col-start-9">{artwork.year}</p>
+		<p class="hidden md:col-start-9 md:block">{artwork.year}</p>
 	{/if}
 {/snippet}
 

@@ -4,10 +4,10 @@
 	/**
 	 * "All / Filter" over a list. All goes to `allHref`, clearing the
 	 * filters; Filter shows a row of `options` as links, each `{ key,
-	 * label, href, current }`. Open while a filter is on (`active`).
+	 * label, href, current }`, or a line each on phones if `stacked`. Open while a filter is on (`active`).
 	 * `label` names the <nav>, and `class` goes on it.
 	 */
-	let { label, allHref, options, active, class: className } = $props();
+	let { label, allHref, options, active, stacked = false, class: className } = $props();
 
 	// Only where it starts: the visitor opens and closes it from there
 	// svelte-ignore state_referenced_locally
@@ -23,7 +23,7 @@
 		</button>
 	</p>
 	{#if open}
-		<ul class="flex flex-wrap gap-x-[0.45em]">
+		<ul class={['flex flex-wrap gap-x-[0.45em]', stacked && 'flex-col md:flex-row']}>
 			{#each options as option (option.key)}
 				<li>
 					<Choice href={option.href} current={option.current}>{option.label}</Choice>

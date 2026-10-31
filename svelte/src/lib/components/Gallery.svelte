@@ -7,9 +7,10 @@
 
 	/**
 	 * Images at the top of an artwork or edition page, 4:3 across the middle
-	 * 16 of 24 columns, centred in a section that follows the window's
-	 * height below the nav, from 60rem to 100rem, and grows to fit a taller
-	 * image.
+	 * 20 of 24 columns on phones, a little below what's above. From md up
+	 * they're across the middle 16,
+	 * centred in a section that follows the window's height below the nav,
+	 * from 60rem to 100rem, and grows to fit a taller image.
 	 * One image sits on its own; more become a carousel with the current
 	 * slide centred and its neighbours peeking in either side, a column
 	 * apart. Three or more loop round, so the last peeks in left of the
@@ -46,9 +47,9 @@
 		return wrapped > slides.length / 2 ? wrapped - slides.length : wrapped;
 	};
 
-	const sizes = 'calc((100vw - 40px) * 2 / 3)';
-	// The section's height, whichever way the images show
-	const height = 'min-h-[clamp(60rem,calc(100svh-var(--spacing-nav)),100rem)]';
+	const sizes = '(width >= 768px) calc((100vw - 40px) * 2 / 3), calc((100vw - 40px) * 5 / 6)';
+	// The section's space above and height, whichever way the images show
+	const section = 'mt-sm md:mt-0 md:min-h-[clamp(60rem,calc(100svh-var(--spacing-nav)),100rem)]';
 
 	const carousel = (node) => {
 		swiper = new Swiper(node, {
@@ -65,7 +66,7 @@
 </script>
 
 {#if images.length > 1}
-	<div class={['swiper w-full items-center', height]} {@attach carousel}>
+	<div class={['swiper w-full items-center', section]} {@attach carousel}>
 		<div class="swiper-wrapper">
 			{#each slides as { image, key }, index (key)}
 				<!-- The arrow keys move it too (Swiper's Keyboard module) -->
@@ -90,14 +91,14 @@
 		</div>
 	</div>
 {:else}
-	<div class={['grid grid-cols-24 items-center px-edge', height]}>
+	<div class={['grid grid-cols-24 items-center px-edge', section]}>
 		<ImageFrame
 			image={images[0]}
 			aspect={4 / 3}
 			{sizes}
 			loading="eager"
 			fetchpriority="high"
-			class="col-span-16 col-start-5"
+			class="col-span-20 col-start-3 md:col-span-16 md:col-start-5"
 		/>
 	</div>
 {/if}
@@ -112,11 +113,15 @@
 	}
 
 	/* Percentages are of the carousel's width, wherever these are used. Each
-	   slide is 16 columns plus half a column either side, so slides sit a
-	   column apart. */
+	   slide is 20 columns on phones and 16 from md up, plus half a column
+	   either side, so slides sit a column apart. */
 	.swiper-wrapper {
 		--column: calc((100% - 2 * var(--spacing-edge)) / 24);
-		--slide: calc(var(--column) * 17);
+		--slide: calc(var(--column) * 21);
+
+		@media (width >= 48rem) {
+			--slide: calc(var(--column) * 17);
+		}
 	}
 
 	.slide {

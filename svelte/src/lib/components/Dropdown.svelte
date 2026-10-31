@@ -6,8 +6,8 @@
 	 * that flips when open, and `children` what opens under it. It opens
 	 * without JavaScript and find-in-page can open it. Dropdowns sharing a
 	 * `name` close each other, so only one is open at a time. `open` binds.
-	 * The first title in a stack has no top padding, so it sits a line under
-	 * a heading. `class` goes on the <details>, `summaryClass` on the row,
+	 * Titles are larger than the text on phones. The first title in a stack
+	 * has no top padding, so it sits a line under a heading. `class` goes on the <details>, `summaryClass` on the row,
 	 * and other attributes, like `id`, pass through to the <details>.
 	 */
 	let {
@@ -25,7 +25,7 @@
 	<summary
 		class={[
 			// Safari's disclosure triangle, which list-none doesn't hide
-			'flex cursor-pointer list-none items-center justify-between py-sm group-first:pt-0 [&::-webkit-details-marker]:hidden',
+			'flex cursor-pointer list-none items-center justify-between py-sm text-[2.6rem] group-first:pt-0 md:text-md [&::-webkit-details-marker]:hidden',
 			summaryClass
 		]}
 	>

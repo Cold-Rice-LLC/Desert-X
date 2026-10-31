@@ -52,6 +52,7 @@
 		allHref={href({ location: null, year: null })}
 		options={filters}
 		active={!!(data.location || data.year)}
+		stacked
 		class="mt-2xl mb-md"
 	/>
 

@@ -1,6 +1,6 @@
 <script>
 	import { PUBLIC_MAPBOX_TOKEN } from '$env/static/public';
-	import { mount, unmount } from 'svelte';
+	import { mount, tick, unmount } from 'svelte';
 	import { MediaQuery } from 'svelte/reactivity';
 	import { artworkCredit } from '$lib/art';
 	import LogoMark from '$lib/components/icons/LogoMark.svelte';
@@ -12,21 +12,24 @@
 	 * A heading ("Exhibition Map" unless overridden) over a Mapbox map of an
 	 * edition's artworks with coordinates, each marked with the logo's X,
 	 * then `text` and, given `href`, a "View Edition" link. Choosing
-	 * an X turns it black and opens a card in the top right with the artist,
-	 * title (up to two lines), thumbnail and a See Details link, which scrolls if it's taller
-	 * than the map. The close button, Escape or a
+	 * an X turns it black and opens a card with the artist, title (up to two
+	 * lines), thumbnail and a See Details link, across the bottom on phones
+	 * and in the top right from md up, which scrolls if it's taller than the
+	 * map. The close button, Escape or a
 	 * click on the map closes it. The map is recoloured to the site's greys,
 	 * without labels, under a grid that moves with it. Mapbox only loads
 	 * once the map nears the viewport, which also keeps it off the server.
 	 * From lg up the map is locked, framed on every X and refit as it
-	 * resizes. Below lg it pans with two fingers and zooms with a pinch,
-	 * and choosing an X flies the map to it. Left out with no located
+	 * resizes. Below lg it pans and zooms, and choosing an X flies the map
+	 * to it: on phones with a finger and a pinch, from md up with two
+	 * fingers or Ctrl and the wheel, so scrolling past it still scrolls. Left out with no located
 	 * artworks. `class` passes to its section.
 	 */
 	let { artworks, text, href, heading = 'Exhibition Map', class: className } = $props();
 
 	// Tailwind's lg: rem in a media query is the browser's 16px, not the root's
 	const locked = new MediaQuery('width >= 64rem');
+	const wide = new MediaQuery('width >= 48rem');
 
 	const style = 'mapbox://styles/mapbox/light-v11';
 
@@ -58,17 +61,18 @@
 		}
 	});
 
-	function select(id) {
+	async function select(id) {
 		selectedId = id;
 		const pin = located.find((p) => p.artwork._id === id);
 		if (pin && map && !locked.current) {
-			// Keeps the chosen X clear of the card in the top right
+			// Keeps the chosen X clear of the card, measured once it's shown:
+			// beside it from md up, above it on phones
+			await tick();
 			const gap = 40;
-			map.flyTo({
-				center: pin.lngLat,
-				zoom: Math.max(map.getZoom(), 13),
-				padding: { top: gap, bottom: gap, left: gap, right: (cardEl?.offsetWidth ?? 0) + gap }
-			});
+			const padding = { top: gap, bottom: gap, left: gap, right: gap };
+			if (wide.current) padding.right += cardEl?.offsetWidth ?? 0;
+			else padding.bottom += cardEl?.offsetHeight ?? 0;
+			map.flyTo({ center: pin.lngLat, zoom: Math.max(map.getZoom(), 13), padding });
 		}
 	}
 
@@ -171,7 +175,7 @@
 	$effect(() => {
 		if (!map) return;
 		const lock = locked.current;
-		map.setCooperativeGestures(!lock);
+		map.setCooperativeGestures(!lock && wide.current);
 		for (const handler of handlers) map[handler][lock ? 'disable' : 'enable']();
 		if (lock) frame(map);
 		else map.touchZoomRotate.disableRotation();
@@ -262,7 +266,7 @@
 		<ModuleHeading {heading} />
 
 		<div class="mt-line px-gutter">
-			<div bind:this={frameEl} class="relative h-[80vh] overflow-hidden bg-grey-2">
+			<div bind:this={frameEl} class="relative h-[60vh] overflow-hidden bg-grey-2 md:h-[80vh]">
 				<!-- Mapbox's own CSS makes this position: relative, so it fills by size instead -->
 				<div bind:this={mapEl} class="size-full"></div>
 
@@ -270,7 +274,7 @@
 					<section
 						bind:this={cardEl}
 						aria-label="Installation"
-						class="absolute top-base right-base z-10 max-h-[calc(100%-2*var(--spacing-base))] w-[40rem] space-y-line overflow-y-auto overscroll-contain bg-white p-base font-mono [scrollbar-width:none]"
+						class="absolute inset-x-sm bottom-sm z-10 max-h-[calc(100%-2*var(--spacing-sm))] space-y-line overflow-y-auto overscroll-contain bg-white p-sm font-mono [scrollbar-width:none] md:inset-x-auto md:top-base md:right-base md:bottom-auto md:max-h-[calc(100%-2*var(--spacing-base))] md:w-[40rem] md:p-base"
 					>
 						<div class="flex items-start justify-between gap-base">
 							<p>

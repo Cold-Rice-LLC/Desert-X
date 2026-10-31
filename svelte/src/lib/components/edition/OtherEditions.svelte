@@ -9,7 +9,7 @@
 
 	/**
 	 * The location's other editions as dropdowns, one open at a time, each
-	 * titled with its year, location and dates. Opening one shows the
+	 * titled with its year and location, and its dates from md up. Opening one shows the
 	 * edition as its own page does, with a link to that page. Its content is
 	 * only built while open, so closed ones load no images and the carousel
 	 * can measure itself. While the open one passes under the nav, the nav
@@ -76,7 +76,9 @@
 					<span class="flex gap-x-[0.8em]">
 						<span>{edition.year}</span>
 						<span>{edition.location}</span>
-						<span>{formatDateRange(edition.startDate, edition.endDate, { short: true })}</span>
+						<span class="hidden md:inline">
+							{formatDateRange(edition.startDate, edition.endDate, { short: true })}
+						</span>
 					</span>
 				{/snippet}
 				{#if openSlug === edition.slug}

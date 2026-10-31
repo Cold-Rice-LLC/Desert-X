@@ -6,7 +6,8 @@
 	 * Search results under "25 Results / Clear", the link clearing the search
 	 * (`clearHref`). Each group is a row, as in the artworks list (see
 	 * GroupedList): its name, an artist or Editions, Pages or News, and its
-	 * rows beside it, each title across 6 columns and its link at the end,
+	 * rows beside it, each title across 5 columns on phones and 6 from md
+	 * up, and its link at the end,
 	 * the whole row one link. Press opens in a new tab. `class` goes on the
 	 * section.
 	 */
@@ -18,13 +19,13 @@
 		<a
 			{...item.external && newTabAttributes}
 			href={item.href}
-			class="col-span-9 grid grid-cols-subgrid"
+			class="col-span-8 grid grid-cols-subgrid md:col-span-9"
 		>
-			<span class="col-span-6">{item.title}</span>
+			<span class="col-span-5 md:col-span-6">{item.title}</span>
 			<span class="col-span-3">{item.action}</span>
 		</a>
 	{:else}
-		<p class="col-span-6">{item.title}</p>
+		<p class="col-span-5 md:col-span-6">{item.title}</p>
 	{/if}
 {/snippet}
 

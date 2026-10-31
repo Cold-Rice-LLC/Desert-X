@@ -13,10 +13,10 @@
 	 * Renders a modules array in order, picking a component by type. Types
 	 * without a component go to the `custom` snippet, given the module, so a
 	 * page can slot its own sections in among them (the Visit page's maps),
-	 * or are skipped. Modules sit 10rem apart, or two blank lines between
+	 * or are skipped. Modules sit an xl step apart, or two blank lines between
 	 * consecutive text modules. `children` comes first, spaced like a module
 	 * (a news article's title). `narrow` runs text-led modules from column 2
-	 * to 11 of the 12-column grid, as news does.
+	 * to 11 of the 12-column grid from md up, as news does.
 	 */
 	let { modules, narrow = false, children, custom } = $props();
 
@@ -55,9 +55,12 @@
 			margin-top: calc(2 * var(--spacing-line));
 		}
 
-		/* Column 2 to 11 of the 12-column grid inside the screen edges */
+		/* Column 2 to 11 of the 12-column grid inside the screen edges, from
+		   md up; phones keep the gutter */
 		&.narrow {
-			--spacing-module: calc(var(--spacing-edge) + (100% - 2 * var(--spacing-edge)) / 12);
+			@media (width >= 48rem) {
+				--spacing-module: calc(var(--spacing-edge) + (100% - 2 * var(--spacing-edge)) / 12);
+			}
 		}
 	}
 </style>
