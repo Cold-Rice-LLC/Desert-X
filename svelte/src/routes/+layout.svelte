@@ -25,6 +25,11 @@
 		complete.then(done, done);
 	});
 
+	// Whether a pointer or Tab last moved focus, for text fields' focus
+	// styles (the keyboard variant in layout.css). Only Tab counts as the
+	// keyboard: typing in a field clicked into mustn't bring its ring up.
+	const pointer = (on) => document.documentElement.toggleAttribute('data-pointer', on);
+
 	let home = $derived(page.url.pathname === '/');
 
 	// What the nav shows beside the menu button: the page's title, which
@@ -38,12 +43,18 @@
 	});
 </script>
 
+<!-- Capturing, so nothing on the page can stop them first -->
+<svelte:document
+	onpointerdowncapture={() => pointer(true)}
+	onkeydowncapture={(event) => event.key === 'Tab' && pointer(false)}
+/>
+
 <Seo defaults={data.seo} />
 
 <!-- Above the nav, and only shown while it has keyboard focus -->
 <a
 	href="#main"
-	class="fixed top-0 left-0 z-30 -translate-y-full bg-white p-edge text-md focus:translate-y-0"
+	class="fixed top-0 left-0 z-30 -translate-y-full bg-white p-xs text-base focus-visible:translate-y-0"
 >
 	Skip to content
 </a>

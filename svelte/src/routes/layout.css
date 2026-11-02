@@ -59,6 +59,11 @@
 	--underline-thickness: 0.05em;
 }
 
+/* While the keyboard, not a pointer, last moved focus. Text fields match
+   :focus-visible however they're focused, a click included, so their
+   focus styles go under this too (see +layout.svelte for data-pointer) */
+@custom-variant keyboard (:root:not([data-pointer]) &);
+
 /* The site's underline, without a hover: for the current one of a set of
    choices, where there's nothing new to click through to */
 @utility link-current {
@@ -132,6 +137,11 @@ html {
 	:focus-visible {
 		outline: 0.2rem solid currentColor;
 		outline-offset: 0.2rem;
+	}
+
+	/* A text field clicked into has its caret to show it */
+	:root[data-pointer] :is(input, textarea):focus-visible {
+		outline: none;
 	}
 }
 

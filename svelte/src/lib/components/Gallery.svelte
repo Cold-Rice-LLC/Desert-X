@@ -18,7 +18,8 @@
 	 * first; three are doubled, as Swiper's loop would otherwise put both
 	 * others on the left. Click a neighbour, under a resize cursor pointing its way, or
 	 * use the arrow keys to move; a mouse can't drag it, but touch screens
-	 * still swipe.
+	 * still swipe. Tabbing reaches Previous and Next buttons at either edge,
+	 * which only show while they have focus.
 	 *
 	 * The browser's lazy loading only looks again on scroll, not when a
 	 * slide moves into view, so the current slide and its neighbours are
@@ -77,6 +78,23 @@
 
 {#if images.length > 1}
 	<div class={['swiper w-full items-center', section]} {@attach carousel}>
+		<!-- For the keyboard, which can't click a neighbour: shown only while
+		     focused, and never in a mouse's way -->
+		{#snippet step(label, side, onclick)}
+			<button
+				type="button"
+				aria-label="{label} image"
+				class={[
+					'pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 bg-white p-xs text-base uppercase opacity-0 focus-visible:opacity-100',
+					side
+				]}
+				{onclick}
+			>
+				{label}
+			</button>
+		{/snippet}
+		{@render step('Previous', 'left-edge', () => swiper.slidePrev())}
+		{@render step('Next', 'right-edge', () => swiper.slideNext())}
 		<div class="swiper-wrapper">
 			{#each slides as { image, alt, key }, index (key)}
 				<!-- The arrow keys move it too (Swiper's Keyboard module) -->
