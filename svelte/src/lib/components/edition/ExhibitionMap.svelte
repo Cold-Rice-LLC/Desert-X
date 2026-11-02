@@ -24,9 +24,16 @@
 	 * resizes. Below lg it pans and zooms, and choosing an X flies the map
 	 * to it: on phones with a finger and a pinch, from md up with two
 	 * fingers or Ctrl and the wheel, so scrolling past it still scrolls. Left out with no located
-	 * artworks. `class` passes to its section.
+	 * artworks. `class` passes to its section, and `headingLevel` to its heading.
 	 */
-	let { artworks, text, href, heading = 'Exhibition Map', class: className } = $props();
+	let {
+		artworks,
+		text,
+		href,
+		heading = 'Exhibition Map',
+		headingLevel,
+		class: className
+	} = $props();
 
 	// Tailwind's lg: rem in a media query is the browser's 16px, not the root's
 	const locked = new MediaQuery('width >= 64rem');
@@ -291,7 +298,7 @@
 
 {#if located.length}
 	<section class={className}>
-		<ModuleHeading {heading} />
+		<ModuleHeading {heading} level={headingLevel} />
 
 		<div class="mt-line px-gutter">
 			<div bind:this={frameEl} class="relative h-[60vh] overflow-hidden bg-grey-2 md:h-[80vh]">

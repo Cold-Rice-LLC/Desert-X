@@ -84,7 +84,7 @@
 					</span>
 				{/snippet}
 				{#if openSlug === edition.slug}
-					<EditionContent {edition} {news}>
+					<EditionContent {edition} {news} headingLevel={3}>
 						<p class="px-gutter pb-2xl">
 							<a href="/editions/{edition.slug}" class="link-underline">
 								View {edition.location}

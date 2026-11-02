@@ -16,9 +16,10 @@
 	 * three news items, sections a 2xl step apart. The gallery is the
 	 * edition's images, or else each artwork's first. Sections with nothing
 	 * to show are left out. `children` follows as another section. `news`
-	 * holds the News landing fields the news tiles need.
+	 * holds the News landing fields the news tiles need, and `headingLevel`
+	 * sets its sections' headings: h2s on its own page, h3s in Other Editions.
 	 */
-	let { edition, news, children } = $props();
+	let { edition, news, headingLevel, children } = $props();
 
 	// By artist or artwork only, as an edition's artworks share a location and year
 	let sort = $state('artist');
@@ -56,7 +57,12 @@
 
 	{#if entries.length}
 		<div class="flex flex-col gap-2xl">
-			<ExhibitionMap artworks={edition.artworks} text={edition.mapText} class="lg:order-last" />
+			<ExhibitionMap
+				artworks={edition.artworks}
+				text={edition.mapText}
+				{headingLevel}
+				class="lg:order-last"
+			/>
 
 			<section aria-label="Artworks" class="space-y-md">
 				<ArtworksBar
@@ -70,9 +76,13 @@
 		</div>
 	{/if}
 
-	<Sponsors groups={edition.sponsorGroups ?? []} lists={edition.sponsorLists ?? []} />
+	<Sponsors
+		groups={edition.sponsorGroups ?? []}
+		lists={edition.sponsorLists ?? []}
+		{headingLevel}
+	/>
 
-	<NewsModule module={{ _type: 'newsModule', items: edition.news, ...news }} />
+	<NewsModule module={{ _type: 'newsModule', items: edition.news, ...news }} {headingLevel} />
 
 	{@render children?.()}
 </div>

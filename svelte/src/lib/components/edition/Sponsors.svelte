@@ -12,9 +12,11 @@
 	 * up. Logos fit one box per width, so wordmarks and marks
 	 * come out about the same size, and any white background multiplies away
 	 * into the grey. They spread wider in a full-width group, and a logo's
-	 * link opens in a new tab. Left out when there's nothing to show.
+	 * link opens in a new tab. Left out when there's nothing to show. Group
+	 * and list titles are a level under the heading (`headingLevel`, h2 by
+	 * default).
 	 */
-	let { groups = [], lists = [] } = $props();
+	let { groups = [], lists = [], headingLevel = 2 } = $props();
 
 	let shownGroups = $derived(groups.filter((group) => group.logos?.length));
 	let shownLists = $derived(lists.filter((list) => list.title || list.text?.length));
@@ -22,7 +24,7 @@
 
 {#if shownGroups.length || shownLists.length}
 	<section>
-		<ModuleHeading heading="Sponsors" />
+		<ModuleHeading heading="Sponsors" level={headingLevel} />
 
 		<div class="mt-line space-y-md px-gutter text-base">
 			{#if shownGroups.length}
@@ -30,7 +32,7 @@
 					{#each shownGroups as group (group._key)}
 						<div class={['flex flex-col gap-line', group.fullWidth && 'md:col-span-2']}>
 							{#if group.title}
-								<h3>{group.title}</h3>
+								<svelte:element this={`h${headingLevel + 1}`}>{group.title}</svelte:element>
 							{/if}
 							<ul
 								class={[
@@ -71,7 +73,9 @@
 					{#each shownLists as list (list._key)}
 						<div class="md:col-span-3">
 							{#if list.title}
-								<h3 class="mb-line">{list.title}</h3>
+								<svelte:element this={`h${headingLevel + 1}`} class="mb-line"
+									>{list.title}</svelte:element
+								>
 							{/if}
 							{#if list.text?.length}
 								<Portable value={list.text} />
