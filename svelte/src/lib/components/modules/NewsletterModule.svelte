@@ -81,6 +81,7 @@
 			type="email"
 			name="EMAIL"
 			required
+			autocomplete="email"
 			placeholder="Email address"
 			aria-label="Email address"
 			bind:value={email}

@@ -32,6 +32,10 @@
 
 <h1 class="sr-only">{data.navTitle}</h1>
 
+<!-- Announces how many match as the search or filters change; screen readers
+     skip what it says on load -->
+<p role="status" class="sr-only">{data.total} {data.total === 1 ? 'artwork' : 'artworks'}</p>
+
 <div class="pt-page-top pb-page-bottom text-md">
 	<header class="px-gutter">
 		{#if data.landing?.intro}

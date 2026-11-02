@@ -12,6 +12,8 @@
 	// Only where it starts: the visitor opens and closes it from there
 	// svelte-ignore state_referenced_locally
 	let open = $state(active);
+
+	const optionsId = $props.id();
 </script>
 
 <nav aria-label={label} class={['space-y-line px-gutter', className]}>
@@ -23,13 +25,14 @@
 		<button
 			class={[open ? 'link-current' : 'link-fade']}
 			aria-expanded={open}
+			aria-controls={optionsId}
 			onclick={() => (open = !open)}
 		>
 			Filter
 		</button>
 	</p>
 	{#if open}
-		<ul class={['flex flex-wrap gap-x-[0.45em]', stacked && 'flex-col md:flex-row']}>
+		<ul id={optionsId} class={['flex flex-wrap gap-x-[0.45em]', stacked && 'flex-col md:flex-row']}>
 			{#each options as option (option.key)}
 				<li>
 					<Choice href={option.href} current={option.current}>{option.label}</Choice>

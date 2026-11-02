@@ -13,6 +13,12 @@
 
 <h1 class="sr-only">{data.navTitle}</h1>
 
+<!-- Announces the count as the search changes; screen readers skip what it
+     says on load -->
+<p role="status" class="sr-only">
+	{#if data.groups}{data.count} {data.count === 1 ? 'result' : 'results'}{/if}
+</p>
+
 <div class="px-gutter pt-page-top pb-page-bottom text-md">
 	{#if data.landing?.intro}
 		<Portable value={data.landing.intro} />

@@ -1,4 +1,5 @@
 <script>
+	import { prefersReducedMotion } from 'svelte/motion';
 	import Swiper from 'swiper';
 	import { A11y, Keyboard } from 'swiper/modules';
 	import 'swiper/css';
@@ -66,6 +67,8 @@
 			loop,
 			simulateTouch: false,
 			keyboard: { enabled: true },
+			// Swiper's own 300ms slide, or a cut with reduced motion
+			speed: prefersReducedMotion.current ? 0 : 300,
 			on: { realIndexChange: ({ realIndex }) => (active = realIndex) }
 		});
 		return () => swiper.destroy();

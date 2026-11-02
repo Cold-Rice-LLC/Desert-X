@@ -11,7 +11,7 @@ const PAGE_SIZE = 18;
  * titles, locations and years and, in the grid, `?page=` for how many
  * batches of 18 to show (see LoadMore).
  * The filters offer each location A–Z and each year newest first, of the
- * artworks there are.
+ * artworks there are. `total` is how many artworks match, all pages' worth.
  */
 export function load({ data, url }) {
 	const view = url.searchParams.get('view') === 'list' ? 'list' : 'grid';
@@ -46,6 +46,8 @@ export function load({ data, url }) {
 
 	const pageCount = Math.max(1, Math.ceil(entries.length / PAGE_SIZE));
 	if (view === 'grid' && page > pageCount) error(404, 'Not found');
+	// Artworks, not tiles: one by two artists has a tile under each
+	const total = new Set(entries.map(({ artwork }) => artwork._id)).size;
 	const shown = view === 'grid' ? entries.slice(0, page * PAGE_SIZE) : entries;
 
 	return {
@@ -58,6 +60,7 @@ export function load({ data, url }) {
 		query,
 		page,
 		pageCount,
+		total,
 		entries: shown
 	};
 }

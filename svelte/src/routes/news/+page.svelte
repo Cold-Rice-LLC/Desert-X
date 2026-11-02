@@ -18,6 +18,10 @@
 
 <h1 class="sr-only">{data.navTitle}</h1>
 
+<!-- Announces how many match as the filter changes; screen readers skip what
+     it says on load -->
+<p role="status" class="sr-only">{data.total} {data.total === 1 ? 'item' : 'items'}</p>
+
 <div class="pt-page-top pb-page-bottom text-md">
 	<Filter label="News filters" allHref="/news" options={filters} active={!!data.filter} />
 
