@@ -12,9 +12,10 @@
 	 * to the image blurred under the date, publication, title and Read More.
 	 * Either text and its padding scale with the tile: the monospaced font
 	 * fits 17 characters to a line, and 13 lines down. Past that, news text
-	 * is cut, and press titles lose lines so Read More stays.
+	 * is cut, and press titles lose lines so Read More stays. `loading` and
+	 * `fetchpriority` pass to the press image.
 	 */
-	let { item, generalPalette, sizes } = $props();
+	let { item, generalPalette, sizes, loading, fetchpriority } = $props();
 
 	// The logo waits for the image (if there is one), so it doesn't show on
 	// the grey frame first
@@ -30,7 +31,14 @@
 		href={item.pressUrl}
 		class="group @container grid aspect-[4/5] grid-rows-1 font-mono text-white *:col-start-1 *:row-start-1"
 	>
-		<ImageFrame image={item.featuredImage} aspect={4 / 5} {sizes} bind:loaded={imageLoaded} />
+		<ImageFrame
+			image={item.featuredImage}
+			aspect={4 / 5}
+			{sizes}
+			{loading}
+			{fetchpriority}
+			bind:loaded={imageLoaded}
+		/>
 		{#if item.logo?.url}
 			<img
 				src={item.logo.url}

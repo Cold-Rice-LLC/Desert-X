@@ -22,7 +22,12 @@
 	<Filter label="News filters" allHref="/news" options={filters} active={!!data.filter} />
 
 	{#if data.items.length}
-		<NewsGrid items={data.items} generalPalette={data.landing?.generalPalette} class="mt-lg" />
+		<NewsGrid
+			items={data.items}
+			generalPalette={data.landing?.generalPalette}
+			eager
+			class="mt-lg"
+		/>
 	{:else}
 		<p class="mt-lg px-gutter">No news yet.</p>
 	{/if}

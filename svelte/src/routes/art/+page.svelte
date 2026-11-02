@@ -61,7 +61,7 @@
 	{:else if data.view === 'list'}
 		<ArtList entries={data.entries} />
 	{:else}
-		<ArtGrid entries={data.entries} />
+		<ArtGrid entries={data.entries} eager />
 		<LoadMore page={data.page} pageCount={data.pageCount} class="mt-md" />
 	{/if}
 </div>

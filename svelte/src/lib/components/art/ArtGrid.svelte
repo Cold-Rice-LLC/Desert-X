@@ -6,19 +6,23 @@
 	 * gutters: the first image at
 	 * 4:3, then in the smaller text the artist, the title in italics cut to
 	 * one line, and the edition's year and location. An artwork by two
-	 * artists has a tile under each.
+	 * artists has a tile under each. With `eager`, for a grid at the top of
+	 * its page, the first tile's image loads straight away, ahead of the
+	 * rest; on phones the next ones are below the fold, and would compete.
 	 */
-	let { entries } = $props();
+	let { entries, eager = false } = $props();
 </script>
 
 <ul class="grid gap-y-md px-gutter md:grid-cols-3 md:gap-x-[12rem]">
-	{#each entries as { artwork, artistId, name } (`${artwork._id}-${artistId}`)}
+	{#each entries as { artwork, artistId, name }, index (`${artwork._id}-${artistId}`)}
 		<li>
 			<a href="/art/{artwork.slug}" class="block space-y-xs">
 				<ImageFrame
 					image={artwork.image}
 					aspect={4 / 3}
 					sizes="(width >= 768px) calc((100vw - 376px) / 3), calc(100vw - 40px)"
+					loading={eager && index === 0 ? 'eager' : 'lazy'}
+					fetchpriority={eager && index === 0 ? 'high' : undefined}
 				/>
 				<p class="text-base">
 					{name}
