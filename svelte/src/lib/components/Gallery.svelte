@@ -21,8 +21,9 @@
 	 *
 	 * The browser's lazy loading only looks again on scroll, not when a
 	 * slide moves into view, so the current slide and its neighbours are
-	 * switched to eager to load them; the rest wait their turn. The first is
-	 * fetched ahead of the page's other images, as its largest.
+	 * switched to eager to load them; the rest wait their turn. The current
+	 * one is fetched ahead of the page's other images, as its largest, and
+	 * the rest behind them, so the neighbours don't hold it up.
 	 */
 	let { images } = $props();
 
@@ -84,7 +85,7 @@
 						aspect={4 / 3}
 						{sizes}
 						loading={Math.abs(offset(index)) <= 1 ? 'eager' : 'lazy'}
-						fetchpriority={index === 0 ? 'high' : undefined}
+						fetchpriority={offset(index) === 0 ? 'high' : 'low'}
 					/>
 				</div>
 			{/each}
