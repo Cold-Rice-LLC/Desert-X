@@ -23,9 +23,10 @@
 	 * slide moves into view, so the current slide and its neighbours are
 	 * switched to eager to load them; the rest wait their turn. The current
 	 * one is fetched ahead of the page's other images, as its largest, and
-	 * the rest behind them, so the neighbours don't hold it up.
+	 * the rest behind them, so the neighbours don't hold it up. `alt` stands
+	 * in for any image's missing alt text.
 	 */
-	let { images } = $props();
+	let { images, alt } = $props();
 
 	let active = $state(0);
 	let swiper;
@@ -84,6 +85,7 @@
 						{image}
 						aspect={4 / 3}
 						{sizes}
+						{alt}
 						loading={Math.abs(offset(index)) <= 1 ? 'eager' : 'lazy'}
 						fetchpriority={offset(index) === 0 ? 'high' : 'low'}
 					/>
@@ -97,6 +99,7 @@
 			image={images[0]}
 			aspect={4 / 3}
 			{sizes}
+			{alt}
 			loading="eager"
 			fetchpriority="high"
 			class="col-span-20 col-start-3 md:col-span-16 md:col-start-5"

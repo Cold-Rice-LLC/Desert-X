@@ -6,13 +6,14 @@
 	 * its place while it loads. With an `aspect` (width / height) the frame
 	 * takes that ratio and the image files are cropped to it; otherwise
 	 * `class` sizes it. Without an image the grey frame holds its place.
-	 * `sizes`, `loading` and `fetchpriority` pass to Image, and `loaded`
-	 * binds to it.
+	 * `sizes`, `alt`, `loading` and `fetchpriority` pass to Image, and
+	 * `loaded` binds to it.
 	 */
 	let {
 		image,
 		aspect,
 		sizes,
+		alt,
 		loading,
 		fetchpriority,
 		loaded = $bindable(false),
@@ -26,6 +27,7 @@
 			{image}
 			{aspect}
 			{sizes}
+			{alt}
 			{loading}
 			{fetchpriority}
 			bind:loaded

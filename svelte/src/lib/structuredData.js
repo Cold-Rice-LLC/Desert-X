@@ -91,7 +91,7 @@ export const exhibitionEvent = (edition, url) =>
 		organizer: { '@id': organizationId(url.origin) }
 	};
 
-/** An artwork as a VisualArtwork by its artists. */
+/** An artwork as a VisualArtwork by its artists, with its `description`. */
 export const visualArtwork = (artwork, url) => ({
 	'@type': 'VisualArtwork',
 	name: artwork.title,
@@ -99,7 +99,7 @@ export const visualArtwork = (artwork, url) => ({
 	creator: (artwork.artists ?? [])
 		.filter((artist) => artist?.title)
 		.map((artist) => ({ '@type': 'Person', name: artist.title })),
-	description: artwork.artistInfo || undefined,
+	description: artwork.description || undefined,
 	image: imageUrls(artwork.images)
 });
 

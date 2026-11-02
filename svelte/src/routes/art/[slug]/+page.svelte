@@ -3,12 +3,15 @@
 	import Modules from '$lib/components/modules/Modules.svelte';
 
 	let { data } = $props();
+
+	// For images with no alt text of their own: "Bloom by Bahraini-Danish"
+	let alt = $derived([data.artwork.title, data.artwork.credit].filter(Boolean).join(' by '));
 </script>
 
 <!-- Keyed, so moving to another artwork starts its carousel afresh -->
 {#key data.artwork._id}
 	{#if data.artwork.images?.length}
-		<Gallery images={data.artwork.images} />
+		<Gallery images={data.artwork.images} {alt} />
 	{/if}
 {/key}
 <Modules modules={data.artwork.modules}>

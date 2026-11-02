@@ -14,13 +14,15 @@
 	 * so a broken file doesn't stay blank. Pass `loading="eager"` for
 	 * above-the-fold images so they load straight away, and
 	 * `fetchpriority="high"` on the one most likely to be the page's largest. Bind `loaded` to fade
-	 * something else in with it. Other attributes, like `class`, pass
-	 * through to the <img>.
+	 * something else in with it. `alt` stands in for the media library's
+	 * alt text where the image has none. Other attributes, like `class`,
+	 * pass through to the <img>.
 	 */
 	let {
 		image,
 		aspect,
 		sizes = '100vw',
+		alt,
 		loading = 'lazy',
 		loaded = $bindable(false),
 		class: className,
@@ -45,7 +47,7 @@
 	src={sources.src}
 	srcset={sources.srcset}
 	{sizes}
-	alt={image.alt ?? ''}
+	alt={image.alt || alt || ''}
 	width={sources.width}
 	height={sources.height}
 	{loading}
