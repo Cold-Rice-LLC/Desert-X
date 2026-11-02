@@ -13,7 +13,7 @@
 
 <h1 class="sr-only">{data.navTitle}</h1>
 
-<main class="px-gutter pt-page-top pb-page-bottom text-md">
+<div class="px-gutter pt-page-top pb-page-bottom text-md">
 	{#if data.landing?.intro}
 		<Portable value={data.landing.intro} />
 	{/if}
@@ -29,4 +29,4 @@
 			class="mt-2xl"
 		/>
 	{/if}
-</main>
+</div>

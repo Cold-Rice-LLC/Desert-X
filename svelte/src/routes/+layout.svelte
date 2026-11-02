@@ -40,11 +40,23 @@
 
 <Seo defaults={data.seo} />
 
+<!-- Above the nav, and only shown while it has keyboard focus -->
+<a
+	href="#main"
+	class="fixed top-0 left-0 z-30 -translate-y-full bg-white p-edge text-md focus:translate-y-0"
+>
+	Skip to content
+</a>
+
 <MainNav {home} {...nav} donateLink={data.donateLink} />
 
 <Menu menu={data.menu} footer={data.footer} />
 
-{@render children()}
+<!-- A flex column like the body, so pages lay out as they would directly
+     in it: the homepage carousel fills the height left -->
+<main id="main" class="flex flex-1 flex-col">
+	{@render children()}
+</main>
 
 {#if !home}
 	<Footer footer={data.footer} />
