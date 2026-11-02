@@ -18,7 +18,8 @@
 	 * map. The close button, Escape or a
 	 * click on the map closes it. The map is recoloured to the site's greys,
 	 * without labels, under a grid that moves with it. Mapbox only loads
-	 * once the map nears the viewport, which also keeps it off the server.
+	 * once the map nears the viewport, which also keeps it off the server,
+	 * and the page has loaded (see afterLoad).
 	 * From lg up the map is locked, framed on every X and refit as it
 	 * resizes. Below lg it pans and zooms, and choosing an X flies the map
 	 * to it: on phones with a finger and a pinch, from md up with two
@@ -227,6 +228,19 @@
 		return instance;
 	}
 
+	// Resolves once the page has loaded and the browser is next idle (or 2s
+	// on), so Mapbox, the heaviest script on any page, doesn't hold up the
+	// page around it, or the first taps on it, as the map starts up
+	const afterLoad = () =>
+		new Promise((resolve) => {
+			const idle = () =>
+				window.requestIdleCallback
+					? requestIdleCallback(resolve, { timeout: 2000 })
+					: setTimeout(resolve);
+			if (document.readyState === 'complete') idle();
+			else window.addEventListener('load', idle, { once: true });
+		});
+
 	$effect(() => {
 		if (!located.length) return;
 		let cancelled = false;
@@ -236,6 +250,8 @@
 				if (!entry.isIntersecting) return;
 				observer.disconnect();
 
+				await afterLoad();
+				if (cancelled) return;
 				const [{ default: mapboxgl }] = await Promise.all([
 					import('mapbox-gl'),
 					import('mapbox-gl/dist/mapbox-gl.css')

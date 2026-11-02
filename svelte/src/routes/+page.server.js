@@ -20,10 +20,14 @@ const caption = ({ title, linked }) => {
 
 const withCaptions = (slides) => slides.map((slide) => ({ ...slide, caption: caption(slide) }));
 
+// The carousel shows still images only: an animated GIF is many times the
+// weight of a photo, and holds up the slides around it
+const still = 'asset->extension != "gif"';
+
 export async function load() {
 	const homepage = await client.fetch(`
 		*[_id == "homepage"][0]{
-			slides[]{
+			slides[image.${still}]{
 				_key,
 				image{ ${imageFields} },
 				title,
@@ -41,13 +45,13 @@ export async function load() {
 	if (homepage?.slides?.length) return { slides: withCaptions(homepage.slides), seo };
 
 	// PROTOTYPE: until the Homepage has slides in the Studio, stand in the
-	// newest artworks' first images, each linking to its artwork
+	// newest artworks' first still images, each linking to its artwork
 	return {
 		slides: withCaptions(
 			await client.fetch(`
-				*[_type == "artwork" && defined(images[0])] | order(edition->year desc)[0...20]{
+				*[_type == "artwork" && defined(images[${still}][0])] | order(edition->year desc)[0...20]{
 					"_key": _id,
-					"image": images[0]{ ${imageFields} },
+					"image": images[${still}][0]{ ${imageFields} },
 					"linkType": "internal",
 					"internal": { _id, _type, "slug": slug.current },
 					"linked": @${linkedFields}
