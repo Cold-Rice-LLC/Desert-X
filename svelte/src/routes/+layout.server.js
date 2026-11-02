@@ -1,6 +1,7 @@
 import { client } from '$lib/sanity/client';
 import { imageFields } from '$lib/sanity/images';
 import { linkFields, richTextFields } from '$lib/sanity/links';
+import { socialProfiles } from '$lib/structuredData';
 
 // A menu, Donate or footer link
 const navLinkFields = `_key, label, ${linkFields}`;
@@ -41,7 +42,8 @@ export async function load() {
 		seo: {
 			siteTitle: settings?.siteTitle,
 			description: settings?.metaDescription,
-			image: settings?.ogImage
+			image: settings?.ogImage,
+			sameAs: socialProfiles(settings?.footerLinks2)
 		},
 		menu: {
 			items: settings?.menuItems ?? [],

@@ -4,13 +4,15 @@ import { client } from '$lib/sanity/client';
 import { imageFields } from '$lib/sanity/images';
 import { modulesFields } from '$lib/sanity/modules';
 import { pageSeo, seoFields } from '$lib/sanity/seo';
+import { visualArtwork } from '$lib/structuredData';
 
 /**
  * An artwork by slug. Its artists' names show beside it and in the nav,
  * unless an Artist Credit replaces them. Shared, it's titled with both,
- * and shows the artist info and its first image.
+ * and shows the artist info and its first image; to search engines it's a
+ * VisualArtwork.
  */
-export async function load({ params }) {
+export async function load({ params, url }) {
 	const { artwork, landingTitle } = await client.fetch(
 		`{
 			"artwork": *[_type == "artwork" && slug.current == $slug][0]{
@@ -41,6 +43,7 @@ export async function load({ params }) {
 			title: credit ? `${credit}, ${artwork.title}` : artwork.title,
 			description: artwork.artistInfo,
 			image: artwork.images?.[0]
-		})
+		}),
+		structuredData: visualArtwork(artwork, url)
 	};
 }

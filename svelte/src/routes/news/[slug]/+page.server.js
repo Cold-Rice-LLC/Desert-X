@@ -6,6 +6,7 @@ import { imageFields } from '$lib/sanity/images';
 import { newsLandingFields, newsTileFields } from '$lib/sanity/news';
 import { pageSeo, seoFields } from '$lib/sanity/seo';
 import { shuffle } from '$lib/random';
+import { newsArticle } from '$lib/structuredData';
 
 const RELATED_COUNT = 3;
 
@@ -20,13 +21,14 @@ const RELATED = `select(
  * A news article by slug, with three other news at its end: related ones
  * first, the rest at random, picked afresh on every load. Press has no page
  * of its own: it links out. Shared, an article shows its card text and
- * featured image.
+ * featured image, and to search engines it's a NewsArticle.
  */
-export async function load({ params }) {
+export async function load({ params, url }) {
 	const news = await client.fetch(
 		`*[_type == "news" && coalesce(kind, "news") == "news" && slug.current == $slug][0]{
 				title,
 				publishDate,
+				_updatedAt,
 				modules[]{ ${modulesFields} },
 				cardText,
 				featuredImage{ ${imageFields} },
@@ -65,6 +67,7 @@ export async function load({ params }) {
 		navTitle: related.landingTitle || 'News',
 		navHref: '/news',
 		navDetail: formatLongDate(news.publishDate),
-		seo: pageSeo(seo, { title: article.title, description: cardText, image: featuredImage })
+		seo: pageSeo(seo, { title: article.title, description: cardText, image: featuredImage }),
+		structuredData: newsArticle({ ...article, featuredImage }, url)
 	};
 }

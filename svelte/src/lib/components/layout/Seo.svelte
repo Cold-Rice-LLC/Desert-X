@@ -1,6 +1,7 @@
 <script>
 	import { page } from '$app/state';
 	import { urlFor } from '$lib/sanity/client';
+	import { breadcrumbs, siteNodes } from '$lib/structuredData';
 
 	/**
 	 * The head tags for search engines and shared links, from the page's
@@ -10,6 +11,10 @@
 	 * 160 characters, at a word, and share images cropped to 1200 × 630.
 	 * Error pages, and any page whose `seo` says `noindex`, are kept out of
 	 * search engines.
+	 *
+	 * Indexed pages also carry JSON-LD: the site's Organization and WebSite,
+	 * a breadcrumb trail for a page whose nav links up a level (navHref),
+	 * and the page's own nodes from its load (`structuredData`).
 	 */
 	let { defaults } = $props();
 
@@ -37,6 +42,33 @@
 
 	// Without the query: ?page=, ?filter= and the like are the same page
 	let url = $derived(page.url.origin + page.url.pathname);
+
+	let indexed = $derived(!page.error && !seo.noindex);
+
+	let structuredData = $derived.by(() => {
+		const { origin } = page.url;
+		const { navTitle, navHref } = page.data;
+		const nodes = [
+			...siteNodes({
+				origin,
+				siteTitle,
+				description: defaults?.description,
+				sameAs: defaults?.sameAs
+			}),
+			navHref &&
+				ownTitle &&
+				breadcrumbs([
+					{ name: siteTitle, url: `${origin}/` },
+					{ name: navTitle, url: origin + navHref },
+					{ name: ownTitle, url }
+				]),
+			...[page.data.structuredData].flat()
+		].filter(Boolean);
+		// Escaped so no text inside can close the script. The tag is built
+		// here, as a closing script tag in the markup would end this block.
+		const json = JSON.stringify({ '@context': 'https://schema.org', '@graph': nodes });
+		return `<script type="application/ld+json">${json.replace(/</g, '\\u003c')}</${'script'}>`;
+	});
 </script>
 
 <svelte:head>
@@ -45,10 +77,12 @@
 		<meta name="description" content={description} />
 		<meta property="og:description" content={description} />
 	{/if}
-	{#if page.error || seo.noindex}
-		<meta name="robots" content="noindex" />
-	{:else}
+	{#if indexed}
 		<link rel="canonical" href={url} />
+		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+		{@html structuredData}
+	{:else}
+		<meta name="robots" content="noindex" />
 	{/if}
 	<meta property="og:site_name" content={siteTitle} />
 	<meta property="og:type" content="website" />
