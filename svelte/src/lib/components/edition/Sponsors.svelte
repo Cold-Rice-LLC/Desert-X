@@ -56,6 +56,7 @@
 														: 'max-h-[8rem] max-w-[20rem]'
 												]}
 											/>
+											{#if logo.url}<span class="sr-only">(opens in new tab)</span>{/if}
 										</svelte:element>
 									</li>
 								{/each}

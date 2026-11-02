@@ -21,7 +21,7 @@
 	} = $props();
 </script>
 
-<figure class={['overflow-hidden bg-grey-1', className]} style:aspect-ratio={aspect}>
+<div class={['overflow-hidden bg-grey-1', className]} style:aspect-ratio={aspect}>
 	{#if image?.asset}
 		<Image
 			{image}
@@ -34,4 +34,4 @@
 			class="size-full object-cover"
 		/>
 	{/if}
-</figure>
+</div>

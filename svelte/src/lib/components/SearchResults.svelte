@@ -26,6 +26,7 @@
 				<span class="md:hidden">View</span>
 				<span class="hidden md:inline">{item.action}</span>
 			</span>
+			{#if item.external}<span class="sr-only">(opens in new tab)</span>{/if}
 		</a>
 	{:else}
 		<p class="col-span-6">{item.title}</p>

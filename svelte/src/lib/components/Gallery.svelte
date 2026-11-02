@@ -34,9 +34,14 @@
 	// Two would show the same image on both sides
 	let loop = $derived(images.length > 2);
 
+	// Numbered, as images sharing one alt would read as the same image:
+	// "Bloom by Bahraini-Danish — image 2 of 5"
+	const imageAlt = (index) =>
+		alt && images.length > 1 ? `${alt} — image ${index + 1} of ${images.length}` : alt;
+
 	let slides = $derived(
 		(images.length === 3 ? [0, 1] : [0]).flatMap((copy) =>
-			images.map((image) => ({ image, key: `${image._key}-${copy}` }))
+			images.map((image, index) => ({ image, alt: imageAlt(index), key: `${image._key}-${copy}` }))
 		)
 	);
 
@@ -70,7 +75,7 @@
 {#if images.length > 1}
 	<div class={['swiper w-full items-center', section]} {@attach carousel}>
 		<div class="swiper-wrapper">
-			{#each slides as { image, key }, index (key)}
+			{#each slides as { image, alt, key }, index (key)}
 				<!-- The arrow keys move it too (Swiper's Keyboard module) -->
 				<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
 				<div

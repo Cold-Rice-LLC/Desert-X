@@ -29,6 +29,6 @@
 
 {#if page < pageCount}
 	<p bind:this={el} class={['px-gutter', className]}>
-		Load <a {href} class="link-underline" onclick={loadMore}>More</a>
+		Load <a {href} aria-label="Load more" class="link-underline" onclick={loadMore}>More</a>
 	</p>
 {/if}

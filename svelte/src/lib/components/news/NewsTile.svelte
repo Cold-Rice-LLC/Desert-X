@@ -52,9 +52,16 @@
 				]}
 			/>
 		{/if}
+		<!-- The link's name for screen readers, as the text below only shows on
+		     hover or focus. The logo's alt gives the publication where there is one. -->
+		<span class="sr-only">
+			{#if !item.logo?.url}{item.publication}:{/if}
+			{item.title}, {date} (opens in new tab)
+		</span>
 		<!-- As the news tile's text, with the bottom padding taking what's left
 		     under 13 lines, so a title cut to fit ends on a whole line -->
 		<div
+			aria-hidden="true"
 			class="hidden min-h-0 flex-col space-y-line p-[6cqi] pb-[calc(119cqi-13lh)] text-[length:calc(88cqi/(17*0.62))] leading-none wrap-anywhere backdrop-blur-2xl group-hover:flex group-focus-visible:flex"
 		>
 			<p>{date}</p>
