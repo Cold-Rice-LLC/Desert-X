@@ -8,7 +8,8 @@ import { latestNews, newsLandingFields } from '$lib/sanity/news';
 
 /**
  * The Visit landing and its modules, then every edition that's on today
- * (between its start and end dates, inclusive, by UTC), soonest first,
+ * (from its Visit From date, else its start date, to its end date,
+ * inclusive, by UTC), soonest first,
  * with its Visit Info and what its map needs, then the three newest news.
  */
 export async function load() {
@@ -16,7 +17,7 @@ export async function load() {
 		loadLanding('visitLanding', 'Visit', `modules[]{ ${modulesFields} }`),
 		client.fetch(
 			`{
-				"editions": *[_type == "edition" && startDate <= $today && endDate >= $today]
+				"editions": *[_type == "edition" && coalesce(visitFrom, startDate) <= $today && endDate >= $today]
 					| order(startDate asc){
 						_id,
 						"slug": slug.current,

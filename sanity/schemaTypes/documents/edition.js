@@ -44,6 +44,19 @@ export default defineType({
         ),
     }),
     defineField({
+      name: 'visitFrom',
+      type: 'date',
+      title: 'Show on Visit Page From',
+      description:
+        'Optional: shows the edition on the Visit page ahead of its Start Date, e.g. to announce an upcoming edition. Leave empty to show it from its Start Date. It still leaves the Visit page after its End Date.',
+      validation: (rule) =>
+        rule.custom((value, context) =>
+          value && context.document?.startDate && value > context.document.startDate
+            ? 'Show on Visit Page From is after Start Date, so it has no effect.'
+            : true,
+        ).warning(),
+    }),
+    defineField({
       name: 'images',
       type: 'array',
       title: 'Images',
@@ -70,7 +83,7 @@ export default defineType({
       type: 'array',
       title: 'Visit Info',
       description:
-        'Shown on the Visit page while the edition is on (today is between its Start and End Date), under its name and above its map: e.g. Hours and Dates, Getting There, Accessibility as dropdowns.',
+        'Shown on the Visit page while the edition is on (today is between its Start and End Date, or from Show on Visit Page From if set), above its map: e.g. Hours and Dates, Getting There, Accessibility as dropdowns.',
       of: moduleMembers,
     }),
     defineField({
