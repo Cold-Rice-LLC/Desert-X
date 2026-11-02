@@ -74,7 +74,7 @@
 							inputmode="numeric"
 							placeholder="Amount"
 							aria-label="Custom amount in dollars"
-							class="w-[7ch] outline-none"
+							class="w-[7ch]"
 						/>
 					</label>
 				{:else}
