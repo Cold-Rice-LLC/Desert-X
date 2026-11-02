@@ -16,12 +16,12 @@
 
 <nav aria-label={label} class={['space-y-line px-gutter', className]}>
 	<p class="uppercase">
-		<a href={allHref} class={[open ? 'link-fade' : 'link-underline']} onclick={() => (open = false)}
+		<a href={allHref} class={[open ? 'link-fade' : 'link-current']} onclick={() => (open = false)}
 			>All</a
 		>
 		/
 		<button
-			class={[open ? 'link-underline' : 'link-fade']}
+			class={[open ? 'link-current' : 'link-fade']}
 			aria-expanded={open}
 			onclick={() => (open = !open)}
 		>
