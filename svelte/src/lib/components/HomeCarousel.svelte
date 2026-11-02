@@ -83,7 +83,8 @@
 	};
 
 	const carousel = (section) => {
-		const track = section.firstElementChild;
+		// After Pause, when there is one
+		const track = section.lastElementChild;
 		const real = track.children[1];
 
 		// One copy's width, the row's position and where it's easing to, and
@@ -195,9 +196,11 @@
 		// Bring a slide tabbed to into the middle, and hold it there. Not one
 		// focused by pressing it, which would stop the row on every drag.
 		const onfocusin = (event) => {
-			if (!event.target.matches(':focus-visible')) return;
+			// Pause isn't a slide, and leaves the row moving
+			const slideEl = event.target.closest('[data-slide]');
+			if (!slideEl || !event.target.matches(':focus-visible')) return;
 			focused = true;
-			const slide = event.target.closest('[data-slide]').getBoundingClientRect();
+			const slide = slideEl.getBoundingClientRect();
 			const box = section.getBoundingClientRect();
 			target = current + box.left + box.width / 2 - (slide.left + slide.width / 2);
 		};
@@ -278,6 +281,17 @@
 	{onclickcapture}
 	ondragstart={(event) => event.preventDefault()}
 >
+	<!-- Ahead of the slides, so the keyboard reaches it first; z-10 keeps it
+	     over them -->
+	{#if !prefersReducedMotion.current}
+		<button
+			class="absolute right-edge bottom-edge z-10 font-mono text-sm text-white uppercase link-fade"
+			onclick={() => (paused = !paused)}
+		>
+			{paused ? 'Play' : 'Pause'}
+		</button>
+	{/if}
+
 	<div class="absolute inset-y-0 left-0 flex will-change-transform">
 		{#each { length: copies }, copy (copy)}
 			<div class="flex shrink-0" inert={copy !== 1}>
@@ -301,13 +315,4 @@
 			</div>
 		{/each}
 	</div>
-
-	{#if !prefersReducedMotion.current}
-		<button
-			class="absolute right-edge bottom-edge font-mono text-sm text-white uppercase link-fade"
-			onclick={() => (paused = !paused)}
-		>
-			{paused ? 'Play' : 'Pause'}
-		</button>
-	{/if}
 </section>

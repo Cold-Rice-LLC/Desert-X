@@ -68,7 +68,8 @@
 >
 	<div class="relative flex h-nav shrink-0 items-center gap-x-[0.8em] px-edge text-md md:pl-gutter">
 		<MenuButton aria-label="Close menu" onclick={() => (ui.menuOpen = false)} />
-		<button aria-label="Close menu" onclick={() => (ui.menuOpen = false)}>
+		<!-- For the mouse, as the nav's logo is -->
+		<button tabindex="-1" aria-hidden="true" onclick={() => (ui.menuOpen = false)}>
 			<Logo class="h-[1.6rem] w-auto md:h-base" />
 		</button>
 	</div>

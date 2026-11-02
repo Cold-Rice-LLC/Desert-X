@@ -125,6 +125,14 @@ html {
 		cursor: pointer;
 		text-transform: inherit;
 	}
+
+	/* One focus ring for keyboard users, in the text's own colour, which
+	   already contrasts with what's behind it: black on white, white over
+	   the homepage's images */
+	:focus-visible {
+		outline: 0.2rem solid currentColor;
+		outline-offset: 0.2rem;
+	}
 }
 
 /* Search fields without the browser's clear button */

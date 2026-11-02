@@ -28,7 +28,9 @@
 >
 	<MenuButton aria-label="Open menu" aria-haspopup="dialog" onclick={() => (ui.menuOpen = true)} />
 	{#if home}
-		<button aria-label="Open menu" aria-haspopup="dialog" onclick={() => (ui.menuOpen = true)}>
+		<!-- For the mouse: keyboards and screen readers have the hamburger
+		     beside it, which does the same -->
+		<button tabindex="-1" aria-hidden="true" onclick={() => (ui.menuOpen = true)}>
 			<Logo class="h-[1.6rem] w-auto md:h-base" />
 		</button>
 	{:else if title && href}
