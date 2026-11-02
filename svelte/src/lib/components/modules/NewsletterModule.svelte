@@ -4,7 +4,8 @@
 
 	/**
 	 * Optional centred heading and text over the Mailchimp newsletter
-	 * signup: an email field over a grey rule, as search's, and Sign Up.
+	 * signup: an email field over a grey rule, black while it has focus, as
+	 * search's, and Sign Up.
 	 * Mailchimp's answer shows underneath, through its JSONP endpoint, so
 	 * the visitor stays on the page; without JavaScript the form posts to
 	 * Mailchimp in a new tab, as its embed does.
@@ -75,7 +76,7 @@
 		method="post"
 		target="_blank"
 		onsubmit={subscribe}
-		class="flex items-center gap-[0.6em] border-b-2 border-grey-3 pb-xs"
+		class="flex items-center gap-[0.6em] border-b-2 border-grey-3 pb-xs has-[input:focus]:border-black"
 	>
 		<input
 			type="email"

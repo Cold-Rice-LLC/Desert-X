@@ -2,16 +2,20 @@
 	import Search from '$lib/components/icons/Search.svelte';
 
 	/**
-	 * A search field over a grey rule, with the magnifier in front. Submitting
-	 * does nothing: `oninput` gets each change. `label` names it for screen
-	 * readers, and `class` goes on the <form>.
+	 * A search field over a grey rule, black while it has focus, with the
+	 * magnifier in front. Submitting does nothing: `oninput` gets each
+	 * change. `label` names it for screen readers, and `class` goes on the
+	 * <form>.
 	 */
 	let { value = '', label = 'Search', oninput, class: className } = $props();
 </script>
 
 <form
 	role="search"
-	class={['flex items-center gap-[0.3em] border-b-2 border-grey-3 pb-xs text-grey-3', className]}
+	class={[
+		'flex items-center gap-[0.3em] border-b-2 border-grey-3 pb-xs text-grey-3 has-[input:focus]:border-black',
+		className
+	]}
 	onsubmit={(event) => event.preventDefault()}
 >
 	<Search class="h-[0.65em] w-auto" />
