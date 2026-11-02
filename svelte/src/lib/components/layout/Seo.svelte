@@ -5,7 +5,7 @@
 	/**
 	 * The head tags for search engines and shared links, from the page's
 	 * `seo` (see pageSeo), falling back to Site Settings (`defaults`). Titles
-	 * read "Page — Desert X"; a page with no title of its own, like the
+	 * read "Page — DESERT X"; a page with no title of its own, like the
 	 * homepage, is the site's title alone. Descriptions are cut to about
 	 * 160 characters, at a word, and share images cropped to 1200 × 630.
 	 * Error pages, and any page whose `seo` says `noindex`, are kept out of
@@ -16,7 +16,7 @@
 	const descriptionLength = 160;
 
 	let seo = $derived(page.data.seo ?? {});
-	let siteTitle = $derived(defaults?.siteTitle || 'Desert X');
+	let siteTitle = $derived(defaults?.siteTitle || 'DESERT X');
 
 	let ownTitle = $derived.by(() => {
 		if (page.error) return page.status === 404 ? 'Not Found' : 'Error';

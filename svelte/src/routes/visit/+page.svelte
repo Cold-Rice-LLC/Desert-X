@@ -24,7 +24,7 @@
 			artworks={edition.artworks}
 			text={edition.mapText}
 			href="/editions/{edition.slug}"
-			heading="Desert X {edition.location} Exhibition Map"
+			heading="DESERT X {edition.location} Exhibition Map"
 		/>
 	{/snippet}
 </Modules>

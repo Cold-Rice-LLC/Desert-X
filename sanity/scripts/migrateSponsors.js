@@ -4,12 +4,14 @@ import {SITE, client, fetchDocument, key, pendingImage, uploadImage} from './lib
 
 /**
  * Fills in DX21's and DX23's sponsors from their old sponsors pages
- * (desertx.org/dx/…/sponsors), the only editions that had one. Each tier's
- * logos are a single composite image there, so each logo here is that
+ * (desertx.org/dx/…/sponsors), the only editions that had one, and DX25's
+ * from the panel of logos at the foot of its edition page. Each tier's
+ * logos are a single composite image there (DX25's tiers share one), so each logo here is that
  * image cropped to it: the boxes below were found by scanning the
  * composites for blank gaps, then checked by eye. Logos are named after
  * what the composites show, which doesn't always match the page's lists;
- * links come from the page's list of the same name. The lists under the
+ * links come from the page's list of the same name, or for DX25, which
+ * links none, from `links`, found by hand. The lists under the
  * logos are the page's Galleries, Cultural, Media and Hotel Partners, one
  * rich text line per name, linked where the page links that name. Lists
  * still stored as plain text are converted the same way, keeping the
@@ -17,9 +19,9 @@ import {SITE, client, fetchDocument, key, pendingImage, uploadImage} from './lib
  *
  * By default it's a dry run: it writes what it would set to
  * scripts/migrateSponsors.dry-run.json and touches nothing. With --import
- * it sets each field only where it's still empty, or the lists where
- * they're still plain text, so re-running never overwrites what editors
- * have changed.
+ * it sets each field only where it's still empty (in the draft too, if
+ * there is one), or the lists where they're still plain text, so
+ * re-running never overwrites what editors have changed.
  *
  *   npx sanity exec scripts/migrateSponsors.js --with-user-token
  *   npx sanity exec scripts/migrateSponsors.js --with-user-token -- --import
@@ -147,6 +149,103 @@ const PAGES = [
       },
     ],
   },
+  {
+    editionId: 'edition-coachella-valley-2025',
+    path: '/dx/dx-25-coachella-valley',
+    groups: [
+      {
+        title: 'Major Sponsor',
+        image: ['dx25_newsletter_logos_4.2.25.png', 1600, 1200],
+        logos: [['1800 Tequila', [487, 121, 654, 226]]],
+      },
+      {
+        title: 'With Major Support From',
+        image: ['dx25_newsletter_logos_4.2.25.png', 1600, 1200],
+        logos: [
+          ['Jordan Schnitzer & Harold & Arlene Schnitzer CARE Foundation', [941, 119, 1058, 223]],
+        ],
+      },
+      {
+        title: 'Additional Support',
+        fullWidth: true,
+        image: ['dx25_newsletter_logos_4.2.25.png', 1600, 1200],
+        logos: [
+          ['National Endowment for the Arts', [167, 432, 390, 494]],
+          [
+            'California Arts Council × Association of Arts Administration Educators',
+            [487, 423, 739, 497],
+          ],
+          ['Pro Helvetia', [824, 431, 1034, 492]],
+          ['Amazon', [1112, 457, 1267, 504]],
+          ['Design Within Reach', [1341, 421, 1444, 493]],
+        ],
+      },
+      {
+        title: 'With Generous Support From',
+        fullWidth: true,
+        image: ['dx25_newsletter_logos_4.2.25.png', 1600, 1200],
+        logos: [
+          ['City of Palm Springs', [136, 811, 229, 904]],
+          ['City of Desert Hot Springs', [299, 809, 417, 903]],
+          ['City of Palm Desert', [491, 811, 636, 902]],
+          ['City of Rancho Mirage', [701, 812, 933, 903]],
+          ['PS Resorts', [1011, 815, 1270, 907]],
+          ['Cathedral City', [1341, 806, 1471, 908]],
+        ],
+      },
+    ],
+    links: {
+      '1800 Tequila': 'https://www.1800tequila.com/',
+      'Jordan Schnitzer & Harold & Arlene Schnitzer CARE Foundation':
+        'https://jordanschnitzer.org/',
+      'National Endowment for the Arts': 'https://www.arts.gov/',
+      'California Arts Council × Association of Arts Administration Educators':
+        'https://arts.ca.gov/',
+      'Pro Helvetia': 'https://prohelvetia.ch/en/',
+      Amazon: 'https://www.amazon.com/',
+      'Design Within Reach': 'https://www.dwr.com/',
+      'City of Palm Springs': 'https://www.palmspringsca.gov/',
+      'City of Desert Hot Springs': 'https://www.cityofdhs.org/',
+      'City of Palm Desert': 'https://www.cityofpalmdesert.org/',
+      'City of Rancho Mirage': 'https://ranchomirageca.gov/',
+      'PS Resorts': 'https://www.ps-resorts.com/members',
+      'Cathedral City': 'https://www.cathedralcity.gov/',
+      Artnet: 'http://www.artnet.com/',
+      ArtReview: 'https://artreview.com/',
+      'C Magazine': 'https://cmagazine.com/',
+      'Canvas Magazine': 'https://canvasonline.com/',
+      'Cultured Magazine': 'https://www.culturedmag.com/',
+      'frieze Magazine': 'https://www.frieze.com/',
+      'Here Media': 'https://www.here.tv/',
+      'KGAY Palm Springs': 'https://gaydesertguide.com/kgay/',
+      GayDesertGuide: 'https://gaydesertguide.com/',
+      'LocaliQ, part of The Desert Sun': 'https://localiq.com/',
+      'Desert Magazine': 'https://www.desertsun.com/desert-magazine/',
+      'Palm Springs Life Magazine': 'https://www.palmspringslife.com/',
+      Terremoto: 'https://terremoto.mx/en/',
+      'Visit Greater Palm Springs': 'https://www.visitgreaterpalmsprings.com/',
+    },
+    // Set in the image, not the page's text
+    lists: {
+      'Media Partners': [
+        'Artnet',
+        'ArtReview',
+        'C Magazine',
+        'Canvas Magazine',
+        'Cultured Magazine',
+        'frieze Magazine',
+        'Here Media',
+        'KGAY Palm Springs',
+        'GayDesertGuide',
+        '103.1 MeTV FM',
+        'LocaliQ, part of The Desert Sun',
+        'Desert Magazine',
+        'Palm Springs Life Magazine',
+        'Terremoto',
+        'Visit Greater Palm Springs',
+      ],
+    },
+  },
 ]
 
 // Room around each box, in pixels, so antialiased edges aren't clipped
@@ -198,7 +297,8 @@ const listBlocks = (names, links) =>
 const readPage = (document) => {
   const links = new Map()
   const lists = new Map()
-  const columns = document.querySelector('article.twocolumns')
+  // Only the sponsors pages have lists
+  const columns = document.querySelector('article.twocolumns') ?? document.createElement('div')
   columns.querySelectorAll('a[href]').forEach((link) => {
     const text = link.textContent.replace(/\s+/g, ' ').trim()
     if (!links.has(text)) links.set(text, link.href)
@@ -222,7 +322,12 @@ const readPage = (document) => {
 
 const main = async () => {
   const editions = await client.fetch(
-    `*[_id in $ids]{ _id, "hasGroups": count(sponsorGroups) > 0, sponsorLists }`,
+    `*[_id in $ids]{
+      _id,
+      "hasGroups": count(sponsorGroups) > 0,
+      sponsorLists,
+      "hasDraft": defined(*[_id == "drafts." + ^._id][0])
+    }`,
     {ids: PAGES.map((page) => page.editionId)},
   )
 
@@ -233,7 +338,10 @@ const main = async () => {
       console.log(`No edition ${page.editionId} in the Studio, skipped`)
       continue
     }
-    const {links, lists, images} = readPage(await fetchDocument(`${SITE}${page.path}`))
+    const read = readPage(await fetchDocument(`${SITE}${page.path}`))
+    const {images} = read
+    const links = new Map([...read.links, ...Object.entries(page.links ?? {})])
+    const lists = page.lists ? new Map(Object.entries(page.lists)) : read.lists
     const warnings = []
 
     const sponsorGroups = page.groups.map((group) => {
@@ -287,7 +395,7 @@ const main = async () => {
       ...(!edition.hasGroups && {sponsorGroups}),
       ...((!edition.sponsorLists?.length || plainText) && sponsorLists.length && {sponsorLists}),
     }
-    patches.push({_id: edition._id, set, warnings})
+    patches.push({_id: edition._id, hasDraft: edition.hasDraft, set, warnings})
     const logoCount = sponsorGroups.reduce((count, group) => count + group.logos.length, 0)
     console.log(
       `${edition._id}: ${sponsorGroups.length} groups, ${logoCount} logos, ${sponsorLists.length} lists${warnings.length ? ` (${warnings.join(', ')})` : ''}`,
@@ -301,12 +409,15 @@ const main = async () => {
   }
 
   const transaction = client.transaction()
-  for (const {_id, set} of patches) {
+  for (const {_id, hasDraft, set} of patches) {
     for (const logo of (set.sponsorGroups ?? []).flatMap((group) => group.logos)) {
       const {crop, ...image} = logo.image
       logo.image = {...(await uploadImage(image)), crop}
     }
-    if (Object.keys(set).length) transaction.patch(_id, {set})
+    if (!Object.keys(set).length) continue
+    transaction.patch(_id, {set})
+    // So publishing the draft keeps them
+    if (hasDraft) transaction.patch(`drafts.${_id}`, {set})
   }
   await transaction.commit()
   console.log(`\nUpdated ${patches.filter(({set}) => Object.keys(set).length).length} editions.`)
