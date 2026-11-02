@@ -62,19 +62,31 @@
 		}
 	});
 
+	// The card comes after every marker, so focus moves into it, and the
+	// next Tab reaches its link rather than the next X
 	async function select(id) {
 		selectedId = id;
+		await tick();
+		cardEl?.focus({ preventScroll: true });
 		const pin = located.find((p) => p.artwork._id === id);
 		if (pin && map && !locked.current) {
 			// Keeps the chosen X clear of the card, measured once it's shown:
 			// beside it from md up, above it on phones
-			await tick();
 			const gap = 40;
 			const padding = { top: gap, bottom: gap, left: gap, right: gap };
 			if (wide.current) padding.right += cardEl?.offsetWidth ?? 0;
 			else padding.bottom += cardEl?.offsetHeight ?? 0;
 			map.flyTo({ center: pin.lngLat, zoom: Math.max(map.getZoom(), 13), padding });
 		}
+	}
+
+	// Focus inside the card goes back to its X, so it isn't lost as the card
+	// goes. A click on the map leaves focus where the click put it.
+	function close() {
+		const marker = markers.find(({ id }) => id === selectedId);
+		const hadFocus = cardEl?.contains(document.activeElement);
+		selectedId = null;
+		if (hadFocus) marker?.element.focus();
 	}
 
 	function bounds(pins) {
@@ -275,7 +287,7 @@
 	});
 </script>
 
-<svelte:window onkeydown={(event) => event.key === 'Escape' && (selectedId = null)} />
+<svelte:window onkeydown={(event) => event.key === 'Escape' && selected && close()} />
 
 {#if located.length}
 	<section class={className}>
@@ -289,6 +301,7 @@
 				{#if selected}
 					<section
 						bind:this={cardEl}
+						tabindex="-1"
 						aria-label="Installation"
 						class="absolute inset-x-sm bottom-sm z-10 max-h-[calc(100%-2*var(--spacing-sm))] space-y-line overflow-y-auto overscroll-contain bg-white p-sm font-mono [scrollbar-width:none] md:inset-x-auto md:top-base md:right-base md:bottom-auto md:max-h-[calc(100%-2*var(--spacing-base))] md:w-[40rem] md:p-base"
 					>
@@ -299,9 +312,9 @@
 							</p>
 							<button
 								type="button"
-								aria-label="Close"
+								aria-label="Close installation"
 								class="link-fade"
-								onclick={() => (selectedId = null)}
+								onclick={close}
 							>
 								X
 							</button>

@@ -65,8 +65,11 @@
 					</Choice>
 				{/each}
 				{#if selected === 'custom'}
+					<!-- Focused as it replaces the button pressed, which would
+					     otherwise drop focus to the page -->
 					<label class="link-underline">
 						$<input
+							{@attach (input) => input.focus()}
 							bind:value={custom}
 							inputmode="numeric"
 							placeholder="Amount"
