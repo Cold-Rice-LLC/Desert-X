@@ -9,6 +9,17 @@ export const HOMEPAGE_IDS = ['homepage', 'drafts.homepage']
 
 const isHomepage = (document) => HOMEPAGE_IDS.includes(document?._id)
 
+const SLIDE_MEDIA_TYPES = [
+  {title: 'Image', value: 'image'},
+  {title: 'Video', value: 'video'},
+]
+
+// Slides saved before videos were added have no media type: they're images
+const isSlideType =
+  (type) =>
+  ({parent}) =>
+    (parent?.mediaType ?? 'image') === type
+
 export default defineType({
   name: 'page',
   type: 'document',
@@ -23,7 +34,7 @@ export default defineType({
       type: 'array',
       title: 'Slides',
       description:
-        'The homepage carousel, in order. It drifts right to left and loops; scrolling pushes it either way.',
+        'The homepage carousel, in order. Each slide fills the window; clicking its left or right half goes back or on, and the last loops round to the first.',
       hidden: ({document}) => !isHomepage(document),
       of: [
         defineArrayMember({
@@ -32,12 +43,35 @@ export default defineType({
           title: 'Slide',
           fields: [
             defineField({
+              name: 'mediaType',
+              type: 'string',
+              title: 'Media Type',
+              options: {list: SLIDE_MEDIA_TYPES, layout: 'radio', direction: 'horizontal'},
+              initialValue: 'image',
+            }),
+            defineField({
               name: 'image',
               type: 'image',
               title: 'Image',
-              description: 'Shown at the full height of the window, at its own width.',
+              description: 'Fills the window, cropped around the hotspot.',
               options: {hotspot: true},
-              validation: (rule) => rule.required(),
+              ...shownWhere(isSlideType('image'), {required: 'Choose an image.'}),
+            }),
+            defineField({
+              name: 'video',
+              type: 'file',
+              title: 'Video',
+              description: 'Fills the window, and plays muted on a loop.',
+              options: {accept: 'video/mp4'},
+              ...shownWhere(isSlideType('video'), {required: 'Choose a video.'}),
+            }),
+            defineField({
+              name: 'poster',
+              type: 'image',
+              title: 'Poster',
+              description: 'Optional. Shown while the video loads.',
+              options: {hotspot: true},
+              ...shownWhere(isSlideType('video')),
             }),
             ...linkTargetFields(),
             defineField({
@@ -49,10 +83,19 @@ export default defineType({
             }),
           ],
           preview: {
-            select: {media: 'image', title: 'title', ...linkTargetSelect},
-            prepare: ({media, title, ...link}) => ({
+            select: {
+              mediaType: 'mediaType',
+              image: 'image',
+              poster: 'poster',
+              videoName: 'video.asset.originalFilename',
+              title: 'title',
+              ...linkTargetSelect,
+            },
+            prepare: ({mediaType, image, poster, videoName, title, ...link}) => ({
               title: title || linkTargetSubtitle(link) || 'No link',
-              media,
+              subtitle:
+                mediaType === 'video' ? ['Video', videoName].filter(Boolean).join(' · ') : 'Image',
+              media: mediaType === 'video' ? poster : image,
             }),
           },
         }),

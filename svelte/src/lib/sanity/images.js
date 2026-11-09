@@ -50,3 +50,16 @@ export const imageSources = (image, aspect) => {
 		height: ratio ? Math.round(maxWidth / ratio) : undefined
 	};
 };
+
+/**
+ * An `object-position` that keeps an image's hotspot in view when it's
+ * covered over a box of another shape, measured within its Studio crop.
+ * Centred when it has no hotspot.
+ */
+export const hotspotPosition = (image) => {
+	const { crop, hotspot } = image ?? {};
+	if (!hotspot) return '50% 50%';
+	const along = (point, start = 0, end = 0) =>
+		`${(Math.min(1, Math.max(0, (point - start) / (1 - start - end))) * 100).toFixed(1)}%`;
+	return `${along(hotspot.x, crop?.left, crop?.right)} ${along(hotspot.y, crop?.top, crop?.bottom)}`;
+};

@@ -20,16 +20,21 @@ const caption = ({ title, linked }) => {
 
 const withCaptions = (slides) => slides.map((slide) => ({ ...slide, caption: caption(slide) }));
 
-// The carousel shows still images only: an animated GIF is many times the
-// weight of a photo, and holds up the slides around it
+// The carousel's images are stills: an animated GIF is many times the
+// weight of a photo, and holds up the slides around it. Slides saved before
+// videos were added have no media type, and are images.
 const still = 'asset->extension != "gif"';
+const media = `(coalesce(mediaType, "image") == "image" && image.${still}) || (mediaType == "video" && defined(video.asset))`;
 
 export async function load() {
 	const homepage = await client.fetch(`
 		*[_id == "homepage"][0]{
-			slides[image.${still}]{
+			slides[${media}]{
 				_key,
+				"mediaType": coalesce(mediaType, "image"),
 				image{ ${imageFields} },
+				"video": video.asset->url,
+				poster{ ${imageFields} },
 				title,
 				${linkFields},
 				"linked": internalLink->${linkedFields}
@@ -51,6 +56,7 @@ export async function load() {
 			await client.fetch(`
 				*[_type == "artwork" && defined(images[${still}][0])] | order(edition->year desc)[0...20]{
 					"_key": _id,
+					"mediaType": "image",
 					"image": images[${still}][0]{ ${imageFields} },
 					"linkType": "internal",
 					"internal": { _id, _type, "slug": slug.current },
