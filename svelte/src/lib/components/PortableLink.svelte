@@ -4,7 +4,7 @@
 
 	/**
 	 * Link annotation in rich text, rendered through AppLink, with Portable's
-	 * `linkClass`.
+	 * `linkClass`. Underlined closer to the text than the site's other links.
 	 */
 	let { portableText, children } = $props();
 
@@ -12,7 +12,9 @@
 </script>
 
 {#if linkHref(link)}
-	<AppLink {link} class={portableText.global.context.linkClass}>{@render children()}</AppLink>
+	<AppLink {link} class="{portableText.global.context.linkClass} [--underline-offset:0.12em]"
+		>{@render children()}</AppLink
+	>
 {:else}
 	{@render children()}
 {/if}
