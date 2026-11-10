@@ -7,6 +7,7 @@ import {schemaTypes} from './schemaTypes'
 import {myStructure} from './myStructure'
 import {templates} from './templates'
 import {landingTypes} from './schemaTypes/documents/landings'
+import {guideTool} from './guide'
 
 // One fixed document each, opened from the structure: no create, delete or
 // duplicate, and kept out of the "new document" menu
@@ -21,6 +22,8 @@ export default defineConfig({
   dataset: 'production',
 
   plugins: [structureTool({structure: myStructure}), media(), colorInput(), visionTool()],
+
+  tools: (prev) => [...prev, guideTool()],
 
   schema: {
     types: schemaTypes,
