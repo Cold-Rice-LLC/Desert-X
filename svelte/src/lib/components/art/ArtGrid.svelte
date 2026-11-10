@@ -20,7 +20,7 @@
 				<ImageFrame
 					image={artwork.image}
 					aspect={4 / 3}
-					sizes="(width >= 768px) calc((100vw - 376px) / 3), calc(100vw - 40px)"
+					sizes="(width >= 768px) calc((100vw - 396px) / 3), calc(100vw - 50px)"
 					loading={eager && index === 0 ? 'eager' : 'lazy'}
 					fetchpriority={eager && index === 0 ? 'high' : undefined}
 				/>

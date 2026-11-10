@@ -11,10 +11,15 @@
 	--text-base--line-height: 1;
 	--text-md: 1.8rem;
 	--text-md--line-height: 1;
-	/* The menu's links and text: stacked on phones, then from md up scaled
-	   with the viewport so the top-level links fit on one line (see :root) */
+	/* The site's biggest size: the menu's logo, links and text. Stacked on
+	   phones, then from md up the wireframes' 5.5rem, scaled down with the
+	   viewport where that's needed for their seven top-level links, 23.3em
+	   wide, to fit on one line between the gutters (see :root) */
 	--text-menu: 4.8rem;
 	--text-menu--line-height: 1;
+
+	/* The wireframes' -1% letter spacing, for the bigger sizes */
+	--tracking-tight: -0.01em;
 
 	--color-black: #000000;
 	--color-white: #ffffff;
@@ -37,13 +42,19 @@
 	   content runs from the edge and the nav title follows the hamburger;
 	   from md up the title starts at the gutter, so content lines up under
 	   it (see :root). */
-	--spacing-edge: 2rem;
+	--spacing-edge: 2.5rem;
 	--spacing-gutter: var(--spacing-edge);
+	/* The screen edge plus one column of the 12-column grid inside the
+	   edges. A percentage of the containing block, so only for the padding
+	   of full-width elements. */
+	--spacing-indent: calc(var(--spacing-edge) + (100% - 2 * var(--spacing-edge)) / 12);
 	/* One line of the current text: the gap between paragraphs, headings
 	   and the text under them, and consecutive text modules */
 	--spacing-line: 1lh;
+	/* The hamburger's height, which the nav's text lines up with */
+	--spacing-hamburger: 1.95rem;
 	/* The nav's height, and the menu's top bar */
-	--spacing-nav: 5.5rem;
+	--spacing-nav: 7.9rem;
 	/* Below the nav to a page's content, and its content to the footer */
 	--spacing-page-top: 4rem;
 	--spacing-page-bottom: var(--spacing-2xl);
@@ -114,11 +125,10 @@ html {
 		--spacing-lg: 7rem;
 		--spacing-xl: 10rem;
 		--spacing-2xl: 15rem;
-		--spacing-gutter: 6.8rem;
+		--spacing-gutter: 7.8rem;
 		--spacing-nav: 7.5rem;
 		--spacing-page-top: 9.25rem;
-		--text-menu: 5vw;
-		--text-menu--line-height: 0.95;
+		--text-menu: min(5.5rem, (100vw - 2 * var(--spacing-gutter)) / 23.3);
 	}
 }
 

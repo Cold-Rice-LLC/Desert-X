@@ -6,6 +6,7 @@
 	import 'swiper/css/a11y';
 	import AppLink from '$lib/components/AppLink.svelte';
 	import Image from '$lib/components/Image.svelte';
+	import FooterLinks from '$lib/components/layout/FooterLinks.svelte';
 	import { urlFor } from '$lib/sanity/client';
 	import { croppedSize, hotspotPosition } from '$lib/sanity/images';
 	import { linkHref } from '$lib/sanity/links';
@@ -18,16 +19,22 @@
 	 * too, and the last loops round to the first. Tabbing reaches the halves
 	 * as Previous and Next buttons, labelled while they have focus. The
 	 * current slide's caption sits bottom left, over the halves, linking to
-	 * where the slide goes.
+	 * where the slide goes. Or, given `quickLinks`, the footer's search and
+	 * two link columns sit there on its bottom edge, as the menu has them on
+	 * phones and the footer from md up (see FooterLinks). Each
+	 * slide's headline sits centred on it in the menu's size, fading in as
+	 * the slide arrives and moving away with it.
 	 *
 	 * Only the current slide's video plays, and none with reduced motion,
 	 * which also cuts between slides. The browser's lazy loading only looks
 	 * again on scroll, so the current slide and its neighbours are switched
 	 * to eager; the first is fetched ahead of everything else.
 	 */
-	let { slides } = $props();
+	let { slides, quickLinks } = $props();
 
 	let active = $state(0);
+	// The slide moving away, whose headline stays while it goes
+	let leaving = $state(null);
 	let swiper;
 
 	let several = $derived(slides.length > 1);
@@ -66,7 +73,13 @@
 			focusableElements: 'input, select, option, textarea, video, label',
 			keyboard: { enabled: true },
 			speed: prefersReducedMotion.current ? 0 : 300,
-			on: { realIndexChange: ({ realIndex }) => (active = realIndex) }
+			on: {
+				realIndexChange: ({ realIndex }) => {
+					leaving = active;
+					active = realIndex;
+				},
+				slideChangeTransitionEnd: () => (leaving = null)
+			}
 		});
 		return () => swiper.destroy();
 	};
@@ -129,13 +142,35 @@
 							style="object-position: {hotspotPosition(slide.image)}"
 						/>
 					{/if}
+					<!-- In its slide, so it moves with it. It fades in as its slide
+					     arrives, and is hidden at once after it's gone, ready to fade in
+					     again -->
+					{#if quickLinks && slide.headline}
+						<p
+							class={[
+								'absolute inset-0 flex items-center justify-center px-gutter text-center text-menu tracking-tight text-balance text-white',
+								index === active || index === leaving
+									? 'opacity-100 transition-opacity delay-150 duration-800 motion-reduce:transition-none'
+									: 'opacity-0'
+							]}
+						>
+							{slide.headline}
+						</p>
+					{/if}
 				</div>
 			{/each}
 		</div>
 	</div>
 
 	<!-- Outside Swiper, over the halves, so clicking it follows the link -->
-	{#if current?.caption && linkHref(current)}
+	{#if quickLinks}
+		<nav
+			aria-label="Quick links"
+			class="pointer-events-none absolute inset-x-0 bottom-edge z-20 grid grid-cols-12 items-end px-edge text-[2.2rem]/none text-white *:pointer-events-auto md:text-md md:tracking-tight"
+		>
+			<FooterLinks links={quickLinks} compact />
+		</nav>
+	{:else if current?.caption && linkHref(current)}
 		<AppLink
 			link={current}
 			class="absolute inset-x-edge bottom-edge z-20 w-fit text-base text-white link-underline"

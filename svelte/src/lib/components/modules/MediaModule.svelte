@@ -29,19 +29,19 @@
 		<ImageFrame
 			image={module.image}
 			aspect={4 / 5}
-			sizes="(width >= 768px) calc((100vw - 40px) * 9 / 24), calc((100vw - 40px) * 5 / 6)"
+			sizes="(width >= 768px) calc((100vw - 50px) * 9 / 24), calc((100vw - 50px) * 5 / 6)"
 			class="col-span-20 col-start-3 md:col-span-9 md:col-start-4"
 		/>
 		<ImageFrame
 			image={module.secondImage}
 			aspect={4 / 5}
-			sizes="(width >= 768px) calc((100vw - 40px) * 9 / 24), calc((100vw - 40px) * 5 / 6)"
+			sizes="(width >= 768px) calc((100vw - 50px) * 9 / 24), calc((100vw - 50px) * 5 / 6)"
 			class="col-span-20 col-start-3 mt-base md:col-span-9 md:col-start-auto md:mt-0"
 		/>
 	{:else if module.mediaType === 'image'}
 		<ImageFrame
 			image={module.image}
-			sizes="(width >= 768px) calc((100vw - 40px) * 2 / 3), calc((100vw - 40px) * 5 / 6)"
+			sizes="(width >= 768px) calc((100vw - 50px) * 2 / 3), calc((100vw - 50px) * 5 / 6)"
 			class={span}
 		/>
 	{:else if module.mediaType === 'mp4' && module.video}

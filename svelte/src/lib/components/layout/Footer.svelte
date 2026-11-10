@@ -1,7 +1,6 @@
 <script>
-	import AppLink from '$lib/components/AppLink.svelte';
 	import Portable from '$lib/components/Portable.svelte';
-	import Search from '$lib/components/icons/Search.svelte';
+	import FooterLinks from '$lib/components/layout/FooterLinks.svelte';
 
 	/**
 	 * Site footer, on every page but the homepage. On phones it's search and
@@ -9,31 +8,21 @@
 	 * centred in the space after search. From md up, on the 12-column grid:
 	 * search in column 1, the link columns in columns 2 and 4, and the
 	 * text, copyright and credits across columns 6–12. Everything sits on
-	 * the bottom edge. The menu shows it too, on phones. `class` goes on the
-	 * <footer>.
+	 * the bottom edge. The menu shows it too, on phones only, with `menu`
+	 * set: in the larger sizes it has from md up, on the 12-column grid (see
+	 * FooterLinks). `class` goes on the <footer>.
 	 */
-	let { footer, class: className } = $props();
+	let { footer, menu, class: className } = $props();
 </script>
 
 <footer
 	class={[
-		'mt-auto grid grid-cols-[auto_1fr_1fr] items-end px-edge pb-edge text-base md:grid-cols-12',
+		'mt-auto grid items-end px-edge pb-edge md:grid-cols-12',
+		menu ? 'grid-cols-12 text-[2.2rem]/none' : 'grid-cols-[auto_1fr_1fr] text-base',
 		className
 	]}
 >
-	<a href="/search" aria-label="Search" class="link-fade">
-		<Search class="h-[1.6rem] w-auto md:h-[2.4rem]" />
-	</a>
-
-	{#each footer.links as links, i (i)}
-		{#if links.length}
-			<ul class={['text-center', i ? 'md:col-start-4' : 'md:col-start-2']}>
-				{#each links as link (link._key)}
-					<li><AppLink {link} class="link-fade">{link.label}</AppLink></li>
-				{/each}
-			</ul>
-		{/if}
-	{/each}
+	<FooterLinks links={footer.links} compact={menu} />
 
 	<!-- Rich text links are underlined elsewhere, but not here, so they fade instead -->
 	<div class="col-span-7 col-start-6 hidden md:block [&_a]:no-underline [&_a]:link-fade">

@@ -22,7 +22,7 @@
 					<ImageFrame
 						image={bio.image}
 						aspect={4 / 5}
-						sizes="(width >= 768px) calc((100vw - 136px) / 4), calc(100vw - 40px)"
+						sizes="(width >= 768px) calc((100vw - 156px) / 4), calc(100vw - 50px)"
 						class="md:col-span-3"
 					/>
 					{#if bio.imageText}

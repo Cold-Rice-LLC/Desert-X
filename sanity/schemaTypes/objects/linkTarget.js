@@ -8,23 +8,22 @@ const LINK_TYPE_TITLES = {
   subItems: 'Sub-items',
 }
 
-const linkTypeIs =
-  (type) =>
-  ({parent}) =>
-    parent?.linkType === type
+const linkTypeIs = (type, shown) => (context) => context.parent?.linkType === type && shown(context)
 
 /**
  * Where a link points, with no label of its own. Pass `required: true` for
  * links that must point somewhere; left optional, an untouched link renders
  * as no link. `types` sets the Link Types on offer (menu items add
  * Sub-items), and `schemes` widens the URL schemes an external link
- * accepts.
+ * accepts. `shown` hides the whole link, and skips checking it, where it
+ * returns false.
  */
 
 export const linkTargetFields = ({
   required = false,
   schemes,
   types = ['internal', 'external'],
+  shown = () => true,
 } = {}) => [
   defineField({
     name: 'linkType',
@@ -42,6 +41,7 @@ export const linkTargetFields = ({
       direction: 'horizontal',
     },
     initialValue: required ? types[0] : undefined,
+    hidden: (context) => !shown(context),
     validation: (rule) => (required ? rule.required() : rule),
   }),
   defineField({
@@ -58,7 +58,7 @@ export const linkTargetFields = ({
       ...landingPages.map(({name}) => ({type: name})),
     ],
     options: {disableNew: true},
-    ...shownWhere(linkTypeIs('internal'), {required: 'Choose a page.'}),
+    ...shownWhere(linkTypeIs('internal', shown), {required: 'Choose a page.'}),
   }),
   defineField({
     name: 'externalUrl',
@@ -69,7 +69,7 @@ export const linkTargetFields = ({
       : 'A full URL. Opens in a new tab.',
     // `url` allows http/https only unless told otherwise — rich text links
     // also reach inboxes and phone numbers.
-    ...shownWhere(linkTypeIs('external'), {
+    ...shownWhere(linkTypeIs('external', shown), {
       required: 'External URL is required.',
       rule: (rule) => (schemes ? rule.uri({scheme: schemes}) : rule),
     }),

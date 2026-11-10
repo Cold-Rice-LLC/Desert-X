@@ -25,6 +25,7 @@ export function load({ data, url }) {
 		name,
 		items: items.map((artwork) => ({
 			key: artwork._id,
+			artist: name,
 			title: artwork.title,
 			href: `/art/${artwork.slug}`,
 			action: 'View artwork'

@@ -23,7 +23,7 @@
 			<NewsTile
 				{item}
 				{generalPalette}
-				sizes="(width >= 768px) calc((100vw - 186px) / 3), calc(100vw - 40px)"
+				sizes="(width >= 768px) calc((100vw - 206px) / 3), calc(100vw - 50px)"
 				loading={index === firstImage ? 'eager' : 'lazy'}
 				fetchpriority={index === firstImage ? 'high' : undefined}
 			/>

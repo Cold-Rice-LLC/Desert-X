@@ -3,33 +3,46 @@
 	import { page } from '$app/state';
 	import AppLink from '$lib/components/AppLink.svelte';
 	import Footer from '$lib/components/layout/Footer.svelte';
-	import Logo from '$lib/components/icons/Logo.svelte';
 	import LogoMark from '$lib/components/icons/LogoMark.svelte';
-	import MenuButton from '$lib/components/layout/MenuButton.svelte';
+	import TopBar from '$lib/components/layout/TopBar.svelte';
 	import { linkHref } from '$lib/sanity/links';
 	import { ui } from '$lib/ui.svelte.js';
+	import { MediaQuery } from 'svelte/reactivity';
 
 	/**
 	 * Full-screen menu, opened by either nav's hamburger. A modal <dialog>,
 	 * so focus stays inside, Escape closes it and the page behind is inert.
-	 * Items stack on phones and sit in a row from md up. Items whose Link
-	 * Type is Sub-items open them in place of the menu text: under the item
-	 * on phones, pushing the rest down, and under the whole row from md up,
-	 * placed against the row so they stay nested in their item's list. The
+	 * On phones items are indented by a column of the 12-column grid; ones
+	 * with sub-items run across, and the rest fill two columns, down then
+	 * across, the second starting halfway along the grid. From md up they
+	 * sit in a row, spread across it, never closer than a word-like gap.
+	 * Items whose Link Type is Sub-items show them under the item on phones,
+	 * always, with the item an underlined label; from md up the item is a
+	 * button that opens them in place of the menu text, under the whole
+	 * row, placed against it so they stay nested in their item's list. The
 	 * rest are plain links. The menu text is left off phones, which have the
 	 * site footer at the bottom instead, and the menu scrolls if it runs
 	 * past the screen. Sub-items linking to
 	 * a location get the Desert X mark; one that goes nowhere, like a
-	 * location with no editions yet, shows faded as plain text. Always
+	 * location with no editions yet, shows faded as plain text. The top bar
+	 * is the homepage nav's (see TopBar), so the hamburger and logo stay
+	 * put. Always
 	 * rendered, so it can fade on opacity alone: while closed it's transparent, ignores the
 	 * pointer and is inert, and it's fixed and stacked above the nav so the
 	 * fade-out isn't cut off when the dialog leaves the top layer.
 	 */
 	let { menu, footer } = $props();
 
+	const desktop = new MediaQuery('width >= 48rem');
 	let dialog;
 	let activeKey = $state(null);
 	let active = $derived(menu.items.find((item) => item._key === activeKey));
+	let withSubItems = $derived(menu.items.filter((item) => item.linkType === 'subItems'));
+	// The phone layout's rows: one for each item with sub-items, then the
+	// two columns of the rest
+	let rows = $derived(
+		withSubItems.length + Math.ceil((menu.items.length - withSubItems.length) / 2)
+	);
 
 	// ui.menuOpen drives the dialog, rather than the dialog's close event,
 	// which Chrome only fires once the page next renders
@@ -66,30 +79,36 @@
 	class="pointer-events-none fixed inset-0 z-20 m-0 flex size-full max-h-none max-w-none flex-col overflow-y-auto bg-white text-menu text-black opacity-0 transition-opacity duration-300 open:pointer-events-auto open:opacity-100"
 	aria-label="Menu"
 >
-	<div class="relative flex h-nav shrink-0 items-center gap-x-[0.8em] px-edge text-md md:pl-gutter">
-		<MenuButton aria-label="Close menu" onclick={() => (ui.menuOpen = false)} />
-		<!-- For the mouse, as the nav's logo is -->
-		<button tabindex="-1" aria-hidden="true" onclick={() => (ui.menuOpen = false)}>
-			<Logo class="h-[1.6rem] w-auto md:h-base" />
-		</button>
-	</div>
+	<TopBar
+		logo
+		aria-label="Close menu"
+		onclick={() => (ui.menuOpen = false)}
+		class="relative shrink-0"
+	/>
 
 	<nav aria-label="Main">
-		<ul class="mt-sm flex flex-col px-gutter md:relative md:mt-md md:flex-row md:justify-between">
+		<ul
+			class="mt-[0.9rem] grid grid-flow-col grid-cols-[5fr_6fr] pr-edge pl-indent md:relative md:mt-[2.3rem] md:flex md:justify-between md:gap-x-[0.8em] md:px-gutter"
+			style:grid-template-rows="repeat({rows}, auto)"
+		>
 			{#each menu.items as item (item._key)}
-				<li>
+				<li class={[item.linkType === 'subItems' && 'col-span-2']}>
 					{#if item.linkType === 'subItems'}
-						<button
-							class={[item._key === activeKey ? 'link-underline' : 'link-fade']}
-							aria-expanded={item._key === activeKey}
-							aria-controls="menu-sub-items"
-							onclick={() => (activeKey = item._key === activeKey ? null : item._key)}
-						>
-							{item.label}
-						</button>
-						{#if item === active}
+						{#if desktop.current}
+							<button
+								class={[item === active ? 'link-underline' : 'link-fade']}
+								aria-expanded={item === active}
+								aria-controls="menu-sub-items-{item._key}"
+								onclick={() => (activeKey = item === active ? null : item._key)}
+							>
+								{item.label}
+							</button>
+						{:else}
+							<span class="link-current">{item.label}</span>
+						{/if}
+						{#if item === active || !desktop.current}
 							<ul
-								id="menu-sub-items"
+								id="menu-sub-items-{item._key}"
 								class="my-line flex flex-col md:absolute md:inset-x-0 md:top-full md:mt-md md:mb-0 md:flex-row md:flex-wrap md:gap-x-[0.8em] md:px-gutter"
 							>
 								{#each item.subItems ?? [] as subItem (subItem._key)}
@@ -127,8 +146,8 @@
 	</nav>
 
 	{#if menu.text && !active}
-		<p class="mt-md hidden px-gutter md:block">{menu.text}</p>
+		<p class="mt-line hidden px-gutter tracking-tight md:block">{menu.text}</p>
 	{/if}
 
-	<Footer {footer} class="pt-md md:hidden" />
+	<Footer {footer} menu class="pt-md md:hidden" />
 </dialog>

@@ -6,4 +6,5 @@
 
 <h1 class="sr-only">DESERT X</h1>
 
-<HomeCarousel slides={data.slides} />
+<!-- The footer's links, which the homepage otherwise doesn't have -->
+<HomeCarousel slides={data.slides} quickLinks={data.quickLinks && data.footer.links} />

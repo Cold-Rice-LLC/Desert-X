@@ -29,12 +29,14 @@ const media = `(coalesce(mediaType, "image") == "image" && image.${still}) || (m
 export async function load() {
 	const homepage = await client.fetch(`
 		*[_id == "homepage"][0]{
+			quickLinks,
 			slides[${media}]{
 				_key,
 				"mediaType": coalesce(mediaType, "image"),
 				image{ ${imageFields} },
 				"video": video.asset->url,
 				poster{ ${imageFields} },
+				headline,
 				title,
 				${linkFields},
 				"linked": internalLink->${linkedFields}
@@ -47,7 +49,12 @@ export async function load() {
 	// Studio sets one
 	const seo = pageSeo(homepage?.seo);
 
-	if (homepage?.slides?.length) return { slides: withCaptions(homepage.slides), seo };
+	if (homepage?.slides?.length) {
+		// With Quick Links on, slides have headlines rather than captions
+		const quickLinks = Boolean(homepage.quickLinks);
+		const slides = quickLinks ? homepage.slides : withCaptions(homepage.slides);
+		return { slides, quickLinks, seo };
+	}
 
 	// PROTOTYPE: until the Homepage has slides in the Studio, stand in the
 	// newest artworks' first still images, each linking to its artwork

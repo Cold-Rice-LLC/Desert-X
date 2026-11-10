@@ -4,8 +4,9 @@
 	/**
 	 * A search field over a grey rule, black while it has keyboard focus, with the
 	 * magnifier in front. Submitting does nothing: `oninput` gets each
-	 * change. `label` names it for screen readers, and `class` goes on the
-	 * <form>.
+	 * change. The field is one line tall, which browsers otherwise stretch
+	 * to the font's own line height, and gives way before the magnifier.
+	 * `label` names it for screen readers, and `class` goes on the <form>.
 	 */
 	let { value = '', label = 'Search', oninput, class: className } = $props();
 </script>
@@ -18,14 +19,14 @@
 	]}
 	onsubmit={(event) => event.preventDefault()}
 >
-	<Search class="h-[0.65em] w-auto" />
+	<Search class="h-[0.71em] w-auto shrink-0" />
 	<input
 		type="search"
 		name="q"
-		placeholder="Search"
+		placeholder="Enter keyword"
 		aria-label={label}
 		{value}
 		{oninput}
-		class="flex-1 text-black outline-none placeholder:text-grey-3"
+		class="h-[1lh] min-w-0 flex-1 text-black outline-none placeholder:text-grey-3"
 	/>
 </form>

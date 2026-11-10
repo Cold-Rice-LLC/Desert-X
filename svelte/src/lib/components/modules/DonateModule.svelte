@@ -40,7 +40,7 @@
 		<ImageFrame
 			image={module.image}
 			aspect={4 / 3}
-			sizes="(width >= 768px) calc((100vw - 226px) / 2), calc(100vw - 90px)"
+			sizes="(width >= 768px) calc((100vw - 246px) / 2), calc(100vw - 100px)"
 		/>
 
 		<!-- Its contents join the card's column on phones, so the title can lead -->

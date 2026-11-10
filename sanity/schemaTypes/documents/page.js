@@ -14,6 +14,10 @@ const SLIDE_MEDIA_TYPES = [
   {title: 'Video', value: 'video'},
 ]
 
+// With Quick Links on, slides have a headline instead of a link and title
+const quickLinksOn = ({document}) => Boolean(document?.quickLinks)
+const quickLinksOff = (context) => !quickLinksOn(context)
+
 // Slides saved before videos were added have no media type: they're images
 const isSlideType =
   (type) =>
@@ -28,6 +32,15 @@ export default defineType({
   fields: [
     ...titleSlugFields({
       slug: shownWhere(({document}) => !isHomepage(document), {required: 'Slug is required.'}),
+    }),
+    defineField({
+      name: 'quickLinks',
+      type: 'boolean',
+      title: 'Quick Links',
+      description:
+        'Shows the footer’s links along the bottom of the carousel (bottom left from tablet size up), and each slide’s Headline centred over it, in place of its link and Title.',
+      initialValue: false,
+      hidden: ({document}) => !isHomepage(document),
     }),
     defineField({
       name: 'slides',
@@ -73,13 +86,23 @@ export default defineType({
               options: {hotspot: true},
               ...shownWhere(isSlideType('video')),
             }),
-            ...linkTargetFields(),
+            defineField({
+              name: 'headline',
+              type: 'text',
+              title: 'Headline',
+              rows: 2,
+              description:
+                'Optional. Centred over the slide, fading in as it arrives. Consecutive slides can carry on one sentence.',
+              hidden: quickLinksOff,
+            }),
+            ...linkTargetFields({shown: quickLinksOff}),
             defineField({
               name: 'title',
               type: 'string',
               title: 'Title',
               description:
                 'Shown bottom left of the slide, linking to where it goes. Leave empty for the linked artwork’s artist and title, or the linked page’s title.',
+              hidden: quickLinksOn,
             }),
           ],
           preview: {
@@ -89,10 +112,13 @@ export default defineType({
               poster: 'poster',
               videoName: 'video.asset.originalFilename',
               title: 'title',
+              headline: 'headline',
               ...linkTargetSelect,
             },
-            prepare: ({mediaType, image, poster, videoName, title, ...link}) => ({
-              title: title || linkTargetSubtitle(link) || 'No link',
+            // A slide doesn't see the document's Quick Links: the headline
+            // when there is one, else what it links to
+            prepare: ({mediaType, image, poster, videoName, title, headline, ...link}) => ({
+              title: headline || title || linkTargetSubtitle(link) || 'No link',
               subtitle:
                 mediaType === 'video' ? ['Video', videoName].filter(Boolean).join(' · ') : 'Image',
               media: mediaType === 'video' ? poster : image,
@@ -101,7 +127,8 @@ export default defineType({
         }),
       ],
     }),
-    modulesField(pageModuleMembers),
+    // The homepage is its carousel alone
+    modulesField(pageModuleMembers, {hidden: ({document}) => isHomepage(document)}),
     seoField,
   ],
 })

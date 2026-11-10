@@ -19,12 +19,22 @@
 	{#if data.groups}{data.count} {data.count === 1 ? 'result' : 'results'}{/if}
 </p>
 
-<div class="px-gutter pt-page-top pb-page-bottom text-md">
+<!-- At least the screen's height below the nav, so the footer waits below
+     the fold, however few the results. On phones the intro is smaller than
+     the field and results, as in the wireframes. -->
+<div
+	class="min-h-[calc(100svh-var(--spacing-nav))] px-gutter pt-[4.6rem] pb-page-bottom text-[2.2rem]/none tracking-tight md:pt-page-top md:text-md md:tracking-normal"
+>
 	{#if data.landing?.intro}
 		<Portable value={data.landing.intro} />
 	{/if}
 
-	<SearchField value={data.query} label="Search the site" oninput={search} class="mt-lg" />
+	<SearchField
+		value={data.query}
+		label="Search the site"
+		oninput={search}
+		class="mt-[7rem] text-[3.5rem] md:mt-lg md:text-md"
+	/>
 
 	{#if data.groups}
 		<SearchResults
@@ -32,7 +42,7 @@
 			count={data.count}
 			query={data.query}
 			clearHref={queryHref(currentPage.url, { q: null })}
-			class="mt-2xl"
+			class="mt-[7.5rem] text-[3.5rem] tracking-normal md:mt-2xl md:text-md"
 		/>
 	{/if}
 </div>

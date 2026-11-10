@@ -11,5 +11,5 @@
 </script>
 
 <button {...props} class="md:absolute md:top-1/2 md:left-edge md:-translate-y-1/2">
-	<Hamburger class="h-[1.5rem] w-auto md:h-[1.7rem]" />
+	<Hamburger class="h-hamburger w-auto" />
 </button>
