@@ -68,7 +68,7 @@ export async function load({ params, url }) {
 		},
 		navTitle: related.landingTitle || 'News',
 		navHref: '/news',
-		navDetail: formatLongDate(news.publishDate),
+		navDetail: formatLongDate(news.publishDate, { shortYear: true }),
 		seo: pageSeo(seo, {
 			title: article.title,
 			description: moduleDescription({ moduleText, title: article.title }) || cardText,

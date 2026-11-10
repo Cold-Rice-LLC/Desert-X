@@ -22,11 +22,14 @@ export const formatDate = (date) => {
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-/** A YYYY-MM-DD date written out: "Oct 8, 2026". */
-export const formatLongDate = (date) => {
+/**
+ * A YYYY-MM-DD date written out: "Oct 8, 2026", or with `shortYear`,
+ * "Oct 8, 26", as a news article's nav shows it.
+ */
+export const formatLongDate = (date, { shortYear = false } = {}) => {
 	if (!date) return '';
-	const [year, month, day] = date.split('-').map(Number);
-	return `${MONTHS[month - 1]} ${day}, ${year}`;
+	const [year, month, day] = date.split('-');
+	return `${MONTHS[month - 1]} ${Number(day)}, ${shortYear ? year.slice(-2) : year}`;
 };
 
 /**

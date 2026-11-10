@@ -15,6 +15,8 @@ const filterConditions = {
 /**
  * News, newest first, optionally filtered to General or one location by
  * `?filter=`; `?page=` is how many batches of 24 to show (see LoadMore).
+ * Only locations with news of their own are offered as filters, so none
+ * leads to an empty list: Jalisco, say, joins them with its first news.
  */
 export async function load({ url }) {
 	const filter = url.searchParams.get('filter');
@@ -32,7 +34,10 @@ export async function load({ url }) {
 				"items": *[_type == "news" && ${condition}] | order(publishDate desc) [0...$end]{
 					${newsTileFields}
 				},
-				"locations": *[_type == "location"] | order(title asc){ title, "slug": slug.current }
+				"locations": *[
+					_type == "location" &&
+					count(*[_type == "news" && kind != "press" && location._ref == ^._id]) > 0
+				] | order(title asc){ title, "slug": slug.current }
 			}`,
 			{ filter, end: page * PAGE_SIZE }
 		)

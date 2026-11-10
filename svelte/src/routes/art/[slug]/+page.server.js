@@ -8,9 +8,10 @@ import { visualArtwork } from '$lib/structuredData';
 
 /**
  * An artwork by slug. Its artists' names show beside it and in the nav,
- * unless an Artist Credit replaces them. Shared, it's titled with both,
- * and shows the start of its text (or else the artist info) and its first
- * image; to search engines it's a VisualArtwork.
+ * under Art on phones, unless an Artist Credit replaces them. Shared,
+ * it's titled with both, and shows the start of its text (or else the
+ * artist info) and its first image; to search engines it's a
+ * VisualArtwork.
  */
 export async function load({ params, url }) {
 	const { artwork, landingTitle } = await client.fetch(
@@ -41,6 +42,7 @@ export async function load({ params, url }) {
 		navTitle: landingTitle || 'Art',
 		navHref: '/art',
 		navDetail: credit,
+		navStacked: true,
 		seo: pageSeo(artwork.seo, {
 			title: credit ? `${credit}, ${artwork.title}` : artwork.title,
 			description,

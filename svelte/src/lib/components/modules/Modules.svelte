@@ -17,9 +17,21 @@
 	 * or are skipped. Modules sit an xl step apart, or two blank lines between
 	 * consecutive text modules. `children` comes first, spaced like a module
 	 * (a news article's title). `narrow` runs text-led modules from column 2
-	 * to 11 of the 12-column grid from md up, as news does.
+	 * to 11 of the 12-column grid from md up, as news does. `lead` sets
+	 * text, captions and bios in the lead size on phones, as artworks do.
+	 * `nested` is a run inside another's, from its `custom` snippet, spaced
+	 * as one module there, without the page's space above and below (the
+	 * Visit page's editions); other attributes go on its element.
 	 */
-	let { modules, narrow = false, children, custom } = $props();
+	let {
+		modules,
+		narrow = false,
+		lead = false,
+		nested = false,
+		children,
+		custom,
+		...attributes
+	} = $props();
 
 	const components = {
 		textModule: TextModule,
@@ -35,7 +47,12 @@
 	};
 </script>
 
-<div class="modules pt-page-top pb-page-bottom text-md" class:narrow>
+<div
+	{...attributes}
+	class={['modules', !nested && 'pt-page-top pb-page-bottom text-md']}
+	class:narrow
+	class:lead
+>
 	{@render children?.()}
 	{#each modules ?? [] as module (module._key)}
 		{@const Module = components[module._type]}
@@ -62,6 +79,18 @@
 		&.narrow {
 			@media (width >= 48rem) {
 				--spacing-module: calc(var(--spacing-edge) + (100% - 2 * var(--spacing-edge)) / 12);
+			}
+		}
+
+		/* The md and base sizes as the lead size on phones; from md up they
+		   inherit their own sizes from :root again */
+		&.lead {
+			--text-md: var(--text-lead);
+			--text-base: var(--text-lead);
+
+			@media (width >= 48rem) {
+				--text-md: inherit;
+				--text-base: inherit;
 			}
 		}
 	}

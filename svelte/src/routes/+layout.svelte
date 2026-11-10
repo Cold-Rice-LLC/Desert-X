@@ -8,6 +8,7 @@
 	import MainNav from '$lib/components/layout/MainNav.svelte';
 	import Menu from '$lib/components/layout/Menu.svelte';
 	import Seo from '$lib/components/layout/Seo.svelte';
+	import { linkHref } from '$lib/sanity/links';
 	import { ui } from '$lib/ui.svelte.js';
 
 	let { children, data } = $props();
@@ -59,12 +60,13 @@
 	Skip to content
 </a>
 
+<!-- Without the Donate link on the page it goes to -->
 <MainNav
 	{home}
 	{...nav}
 	stacked={page.data.navStacked}
 	action={page.data.navAction}
-	donateLink={data.donateLink}
+	donateLink={linkHref(data.donateLink) === page.url.pathname ? null : data.donateLink}
 />
 
 <Menu menu={data.menu} footer={data.footer} />

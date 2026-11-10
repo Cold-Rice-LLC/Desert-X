@@ -179,8 +179,11 @@ html {
 		outline-offset: 0.2rem;
 	}
 
-	/* A text field clicked into has its caret to show it */
-	:root[data-pointer] :is(input, textarea):focus-visible {
+	/* A text field clicked into has its caret to show it. What's focused
+	   for you as something opens (autofocus, like the lightbox's close
+	   button) or only by a script (tabindex -1, like the map's card) shows
+	   a ring only if the keyboard, not a click, opened it. */
+	:root[data-pointer] :is(input, textarea, [autofocus], [tabindex='-1']):focus-visible {
 		outline: none;
 	}
 }

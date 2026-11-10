@@ -1,10 +1,10 @@
 <script>
 	/**
-	 * Groups as rows on the 12-column grid, as the artworks list and search
-	 * results show them: each group's `name` (an artist, or Editions, Pages
-	 * or News) across 4 columns on phones and 3 from md up, and its `items`
-	 * stacked beside it on a subgrid of the rest, 8 columns or 9, each drawn
-	 * by `row` and keyed by `key`. With `flatOnPhones`, phones have the rows
+	 * Groups as rows on the 12-column grid, as search results show them:
+	 * each group's `name` (an artist, or Editions, Pages or News) across 4
+	 * columns on phones and 3 from md up, and its `items` stacked beside it
+	 * on a subgrid of the rest, 8 columns or 9, each drawn by `row` and
+	 * keyed by `key`. With `flatOnPhones`, phones have the rows
 	 * alone, one under another, without the names, and the rows the whole
 	 * width; the grid starts at md.
 	 */

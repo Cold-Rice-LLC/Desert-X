@@ -14,7 +14,7 @@
 		<Gallery images={data.artwork.images} {alt} />
 	{/if}
 {/key}
-<Modules modules={data.artwork.modules}>
+<Modules modules={data.artwork.modules} lead>
 	<!-- Spaced like a text module, so text straight after sits a line below -->
 	<header class="text-module grid gap-y-line px-module md:grid-cols-2">
 		<h1>{data.artwork.title}</h1>

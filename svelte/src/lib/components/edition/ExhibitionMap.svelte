@@ -2,7 +2,7 @@
 	import { PUBLIC_MAPBOX_TOKEN } from '$env/static/public';
 	import { mount, tick, unmount } from 'svelte';
 	import { MediaQuery } from 'svelte/reactivity';
-	import { artworkCredit } from '$lib/art';
+	import { artworkCredit, isLocated } from '$lib/art';
 	import LogoMark from '$lib/components/icons/LogoMark.svelte';
 	import ImageFrame from '$lib/components/ImageFrame.svelte';
 	import ModuleHeading from '$lib/components/modules/ModuleHeading.svelte';
@@ -13,10 +13,12 @@
 	 * edition's artworks with coordinates, each marked with the logo's X,
 	 * then `text` and, given `href`, a "View Edition" link. Choosing
 	 * an X turns it black and opens a card with the artist, title (up to two
-	 * lines), thumbnail and a See Details link, across the bottom on phones
-	 * and in the top right from md up, which scrolls if it's taller than the
-	 * map. The close button, Escape or a
-	 * click on the map closes it. The map is recoloured to the site's greys,
+	 * lines), thumbnail, a Details link to the artwork and a Next button,
+	 * which moves on to the next X, round to the first after the last. It's
+	 * across the bottom on phones and in the top right from md up, scrolls
+	 * if it's taller than the map, and passes under the nav, as the map's
+	 * own layers do. The close button, Escape or a click on the map closes
+	 * it. The map is recoloured to the site's greys,
 	 * without labels, under a grid that moves with it. Mapbox only loads
 	 * once the map nears the viewport, which also keeps it off the server,
 	 * and the page has loaded (see afterLoad).
@@ -42,13 +44,11 @@
 	const style = 'mapbox://styles/mapbox/light-v11';
 
 	let located = $derived(
-		artworks
-			.filter((artwork) => Number.isFinite(artwork.coordinates?.lat))
-			.map((artwork) => ({
-				artwork,
-				lngLat: [artwork.coordinates.lng, artwork.coordinates.lat],
-				artists: artworkCredit(artwork)
-			}))
+		artworks.filter(isLocated).map((artwork) => ({
+			artwork,
+			lngLat: [artwork.coordinates.lng, artwork.coordinates.lat],
+			artists: artworkCredit(artwork)
+		}))
 	);
 
 	let frameEl = $state();
@@ -60,6 +60,12 @@
 	let selectedId = $state(null);
 	let selected = $derived(located.find((pin) => pin.artwork._id === selectedId));
 
+	// The X after the chosen one, round to the first after the last
+	const next = () => {
+		const index = located.findIndex((pin) => pin.artwork._id === selectedId);
+		select(located[(index + 1) % located.length].artwork._id, { focus: false });
+	};
+
 	// Markers aren't Svelte's, so their state is set here. The chosen id is
 	// read first, so the effect reruns on it even before markers exist
 	$effect(() => {
@@ -70,11 +76,12 @@
 	});
 
 	// The card comes after every marker, so focus moves into it, and the
-	// next Tab reaches its link rather than the next X
-	async function select(id) {
+	// next Tab reaches its link rather than the next X; from Next, which
+	// keeps the card open, it stays on Next to go on again
+	async function select(id, { focus = true } = {}) {
 		selectedId = id;
 		await tick();
-		cardEl?.focus({ preventScroll: true });
+		if (focus) cardEl?.focus({ preventScroll: true });
 		const pin = located.find((p) => p.artwork._id === id);
 		if (pin && map && !locked.current) {
 			// Keeps the chosen X clear of the card, measured once it's shown:
@@ -301,7 +308,10 @@
 		<ModuleHeading {heading} level={headingLevel} />
 
 		<div class="mt-line px-gutter">
-			<div bind:this={frameEl} class="relative h-[60vh] overflow-hidden bg-grey-2 md:h-[80vh]">
+			<div
+				bind:this={frameEl}
+				class="relative isolate h-[60vh] overflow-hidden bg-grey-2 md:h-[80vh]"
+			>
 				<!-- Mapbox's own CSS makes this position: relative, so it fills by size instead -->
 				<div bind:this={mapEl} class="size-full"></div>
 
@@ -338,7 +348,12 @@
 								/>
 							{/if}
 						{/key}
-						<p>See <a href="/art/{selected.artwork.slug}" class="link-underline">Details</a></p>
+						<div class="flex justify-between gap-base">
+							<a href="/art/{selected.artwork.slug}" class="link-underline">Details</a>
+							{#if located.length > 1}
+								<button type="button" class="link-underline" onclick={next}>Next</button>
+							{/if}
+						</div>
 					</section>
 				{/if}
 			</div>

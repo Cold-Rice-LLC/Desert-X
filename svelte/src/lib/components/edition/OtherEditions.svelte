@@ -4,7 +4,7 @@
 	import Dropdown from '$lib/components/Dropdown.svelte';
 	import EditionContent from '$lib/components/edition/EditionContent.svelte';
 	import ModuleHeading from '$lib/components/modules/ModuleHeading.svelte';
-	import { ui } from '$lib/ui.svelte.js';
+	import { showUnderNav } from '$lib/ui.svelte.js';
 	import { replaceQuery } from '$lib/url';
 
 	/**
@@ -41,27 +41,12 @@
 	$effect(() => {
 		const edition = editions.find(({ slug }) => slug === openSlug);
 		if (!edition) return;
-		const details = document.getElementById(`edition-${edition.slug}`);
-		// The nav's own height, which on phones is a line taller than
-		// --spacing-nav, stacked (see TopBar)
-		const nav = document.querySelector('header');
-		let under = false;
-
-		const update = () => {
-			const navBottom = nav.offsetHeight;
-			const { top, bottom } = details.getBoundingClientRect();
-			if (under === (top <= navBottom && bottom > navBottom)) return;
-			under = !under;
-			ui.nav = under ? { title: String(edition.year), detail: edition.location } : null;
-		};
-		update();
-		addEventListener('scroll', update, { passive: true });
-		addEventListener('resize', update);
-		return () => {
-			removeEventListener('scroll', update);
-			removeEventListener('resize', update);
-			if (under) ui.nav = null;
-		};
+		return showUnderNav([
+			{
+				element: document.getElementById(`edition-${edition.slug}`),
+				nav: { title: String(edition.year), detail: edition.location }
+			}
+		]);
 	});
 </script>
 

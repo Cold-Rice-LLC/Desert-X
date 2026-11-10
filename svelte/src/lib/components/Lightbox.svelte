@@ -19,7 +19,8 @@
 	 * a resize cursor pointing that way; the arrow keys, a swipe and a mouse
 	 * drag move it too, and the last loops round to the first. Tabbing
 	 * reaches the halves as Previous and Next buttons, labelled while they
-	 * have focus, and a close button top right.
+	 * have focus, and a close button top right, focused on opening, with
+	 * its ring only if the keyboard opened it (see layout.css).
 	 *
 	 * A modal <dialog>, so focus stays inside and the page behind is inert;
 	 * Escape closes it too. Mounted to open, it calls `onchange` with each
@@ -89,11 +90,13 @@
 		closing && 'pointer-events-none opacity-0'
 	]}
 >
-	<!-- Where the menu's close button would be, mirrored to the right. First,
-	     so opening focuses it rather than Previous, whose label would show. -->
+	<!-- Where the menu's close button would be, mirrored to the right.
+	     Opening focuses it, as a dialog's autofocus, rather than Previous,
+	     whose label would show. -->
 	<button
 		type="button"
 		aria-label="Close"
+		autofocus
 		class="absolute top-0 right-edge z-20 flex h-nav items-center link-fade md:text-white"
 		onclick={close}
 	>

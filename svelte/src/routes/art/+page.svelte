@@ -65,8 +65,9 @@
 		label="Artwork filters"
 		allHref={href({ location: null, year: null })}
 		groups={filters}
+		quarters
 		active={!!(data.location || data.year)}
-		class="mt-2xl mb-md text-[length:min(var(--text-title),(100vw-2*var(--spacing-edge))/10)] md:text-md"
+		class="mt-2xl mb-md"
 	/>
 
 	{#if !data.entries.length}

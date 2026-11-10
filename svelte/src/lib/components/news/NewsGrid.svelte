@@ -2,12 +2,13 @@
 	import NewsTile from '$lib/components/news/NewsTile.svelte';
 
 	/**
-	 * News tiles, one across on phones and three from md up, between the
-	 * gutters. `class` goes on the <ul>. With `eager`, for a grid at the top
+	 * News tiles, one across on phones, 5 of 6 columns wide and centred, as
+	 * the Art landing's are, and three from md up, between the gutters.
+	 * `class` goes on the <ul>. With `eager`, for a grid at the top
 	 * of its page, the first image in the first row loads straight away,
 	 * ahead of the rest. Only press tiles show one. With `row`, phones show
-	 * them in a row instead, a tile and a fifth of the next across, that
-	 * scrolls sideways freely, without a scrollbar.
+	 * them in a row instead, between the gutters, a tile and a fifth of the
+	 * next across, that scrolls sideways freely, without a scrollbar.
 	 */
 	let { items, generalPalette, eager = false, row = false, class: className } = $props();
 
@@ -21,8 +22,8 @@
 
 <ul
 	class={[
-		'gap-base px-gutter md:grid md:grid-cols-3',
-		row ? 'scrollbar-none flex overflow-x-auto' : 'grid',
+		'gap-base md:grid md:grid-cols-3 md:px-gutter',
+		row ? 'scrollbar-none flex overflow-x-auto px-gutter' : 'grid px-indent',
 		className
 	]}
 >
@@ -33,7 +34,7 @@
 				{generalPalette}
 				sizes={row
 					? '(width >= 768px) calc((100vw - 206px) / 3), calc((100vw - 50px) * 5 / 6)'
-					: '(width >= 768px) calc((100vw - 206px) / 3), calc(100vw - 50px)'}
+					: '(width >= 768px) calc((100vw - 206px) / 3), calc((100vw - 50px) * 5 / 6)'}
 				loading={index === firstImage ? 'eager' : 'lazy'}
 				fetchpriority={index === firstImage ? 'high' : undefined}
 			/>

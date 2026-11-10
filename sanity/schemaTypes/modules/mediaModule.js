@@ -1,6 +1,7 @@
 import {defineField, defineType} from 'sanity'
 import {ImageIcon} from '@sanity/icons'
 import {shownWhere} from '../objects/fields'
+import {blocksToText} from '../objects/richText'
 
 const MEDIA_TYPES = [
   {title: 'Image', value: 'image'},
@@ -81,10 +82,18 @@ export default defineType({
     }),
     defineField({
       name: 'caption',
-      type: 'string',
+      type: 'richText',
       title: 'Caption',
       description:
-        'Overrides the caption set on the image or video in the Media library. YouTube and Vimeo only have this caption.',
+        'Shown under the media, e.g. the artist, the title in italics and the year. Overrides the caption set on the image or video in the Media library. YouTube and Vimeo only have this caption.',
+    }),
+    defineField({
+      name: 'secondCaption',
+      type: 'richText',
+      title: 'Second Caption',
+      description:
+        'Shown under the second image, as Caption is under the first. Overrides the caption set on it in the Media library.',
+      hidden: ({parent}) => !(parent?.mediaType === 'image' && parent?.secondImage),
     }),
   ],
   preview: {
@@ -103,7 +112,8 @@ export default defineType({
       const typeTitle = MEDIA_TYPES.find(({value}) => value === mediaType)?.title
       const sources = {mp4: source.videoName, youtube: source.youtubeId, vimeo: source.vimeoUrl}
       return {
-        title: caption || (mediaType === 'image' ? imageCaption : videoCaption) || 'Media',
+        title:
+          blocksToText(caption) || (mediaType === 'image' ? imageCaption : videoCaption) || 'Media',
         subtitle: [typeTitle, sources[mediaType]].filter(Boolean).join(' · '),
         media: mediaType === 'image' ? image : poster,
       }

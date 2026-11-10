@@ -59,6 +59,9 @@ export const collator = new Intl.Collator('en', { sensitivity: 'base' });
 const joinNames = (names) =>
 	names.length > 1 ? `${names.slice(0, -1).join(', ')} & ${names.at(-1)}` : (names[0] ?? '');
 
+/** Whether an artwork has coordinates, for an exhibition map's X. */
+export const isLocated = (artwork) => Number.isFinite(artwork.coordinates?.lat);
+
 /**
  * An artwork's artists as one credit: its Artist Credit, or else all
  * their names (`artists` with a title each), "A & B".
