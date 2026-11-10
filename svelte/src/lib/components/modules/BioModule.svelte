@@ -18,8 +18,10 @@
 	<ModuleHeading heading={module.heading} />
 
 	{#if module.bios?.length}
+		<!-- Room below on phones for the last line's descenders, which the row
+		     would otherwise clip, given back so the spacing stays the same -->
 		<ul
-			class="scrollbar-none flex gap-base overflow-x-auto px-gutter text-base md:block md:space-y-base"
+			class="-mb-xs scroll-row flex gap-base px-gutter pb-xs text-base md:mb-0 md:block md:space-y-base md:pb-0"
 		>
 			{#each module.bios as bio (bio._key)}
 				<li class="grid w-5/6 shrink-0 items-start gap-y-sm md:w-auto md:grid-cols-12">

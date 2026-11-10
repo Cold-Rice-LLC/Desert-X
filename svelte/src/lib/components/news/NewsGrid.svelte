@@ -23,7 +23,7 @@
 <ul
 	class={[
 		'gap-base md:grid md:grid-cols-3 md:px-gutter',
-		row ? 'scrollbar-none flex overflow-x-auto px-gutter' : 'grid px-indent',
+		row ? 'scroll-row flex px-gutter' : 'grid px-indent',
 		className
 	]}
 >

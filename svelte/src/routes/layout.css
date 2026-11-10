@@ -120,9 +120,14 @@
 	}
 }
 
-/* Scrolls without showing a scrollbar, as the news row on phones does;
-   the pseudo-element for Safari before 18.2 */
-@utility scrollbar-none {
+/* A row that scrolls sideways without a scrollbar, as the news and bio
+   rows do on phones; the pseudo-element for Safari before 18.2. Only
+   sideways: overflow-x alone would turn overflow-y from visible to auto,
+   so text a pixel taller than its line made the row scroll down too,
+   catching the page's scroll as it passed. */
+@utility scroll-row {
+	overflow-x: auto;
+	overflow-y: hidden;
 	scrollbar-width: none;
 
 	&::-webkit-scrollbar {
