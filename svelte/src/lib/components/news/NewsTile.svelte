@@ -29,7 +29,7 @@
 	<a
 		{...newTabAttributes}
 		href={item.pressUrl}
-		class="group @container grid aspect-[4/5] grid-rows-1 font-mono text-white *:col-start-1 *:row-start-1"
+		class="group @container relative grid aspect-[4/5] grid-rows-1 font-mono text-white *:col-start-1 *:row-start-1"
 	>
 		<ImageFrame
 			image={item.featuredImage}
@@ -53,7 +53,9 @@
 			/>
 		{/if}
 		<!-- The link's name for screen readers, as the text below only shows on
-		     hover or focus. The logo's alt gives the publication where there is one. -->
+		     hover or focus. The logo's alt gives the publication where there is one.
+		     The tile is relative so this, absolutely positioned, stays inside it:
+		     otherwise it sits out past a row's edge and widens the page. -->
 		<span class="sr-only">
 			{#if !item.logo?.url}{item.publication}:{/if}
 			{item.title}, {date} (opens in new tab)
