@@ -13,10 +13,13 @@
 	 * pages without a title don't collapse it. With an `href` the title is a
 	 * link up a level, like a breadcrumb; `detail` follows it, e.g. a news
 	 * article's date or an artwork's artists, cut to one line on phones.
+	 * With `stacked` it goes on a line of its own under the title on phones,
+	 * as an edition's location does (see TopBar).
 	 * `donateLink` is an underlined link at the right edge from md up; phones
-	 * have Donate in the menu.
+	 * have Donate in the menu, and instead any `action` there, a `{ label,
+	 * href }` link like the Art landing's switch to its other view.
 	 */
-	let { home, title, href, detail, donateLink } = $props();
+	let { home, title, href, detail, stacked, action, donateLink } = $props();
 
 	// Centred in the bar, as the hamburger is, text has its baseline 0.35em
 	// below the middle; this lifts it to the hamburger's bottom edge, half
@@ -27,6 +30,7 @@
 <TopBar
 	as="header"
 	logo={home}
+	{stacked}
 	aria-label="Open menu"
 	aria-haspopup="dialog"
 	onclick={() => (ui.menuOpen = true)}
@@ -41,9 +45,20 @@
 		<p class={onHamburger}>{title}</p>
 	{/if}
 	{#if detail}
-		<p class={['min-w-0 truncate md:overflow-visible md:whitespace-normal', onHamburger]}>
+		<p
+			class={['col-start-2 min-w-0 truncate md:overflow-visible md:whitespace-normal', onHamburger]}
+		>
 			{detail}
 		</p>
+	{/if}
+	{#if action}
+		<a
+			href={action.href}
+			aria-label="{action.label} view"
+			class={['ml-auto uppercase link-underline md:hidden', onHamburger]}
+		>
+			{action.label}
+		</a>
 	{/if}
 	{#if donateLink?.label}
 		<AppLink link={donateLink} class={['ml-auto hidden link-underline md:block', onHamburger]}>

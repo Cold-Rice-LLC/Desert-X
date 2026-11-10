@@ -42,12 +42,13 @@
 		const edition = editions.find(({ slug }) => slug === openSlug);
 		if (!edition) return;
 		const details = document.getElementById(`edition-${edition.slug}`);
-		const root = getComputedStyle(document.documentElement);
-		const navBottom =
-			parseFloat(root.getPropertyValue('--spacing-nav')) * parseFloat(root.fontSize);
+		// The nav's own height, which on phones is a line taller than
+		// --spacing-nav, stacked (see TopBar)
+		const nav = document.querySelector('header');
 		let under = false;
 
 		const update = () => {
+			const navBottom = nav.offsetHeight;
 			const { top, bottom } = details.getBoundingClientRect();
 			if (under === (top <= navBottom && bottom > navBottom)) return;
 			under = !under;
@@ -65,7 +66,7 @@
 </script>
 
 <section class="space-y-line">
-	<ModuleHeading heading="Other Editions" />
+	<ModuleHeading heading="Previous Editions" />
 	<div>
 		{#each editions as edition (edition._id)}
 			<Dropdown
@@ -84,8 +85,8 @@
 					</span>
 				{/snippet}
 				{#if openSlug === edition.slug}
-					<EditionContent {edition} {news} headingLevel={3}>
-						<p class="px-gutter pb-2xl">
+					<EditionContent {edition} {news} headingLevel={3} class="pb-2xl">
+						<p class="px-gutter">
 							<a href="/editions/{edition.slug}" class="link-underline">
 								View {edition.location}
 								{edition.year}

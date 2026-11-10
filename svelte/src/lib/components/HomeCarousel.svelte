@@ -1,14 +1,15 @@
 <script>
 	import { prefersReducedMotion } from 'svelte/motion';
 	import Swiper from 'swiper';
-	import { A11y, Keyboard } from 'swiper/modules';
 	import 'swiper/css';
 	import 'swiper/css/a11y';
+	import { coverSizes, fullScreenOptions, loopOffset } from '$lib/carousel';
 	import AppLink from '$lib/components/AppLink.svelte';
+	import CarouselHalves from '$lib/components/CarouselHalves.svelte';
 	import Image from '$lib/components/Image.svelte';
 	import FooterLinks from '$lib/components/layout/FooterLinks.svelte';
 	import { urlFor } from '$lib/sanity/client';
-	import { croppedSize, hotspotPosition } from '$lib/sanity/images';
+	import { hotspotPosition } from '$lib/sanity/images';
 	import { linkHref } from '$lib/sanity/links';
 
 	/**
@@ -40,19 +41,8 @@
 	let several = $derived(slides.length > 1);
 	let current = $derived(slides[active]);
 
-	// How far a slide is from the current one, going round the shorter way
-	const offset = (index) => {
-		const wrapped = (index - active + slides.length) % slides.length;
-		return wrapped > slides.length / 2 ? wrapped - slides.length : wrapped;
-	};
+	const offset = (index) => loopOffset(index, active, slides.length);
 	const near = (index) => Math.abs(offset(index)) <= 1;
-
-	// Covering the window, an image is as wide as it is or as the window's
-	// height makes it, whichever is wider
-	const sizes = (image) => {
-		const size = croppedSize(image);
-		return size ? `max(100vw, calc(100svh * ${(size.width / size.height).toFixed(3)}))` : '100vw';
-	};
 
 	const posterUrl = (poster) => poster?.asset && urlFor(poster).width(2400).auto('format').url();
 
@@ -64,15 +54,7 @@
 
 	const carousel = (node) => {
 		swiper = new Swiper(node, {
-			modules: [A11y, Keyboard],
-			loop: true,
-			// A drag or swipe over the halves moves it too, and isn't a click.
-			// Swiper won't drag from a focused button, as a form control, and
-			// pressing a half focuses it, so buttons are left off its list.
-			touchEventsTarget: 'container',
-			focusableElements: 'input, select, option, textarea, video, label',
-			keyboard: { enabled: true },
-			speed: prefersReducedMotion.current ? 0 : 300,
+			...fullScreenOptions(),
 			on: {
 				realIndexChange: ({ realIndex }) => {
 					leaving = active;
@@ -85,25 +67,6 @@
 	};
 </script>
 
-{#snippet step(label, half, edge, onclick)}
-	<button
-		type="button"
-		aria-label="{label} slide"
-		class={['group absolute inset-y-0 z-10 w-1/2 outline-none', half]}
-		{onclick}
-	>
-		<!-- For the keyboard: shown only while focused, as its focus ring -->
-		<span
-			class={[
-				'absolute top-1/2 -translate-y-1/2 bg-white p-xs text-base uppercase opacity-0 group-focus-visible:opacity-100',
-				edge
-			]}
-		>
-			{label}
-		</span>
-	</button>
-{/snippet}
-
 {#snippet caption({ name, work })}
 	{name}
 	{#if work}<i>{work}</i>{/if}
@@ -112,8 +75,11 @@
 <section class="relative flex-1 bg-grey-1" aria-roledescription="carousel" aria-label="Featured">
 	<div class="swiper" {@attach several && carousel}>
 		{#if several}
-			{@render step('Previous', 'left-0 cursor-w-resize', 'left-edge', () => swiper.slidePrev())}
-			{@render step('Next', 'right-0 cursor-e-resize', 'right-edge', () => swiper.slideNext())}
+			<CarouselHalves
+				noun="slide"
+				onprevious={() => swiper.slidePrev()}
+				onnext={() => swiper.slideNext()}
+			/>
 		{/if}
 		<div class="swiper-wrapper">
 			{#each slides as slide, index (slide._key)}
@@ -135,7 +101,7 @@
 					{:else}
 						<Image
 							image={slide.image}
-							sizes={sizes(slide.image)}
+							sizes={coverSizes(slide.image)}
 							loading={near(index) ? 'eager' : 'lazy'}
 							fetchpriority={index === 0 ? 'high' : undefined}
 							class="size-full object-cover"

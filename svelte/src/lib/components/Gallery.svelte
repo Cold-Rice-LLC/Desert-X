@@ -4,22 +4,26 @@
 	import { A11y, Keyboard } from 'swiper/modules';
 	import 'swiper/css';
 	import 'swiper/css/a11y';
+	import { loopOffset, numberedAlt } from '$lib/carousel';
 	import ImageFrame from '$lib/components/ImageFrame.svelte';
+	import Lightbox from '$lib/components/Lightbox.svelte';
 
 	/**
 	 * Images at the top of an artwork or edition page, 4:3 across the middle
 	 * 20 of 24 columns on phones, a little below what's above. From md up
-	 * they're across the middle 16,
-	 * centred in a section that follows the window's height below the nav,
-	 * from 60rem to 100rem, and grows to fit a taller image.
+	 * they're across the middle 18, or narrower where that would be too
+	 * tall, centred in a section the window's height below the nav, at
+	 * least 60rem, with base space above and below at most.
 	 * One image sits on its own; more become a carousel with the current
 	 * slide centred and its neighbours peeking in either side, a column
 	 * apart. Three or more loop round, so the last peeks in left of the
 	 * first; three are doubled, as Swiper's loop would otherwise put both
 	 * others on the left. Click a neighbour, under a resize cursor pointing its way, or
 	 * use the arrow keys to move; a mouse can't drag it, but touch screens
-	 * still swipe. Tabbing reaches Previous and Next buttons at either edge,
-	 * which only show while they have focus.
+	 * still swipe. Click the current image to see them all full screen (see
+	 * Lightbox), and come back to the one left on. Tabbing reaches Previous,
+	 * Full Screen and Next buttons, which only show while they have focus;
+	 * a single image is a button itself.
 	 *
 	 * The browser's lazy loading only looks again on scroll, not when a
 	 * slide moves into view, so the current slide and its neighbours are
@@ -31,34 +35,40 @@
 	let { images, alt } = $props();
 
 	let active = $state(0);
+	// The image the lightbox opens at, while it's open
+	let lightbox = $state(null);
 	let swiper;
 
 	// Two would show the same image on both sides
 	let loop = $derived(images.length > 2);
 
-	// Numbered, as images sharing one alt would read as the same image:
-	// "Bloom by Bahraini-Danish — image 2 of 5"
-	const imageAlt = (index) =>
-		alt && images.length > 1 ? `${alt} — image ${index + 1} of ${images.length}` : alt;
-
 	let slides = $derived(
 		(images.length === 3 ? [0, 1] : [0]).flatMap((copy) =>
-			images.map((image, index) => ({ image, alt: imageAlt(index), key: `${image._key}-${copy}` }))
+			images.map((image, index) => ({
+				image,
+				alt: numberedAlt(alt, index, images.length),
+				key: `${image._key}-${copy}`
+			}))
 		)
 	);
 
-	// How far an image is from the current one, minus to the left, going
-	// round the shorter way when the carousel loops
-	const offset = (index) => {
-		const ahead = index - active;
-		if (!loop) return ahead;
-		const wrapped = (ahead + slides.length) % slides.length;
-		return wrapped > slides.length / 2 ? wrapped - slides.length : wrapped;
+	// How far an image is from the current one, minus to the left
+	const offset = (index) => (loop ? loopOffset(index, active, slides.length) : index - active);
+
+	// The arrow keys are the lightbox's while it's open
+	const openLightbox = () => {
+		lightbox = active % images.length;
+		swiper?.keyboard.disable();
 	};
 
-	const sizes = '(width >= 768px) calc((100vw - 50px) * 2 / 3), calc((100vw - 50px) * 5 / 6)';
+	const closeLightbox = () => {
+		lightbox = null;
+		swiper?.keyboard.enable();
+	};
+
+	const sizes = '(width >= 768px) calc((100vw - 50px) * 3 / 4), calc((100vw - 50px) * 5 / 6)';
 	// The section's space above and height, whichever way the images show
-	const section = 'mt-sm md:mt-0 md:min-h-[clamp(60rem,calc(100svh-var(--spacing-nav)),100rem)]';
+	const section = 'gallery mt-sm md:mt-0 md:h-[max(60rem,calc(100svh-var(--spacing-nav)))]';
 
 	const carousel = (node) => {
 		swiper = new Swiper(node, {
@@ -76,26 +86,33 @@
 	};
 </script>
 
+<!-- For the keyboard, which can't click a slide: shown only while focused,
+     and never in a mouse's way -->
+{#snippet step(label, ariaLabel, place, onclick)}
+	<button
+		type="button"
+		aria-label={ariaLabel}
+		class={[
+			'pointer-events-none absolute top-1/2 z-10 bg-white p-xs text-base uppercase opacity-0 focus-visible:opacity-100',
+			place
+		]}
+		{onclick}
+	>
+		{label}
+	</button>
+{/snippet}
+
 {#if images.length > 1}
-	<div class={['swiper w-full items-center', section]} {@attach carousel}>
-		<!-- For the keyboard, which can't click a neighbour: shown only while
-		     focused, and never in a mouse's way -->
-		{#snippet step(label, side, onclick)}
-			<button
-				type="button"
-				aria-label="{label} image"
-				class={[
-					'pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 bg-white p-xs text-base uppercase opacity-0 focus-visible:opacity-100',
-					side
-				]}
-				{onclick}
-			>
-				{label}
-			</button>
-		{/snippet}
-		{@render step('Previous', 'left-edge', () => swiper.slidePrev())}
-		{@render step('Next', 'right-edge', () => swiper.slideNext())}
-		<div class="swiper-wrapper">
+	<!-- Swiper's own auto side margins would shrink it to its content in the
+	     body's flex column, so it would start at no width and grow as its
+	     images load: w-full keeps it full width -->
+	<div class={['swiper w-full', section]} {@attach carousel}>
+		{@render step('Previous', 'Previous image', 'left-edge -translate-y-1/2', () =>
+			swiper.slidePrev()
+		)}
+		{@render step('Full Screen', undefined, 'left-1/2 -translate-1/2', openLightbox)}
+		{@render step('Next', 'Next image', 'right-edge -translate-y-1/2', () => swiper.slideNext())}
+		<div class="swiper-wrapper items-center">
 			{#each slides as { image, alt, key }, index (key)}
 				<!-- The arrow keys move it too (Swiper's Keyboard module) -->
 				<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
@@ -103,9 +120,10 @@
 					class={[
 						'swiper-slide slide',
 						offset(index) < 0 && 'cursor-w-resize',
+						offset(index) === 0 && 'cursor-zoom-in',
 						offset(index) > 0 && 'cursor-e-resize'
 					]}
-					onclick={() => swiper.slideToLoop(index)}
+					onclick={() => (offset(index) === 0 ? openLightbox() : swiper.slideToLoop(index))}
 				>
 					<ImageFrame
 						{image}
@@ -120,47 +138,64 @@
 		</div>
 	</div>
 {:else}
-	<div class={['grid grid-cols-24 items-center px-edge', section]}>
-		<ImageFrame
-			image={images[0]}
-			aspect={4 / 3}
-			{sizes}
-			{alt}
-			loading="eager"
-			fetchpriority="high"
-			class="col-span-20 col-start-3 md:col-span-16 md:col-start-5"
-		/>
+	<div class={['flex items-center justify-center', section]}>
+		<button
+			type="button"
+			aria-label="Full screen"
+			class="w-(--image) cursor-zoom-in"
+			onclick={openLightbox}
+		>
+			<ImageFrame
+				image={images[0]}
+				aspect={4 / 3}
+				{sizes}
+				{alt}
+				loading="eager"
+				fetchpriority="high"
+			/>
+		</button>
 	</div>
 {/if}
 
-<style>
-	/* A flex box to centre the slides; Swiper's own CSS makes it a block,
-	   which would win over a utility. Its auto side margins would also shrink
-	   it to its content in the body's flex column, so it starts at no width
-	   and grows as its images load: w-full keeps it full width. */
-	.swiper {
-		display: flex;
-	}
+{#if lightbox !== null}
+	<!-- Following the lightbox behind it, so it's on the same image as it
+	     fades out -->
+	<Lightbox
+		{images}
+		start={lightbox}
+		{alt}
+		onchange={(index) => swiper?.slideToLoop(index, 0)}
+		onclose={closeLightbox}
+	/>
+{/if}
 
-	/* Percentages are of the carousel's width, wherever these are used. Each
-	   slide is 20 columns on phones and 16 from md up, plus half a column
-	   either side, so slides sit a column apart. */
-	.swiper-wrapper {
+<style>
+	/* Percentages are of the gallery's width, wherever these are used. An
+	   image is 20 columns on phones, and from md up 18, or as wide as fits
+	   the section's height at 4:3, less base space above and below. */
+	.gallery {
 		--column: calc((100% - 2 * var(--spacing-edge)) / 24);
-		--slide: calc(var(--column) * 21);
+		--image: calc(var(--column) * 20);
 
 		@media (width >= 48rem) {
-			--slide: calc(var(--column) * 17);
+			--image: min(
+				var(--column) * 18,
+				(max(60rem, 100svh - var(--spacing-nav)) - 2 * var(--spacing-base)) * 4 / 3
+			);
 		}
 	}
 
+	/* Each slide is an image plus half a column either side, so slides sit
+	   a column apart. Its own height, not Swiper's full one, so the wrapper
+	   can centre it. */
 	.slide {
-		width: var(--slide);
+		height: auto;
+		width: calc(var(--image) + var(--column));
 		padding-inline: calc(var(--column) / 2);
 	}
 
 	/* Centre the first slide before Swiper takes over, so it doesn't jump */
 	.swiper:not(.swiper-initialized) > .swiper-wrapper {
-		transform: translateX(calc((100% - var(--slide)) / 2));
+		transform: translateX(calc((100% - var(--image) - var(--column)) / 2));
 	}
 </style>

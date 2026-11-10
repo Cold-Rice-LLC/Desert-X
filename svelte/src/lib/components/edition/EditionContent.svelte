@@ -2,36 +2,33 @@
 	import { artworkEntries, sortEntries } from '$lib/art';
 	import { formatDateRange } from '$lib/dates';
 	import ArtGrid from '$lib/components/art/ArtGrid.svelte';
-	import ArtworksBar from '$lib/components/art/ArtworksBar.svelte';
 	import ExhibitionMap from '$lib/components/edition/ExhibitionMap.svelte';
 	import Sponsors from '$lib/components/edition/Sponsors.svelte';
 	import Gallery from '$lib/components/Gallery.svelte';
+	import ModuleHeading from '$lib/components/modules/ModuleHeading.svelte';
 	import NewsModule from '$lib/components/modules/NewsModule.svelte';
 	import Portable from '$lib/components/Portable.svelte';
 
 	/**
 	 * An edition, as its page shows it and as Other Editions shows it when
 	 * opened: the gallery, the dates and description, the exhibition map and
-	 * its artworks (the map after them from lg up), its sponsors and up to
-	 * three news items, sections a 2xl step apart. The gallery is the
-	 * edition's images, or else each artwork's first. Sections with nothing
-	 * to show are left out. `children` follows as another section. `news`
-	 * holds the News landing fields the news tiles need, and `headingLevel`
-	 * sets its sections' headings: h2s on its own page, h3s in Other Editions.
+	 * its artworks by artist (the map after them from lg up), its sponsors,
+	 * then `children` as another section, and last up to three news items,
+	 * sections a 2xl step apart. The gallery is the edition's images, or
+	 * else each artwork's first. Sections with nothing to show are left out.
+	 * `news` holds the News landing fields the news tiles need, and
+	 * `headingLevel` sets its sections' headings: h2s on its own page, h3s
+	 * in Other Editions. `class` goes on what follows the gallery.
 	 */
-	let { edition, news, headingLevel, children } = $props();
+	let { edition, news, headingLevel, class: className, children } = $props();
 
-	// By artist or artwork only, as an edition's artworks share a location and year
-	let sort = $state('artist');
-	let allEntries = $derived(artworkEntries(edition.artworks ?? []));
-	let byArtist = $derived(sortEntries(allEntries));
-	let entries = $derived(sort === 'artist' ? byArtist : sortEntries(allEntries, sort));
+	let entries = $derived(sortEntries(artworkEntries(edition.artworks ?? [])));
 
-	// Each artwork's first image, by artist whichever way the grid is sorted,
-	// for an edition without images of its own
+	// Each artwork's first image, by artist, for an edition without images
+	// of its own
 	let images = $derived.by(() => {
 		if (edition.images?.length) return edition.images;
-		const artworks = new Set(byArtist.map((entry) => entry.artwork));
+		const artworks = new Set(entries.map((entry) => entry.artwork));
 		return [...artworks]
 			.filter((artwork) => artwork.image?.asset)
 			.map((artwork) => ({ ...artwork.image, _key: artwork._id }));
@@ -43,7 +40,7 @@
 	<Gallery {images} />
 {/if}
 
-<div class="space-y-2xl pt-page-top text-md">
+<div class={['space-y-2xl pt-page-top text-md', className]}>
 	{#if dates || edition.description}
 		<div class="space-y-line px-gutter">
 			{#if dates}
@@ -64,14 +61,9 @@
 				class="lg:order-last"
 			/>
 
-			<section aria-label="Artworks" class="space-y-md">
-				<ArtworksBar
-					sorts={['artist', 'artwork']}
-					{sort}
-					onsort={(key) => (sort = key)}
-					class="px-gutter"
-				/>
-				<ArtGrid {entries} />
+			<section class="space-y-line">
+				<ModuleHeading heading="Artists and Artworks" level={headingLevel} />
+				<ArtGrid {entries} edition />
 			</section>
 		</div>
 	{/if}
@@ -82,7 +74,7 @@
 		{headingLevel}
 	/>
 
-	<NewsModule module={{ _type: 'newsModule', items: edition.news, ...news }} {headingLevel} />
-
 	{@render children?.()}
+
+	<NewsModule module={{ _type: 'newsModule', items: edition.news, ...news }} {headingLevel} />
 </div>

@@ -9,12 +9,13 @@
 	 * of logos, stacked on phones and from md up two side by side unless one
 	 * is full width, then up to four lists of names, a line each and linked
 	 * where set, stacked on phones and a quarter of the grid each from md
-	 * up. Logos fit one box per width, so wordmarks and marks
-	 * come out about the same size, and any white background multiplies away
-	 * into the grey. They spread wider in a full-width group, and a logo's
-	 * link opens in a new tab. Left out when there's nothing to show. Group
-	 * and list titles are a level under the heading (`headingLevel`, h2 by
-	 * default).
+	 * up, their links underlined only on hover. Logos fit one box per
+	 * width, so wordmarks and marks come out about the same size, and any
+	 * white background multiplies away into the grey. The box is smaller on
+	 * phones; from md up logos are larger and spread wider in a full-width
+	 * group. A logo's link opens in a new tab. Left out when there's nothing
+	 * to show. Group and list titles are a level under the heading
+	 * (`headingLevel`, h2 by default).
 	 */
 	let { groups = [], lists = [], headingLevel = 2 } = $props();
 
@@ -50,12 +51,14 @@
 										>
 											<Image
 												image={{ ...logo.image, alt: logo.name }}
-												sizes={group.fullWidth ? '300px' : '200px'}
+												sizes={group.fullWidth
+													? '(width >= 768px) 220px, 120px'
+													: '(width >= 768px) 160px, 120px'}
 												class={[
-													'w-auto mix-blend-multiply',
+													'max-h-[5rem] w-auto max-w-[12rem] mix-blend-multiply',
 													group.fullWidth
-														? 'max-h-[12rem] max-w-[30rem]'
-														: 'max-h-[8rem] max-w-[20rem]'
+														? 'md:max-h-[9rem] md:max-w-[22rem]'
+														: 'md:max-h-[6.5rem] md:max-w-[16rem]'
 												]}
 											/>
 											{#if logo.url}<span class="sr-only">(opens in new tab)</span>{/if}
@@ -78,7 +81,7 @@
 								>
 							{/if}
 							{#if list.text?.length}
-								<Portable value={list.text} />
+								<Portable value={list.text} linkClass="link-hover" />
 							{/if}
 						</div>
 					{/each}

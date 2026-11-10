@@ -25,8 +25,8 @@
 		return { key: value, label, href: href({ [param]: current ? null : value }), current };
 	};
 	let filters = $derived([
-		...data.locations.map(({ slug, title }) => option('location', slug, title)),
-		...data.years.map((year) => option('year', year, year))
+		data.locations.map(({ slug, title }) => option('location', slug, title)),
+		data.years.map((year) => option('year', year, year))
 	]);
 </script>
 
@@ -37,27 +37,36 @@
 <p role="status" class="sr-only">{data.total} {data.total === 1 ? 'artwork' : 'artworks'}</p>
 
 <div class="pt-page-top pb-page-bottom text-md">
-	<header class="px-gutter">
+	<!-- On phones the intro is in the lead size and the search and filters
+	     in the title size, and the views switch from the nav (see +page.js).
+	     The filters' years only fit two columns in their half at that size
+	     on phones 400px wide and up, as the wireframes are, so they scale
+	     down with narrower ones. -->
+	<header class="px-gutter text-lead tracking-tight md:text-md md:tracking-normal">
 		{#if data.landing?.intro}
 			<Portable value={data.landing.intro} />
 		{/if}
 
-		<nav aria-label="Artwork views" class="mt-line uppercase">
+		<nav aria-label="Artwork views" class="mt-line hidden uppercase md:block">
 			<Choice href={href({ view: null })} current={data.view === 'grid'}>Grid</Choice>
 			/
 			<Choice href={href({ view: 'list' })} current={data.view === 'list'}>List</Choice>
 		</nav>
 
-		<SearchField value={data.query} label="Search artworks" oninput={search} class="mt-lg" />
+		<SearchField
+			value={data.query}
+			label="Search artworks"
+			oninput={search}
+			class="mt-lg text-title md:text-md"
+		/>
 	</header>
 
 	<Filter
 		label="Artwork filters"
 		allHref={href({ location: null, year: null })}
-		options={filters}
+		groups={filters}
 		active={!!(data.location || data.year)}
-		stacked
-		class="mt-2xl mb-md"
+		class="mt-2xl mb-md text-[length:min(var(--text-title),(100vw-2*var(--spacing-edge))/10)] md:text-md"
 	/>
 
 	{#if !data.entries.length}

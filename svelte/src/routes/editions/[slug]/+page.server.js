@@ -9,7 +9,8 @@ import { exhibitionEvent } from '$lib/structuredData';
 /**
  * An edition by slug, with every other edition at its location, newest
  * first, for Other Editions. The nav shows its location after Upcoming,
- * On View or, once it's over, its year (see editionStatus).
+ * On View or, once it's over, its year (see editionStatus), on a line of
+ * its own on phones.
  * Shared, it shows its title, the start of its description and its first
  * image, and to search engines as an ExhibitionEvent.
  */
@@ -36,6 +37,7 @@ export async function load({ params, url }) {
 		news,
 		navTitle: editionStatus(edition),
 		navDetail: edition.location,
+		navStacked: true,
 		seo: pageSeo(edition.seo, {
 			title: edition.title,
 			description: edition.descriptionText,

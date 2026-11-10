@@ -107,6 +107,29 @@
 	}
 }
 
+/* Links that are plain until hovered, then underlined, as sponsor lists'
+   are. Plain on touch screens, which can't hover. */
+@utility link-hover {
+	text-underline-offset: var(--underline-offset);
+	text-decoration-thickness: var(--underline-thickness);
+
+	&:hover {
+		@media (hover: hover) {
+			text-decoration-line: underline;
+		}
+	}
+}
+
+/* Scrolls without showing a scrollbar, as the news row on phones does;
+   the pseudo-element for Safari before 18.2 */
+@utility scrollbar-none {
+	scrollbar-width: none;
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
+}
+
 /* The hover for links and buttons without an underline: they fade */
 @utility link-fade {
 	transition: opacity 0.3s var(--default-transition-timing-function);

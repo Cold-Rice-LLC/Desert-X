@@ -59,7 +59,13 @@
 	Skip to content
 </a>
 
-<MainNav {home} {...nav} donateLink={data.donateLink} />
+<MainNav
+	{home}
+	{...nav}
+	stacked={page.data.navStacked}
+	action={page.data.navAction}
+	donateLink={data.donateLink}
+/>
 
 <Menu menu={data.menu} footer={data.footer} />
 

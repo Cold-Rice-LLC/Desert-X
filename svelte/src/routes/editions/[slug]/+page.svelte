@@ -7,8 +7,8 @@
 
 <h1 class="sr-only">{data.edition.location} {data.edition.year}</h1>
 
-<!-- Keyed, so moving to another edition starts afresh: its own carousel,
-     sort order and open dropdown -->
+<!-- Keyed, so moving to another edition starts afresh: its own carousel
+     and open dropdown -->
 {#key data.edition._id}
 	<div class="pb-page-bottom">
 		<EditionContent edition={data.edition} news={data.news}>
