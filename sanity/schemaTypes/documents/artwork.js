@@ -1,13 +1,29 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {ImageIcon} from '@sanity/icons'
 import {moduleMembers} from '../modules'
-import {modulesField, seoField, titleSlugFields} from '../objects/fields'
+import {
+  modulesField,
+  seoField,
+  spanishField,
+  spanishFieldset,
+  titleSlugFields,
+} from '../objects/fields'
+
+const artistInfo = {
+  name: 'artistInfo',
+  type: 'text',
+  title: 'Artist Info',
+  description:
+    'Shown under the artist’s name, line for line, e.g. b. 1973, Chicago / Based in New York.',
+  rows: 3,
+}
 
 export default defineType({
   name: 'artwork',
   type: 'document',
   title: 'Artwork',
   icon: ImageIcon,
+  fieldsets: [spanishFieldset],
   fields: [
     ...titleSlugFields({
       slug: {
@@ -28,14 +44,9 @@ export default defineType({
       description:
         'Optional. Replaces the artists’ names on the page, e.g. Lauren Bon and Metabolic Studio.',
     }),
-    defineField({
-      name: 'artistInfo',
-      type: 'text',
-      title: 'Artist Info',
-      description:
-        'Shown under the artist’s name, line for line, e.g. b. 1973, Chicago / Based in New York.',
-      rows: 3,
-    }),
+    defineField(artistInfo),
+    spanishField({name: 'title', type: 'string', title: 'Title'}),
+    spanishField(artistInfo),
     defineField({
       name: 'edition',
       type: 'reference',

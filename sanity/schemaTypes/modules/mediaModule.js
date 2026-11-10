@@ -1,6 +1,6 @@
 import {defineField, defineType} from 'sanity'
 import {ImageIcon} from '@sanity/icons'
-import {shownWhere} from '../objects/fields'
+import {shownWhere, spanishField, spanishFieldset} from '../objects/fields'
 import {blocksToText} from '../objects/richText'
 
 const MEDIA_TYPES = [
@@ -16,11 +16,29 @@ const isType =
   ({parent}) =>
     types.includes(parent?.mediaType)
 
+const caption = {
+  name: 'caption',
+  type: 'richText',
+  title: 'Caption',
+  description:
+    'Shown under the media, e.g. the artist, the title in italics and the year. Overrides the caption set on the image or video in the Media library. YouTube and Vimeo only have this caption.',
+}
+
+const secondCaption = {
+  name: 'secondCaption',
+  type: 'richText',
+  title: 'Second Caption',
+  description:
+    'Shown under the second image, as Caption is under the first. Overrides the caption set on it in the Media library.',
+  hidden: ({parent}) => !(parent?.mediaType === 'image' && parent?.secondImage),
+}
+
 export default defineType({
   name: 'mediaModule',
   type: 'object',
   title: 'Media',
   icon: ImageIcon,
+  fieldsets: [spanishFieldset],
   fields: [
     defineField({
       name: 'mediaType',
@@ -80,21 +98,10 @@ export default defineType({
       options: {hotspot: true},
       ...shownWhere(isType('mp4', 'youtube', 'vimeo')),
     }),
-    defineField({
-      name: 'caption',
-      type: 'richText',
-      title: 'Caption',
-      description:
-        'Shown under the media, e.g. the artist, the title in italics and the year. Overrides the caption set on the image or video in the Media library. YouTube and Vimeo only have this caption.',
-    }),
-    defineField({
-      name: 'secondCaption',
-      type: 'richText',
-      title: 'Second Caption',
-      description:
-        'Shown under the second image, as Caption is under the first. Overrides the caption set on it in the Media library.',
-      hidden: ({parent}) => !(parent?.mediaType === 'image' && parent?.secondImage),
-    }),
+    defineField(caption),
+    defineField(secondCaption),
+    spanishField(caption),
+    spanishField(secondCaption),
   ],
   preview: {
     select: {

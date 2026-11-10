@@ -69,5 +69,36 @@ export const shownWhere = (applies, {required, check, rule: base = (rule) => rul
     }),
 })
 
+/**
+ * Spanish, for the document types whose page offers EN / ES: artworks.
+ * Each translated field has a Spanish twin, named with `Es` (titleEs,
+ * textEs), in a collapsed Spanish fieldset beside it; where one is empty,
+ * the page shows the English.
+ */
+export const SPANISH_TYPES = ['artwork']
+
+export const spanishFieldset = {
+  name: 'spanish',
+  title: 'Spanish',
+  description:
+    'Shown when a visitor picks ES above the title. Anything left empty shows in English.',
+  options: {collapsible: true, collapsed: true},
+}
+
+/**
+ * The Spanish twin of `field`: optional, and hidden outside SPANISH_TYPES
+ * and wherever the English one is.
+ */
+export const spanishField = ({name, title, hidden, validation, description, ...field}) =>
+  defineField({
+    ...field,
+    name: `${name}Es`,
+    title,
+    fieldset: 'spanish',
+    hidden: (context) =>
+      !SPANISH_TYPES.includes(context.document?._type) ||
+      (typeof hidden === 'function' ? hidden(context) : Boolean(hidden)),
+  })
+
 /** A count for previews: "1 bio", "3 bios". */
 export const countLabel = (count = 0, word) => `${count} ${count === 1 ? word : `${word}s`}`
