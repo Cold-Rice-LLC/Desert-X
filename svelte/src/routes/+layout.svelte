@@ -34,13 +34,14 @@
 	let home = $derived(page.url.pathname === '/');
 
 	// What the nav shows beside the menu button: the page's title, which
-	// can link up a level (navHref), and an optional detail after it
+	// can link up a level (navHref), and an optional detail after it, with
+	// a shorter one for phones (navDetailPhone)
 	let nav = $derived.by(() => {
 		if (page.status === 404) return { title: 'Not Found' };
 		if (page.error) return { title: 'Error' };
 		if (ui.nav) return ui.nav;
-		const { navTitle, navHref, navDetail } = page.data;
-		return { title: navTitle, href: navHref, detail: navDetail };
+		const { navTitle, navHref, navDetail, navDetailPhone } = page.data;
+		return { title: navTitle, href: navHref, detail: navDetail, detailPhone: navDetailPhone };
 	});
 </script>
 

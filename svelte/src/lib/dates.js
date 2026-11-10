@@ -24,7 +24,7 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 
 /**
  * A YYYY-MM-DD date written out: "Oct 8, 2026", or with `shortYear`,
- * "Oct 8, 26", as a news article's nav shows it.
+ * "Oct 8, 26", as a news article's nav shows it on phones.
  */
 export const formatLongDate = (date, { shortYear = false } = {}) => {
 	if (!date) return '';

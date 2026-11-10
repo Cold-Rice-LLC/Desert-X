@@ -12,14 +12,16 @@
 	 * between its links; elsewhere it sits on white. Its height is fixed, so
 	 * pages without a title don't collapse it. With an `href` the title is a
 	 * link up a level, like a breadcrumb; `detail` follows it, e.g. a news
-	 * article's date or an artwork's artists, cut to one line on phones.
+	 * article's date or an artwork's artists, cut to one line on phones,
+	 * where `detailPhone` takes its place if given (a news article's date
+	 * with a two-digit year).
 	 * With `stacked` it goes on a line of its own under the title on phones,
 	 * as an edition's location does (see TopBar).
 	 * `donateLink` is an underlined link at the right edge from md up; phones
 	 * have Donate in the menu, and instead any `action` there, a `{ label,
 	 * href }` link like the Art landing's switch to its other view.
 	 */
-	let { home, title, href, detail, stacked, action, donateLink } = $props();
+	let { home, title, href, detail, detailPhone, stacked, action, donateLink } = $props();
 
 	// Centred in the bar, as the hamburger is, text has its baseline 0.35em
 	// below the middle; this lifts it to the hamburger's bottom edge, half
@@ -48,7 +50,12 @@
 		<p
 			class={['col-start-2 min-w-0 truncate md:overflow-visible md:whitespace-normal', onHamburger]}
 		>
-			{detail}
+			{#if detailPhone}
+				<span class="md:hidden">{detailPhone}</span>
+				<span class="hidden md:inline">{detail}</span>
+			{:else}
+				{detail}
+			{/if}
 		</p>
 	{/if}
 	{#if action}
