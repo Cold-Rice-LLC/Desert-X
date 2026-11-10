@@ -166,7 +166,7 @@
 	{#if quickLinks}
 		<nav
 			aria-label="Quick links"
-			class="pointer-events-none absolute inset-x-0 bottom-edge z-20 grid grid-cols-12 items-end px-edge text-[2.2rem]/none text-white *:pointer-events-auto md:text-md md:tracking-tight"
+			class="pointer-events-none absolute inset-x-0 bottom-edge z-20 grid grid-cols-12 items-end px-edge text-lead text-white *:pointer-events-auto md:text-md md:tracking-tight"
 		>
 			<FooterLinks links={quickLinks} compact />
 		</nav>

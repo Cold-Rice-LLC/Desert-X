@@ -23,7 +23,7 @@
      the fold, however few the results. On phones the intro is smaller than
      the field and results, as in the wireframes. -->
 <div
-	class="min-h-[calc(100svh-var(--spacing-nav))] px-gutter pt-[4.6rem] pb-page-bottom text-[2.2rem]/none tracking-tight md:pt-page-top md:text-md md:tracking-normal"
+	class="min-h-[calc(100svh-var(--spacing-nav))] px-gutter pt-[4.6rem] pb-page-bottom text-lead tracking-tight md:pt-page-top md:text-md md:tracking-normal"
 >
 	{#if data.landing?.intro}
 		<Portable value={data.landing.intro} />
@@ -33,7 +33,7 @@
 		value={data.query}
 		label="Search the site"
 		oninput={search}
-		class="mt-[7rem] text-[3.5rem] md:mt-lg md:text-md"
+		class="mt-[7rem] text-title md:mt-lg"
 	/>
 
 	{#if data.groups}
@@ -42,7 +42,7 @@
 			count={data.count}
 			query={data.query}
 			clearHref={queryHref(currentPage.url, { q: null })}
-			class="mt-[7.5rem] text-[3.5rem] tracking-normal md:mt-2xl md:text-md"
+			class="mt-[7.5rem] text-title tracking-normal md:mt-2xl"
 		/>
 	{/if}
 </div>

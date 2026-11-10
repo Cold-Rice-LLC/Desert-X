@@ -18,7 +18,7 @@
 <footer
 	class={[
 		'mt-auto grid items-end px-edge pb-edge md:grid-cols-12',
-		menu ? 'grid-cols-12 text-[2.2rem]/none' : 'grid-cols-[auto_1fr_1fr] text-base',
+		menu ? 'grid-cols-12 text-lead' : 'grid-cols-[auto_1fr_1fr] text-base',
 		className
 	]}
 >

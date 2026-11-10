@@ -11,6 +11,13 @@
 	--text-base--line-height: 1;
 	--text-md: 1.8rem;
 	--text-md--line-height: 1;
+	/* Sizes that don't change at md: the menu's footer links, the homepage's
+	   quick links and the search intro on phones; and page titles in the
+	   nav and the search field and results */
+	--text-lead: 2.2rem;
+	--text-lead--line-height: 1;
+	--text-title: 3.5rem;
+	--text-title--line-height: 1;
 	/* The site's biggest size: the menu's logo, links and text. Stacked on
 	   phones, then from md up the wireframes' 5.5rem, scaled down with the
 	   viewport where that's needed for their seven top-level links, 23.3em

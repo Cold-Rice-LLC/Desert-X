@@ -6,10 +6,9 @@
 	/**
 	 * Sticky (not fixed) so other sticky elements further down a page can
 	 * take its place. The hamburger leads (see TopBar), then the logo on the
-	 * homepage, which opens the menu too, the page's title elsewhere. On
-	 * phones the text is the wireframes' 3.5rem, the size it has from md up.
-	 * On the homepage it floats in white over
-	 * the hero, taking no space and letting clicks through
+	 * homepage, which opens the menu too, the page's title elsewhere, in
+	 * the title size at every width. On the homepage it floats in white
+	 * over the hero, taking no space and letting clicks through
 	 * between its links; elsewhere it sits on white. Its height is fixed, so
 	 * pages without a title don't collapse it. With an `href` the title is a
 	 * link up a level, like a breadcrumb; `detail` follows it, e.g. a news
@@ -32,7 +31,7 @@
 	aria-haspopup="dialog"
 	onclick={() => (ui.menuOpen = true)}
 	class={[
-		'sticky top-0 z-10 text-[3.5rem]',
+		'sticky top-0 z-10 text-title',
 		home ? 'pointer-events-none -mb-nav text-white *:pointer-events-auto' : 'bg-white'
 	]}
 >
