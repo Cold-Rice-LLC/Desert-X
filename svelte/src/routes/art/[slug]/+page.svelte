@@ -22,7 +22,7 @@
 		<Gallery images={data.artwork.images} {alt} />
 	{/if}
 {/key}
-<Modules modules={artwork.modules} lead lang={spanish ? 'es' : undefined}>
+<Modules modules={artwork.modules} lang={spanish ? 'es' : undefined}>
 	<!-- Spaced like a text module, so text straight after sits a line below -->
 	<header class="text-module grid gap-y-line px-module md:grid-cols-2">
 		{#if data.spanish}

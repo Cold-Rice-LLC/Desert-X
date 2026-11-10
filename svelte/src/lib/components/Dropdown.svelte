@@ -25,7 +25,7 @@
 	<summary
 		class={[
 			// Safari's disclosure triangle, which list-none doesn't hide
-			'flex cursor-pointer list-none items-center justify-between py-sm text-[2.6rem] group-first:pt-0 md:text-md [&::-webkit-details-marker]:hidden',
+			'flex cursor-pointer list-none items-center justify-between py-sm text-lead group-first:pt-0 md:text-md [&::-webkit-details-marker]:hidden',
 			summaryClass
 		]}
 	>

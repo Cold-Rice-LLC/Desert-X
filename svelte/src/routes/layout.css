@@ -4,12 +4,13 @@
 	--font-sans: 'DESERT X Schengen', sans-serif;
 	--font-mono: 'DESERT X Schengen Mono', monospace;
 
-	/* Phone sizes; md up are set in :root */
+	/* Phone sizes; md up are set in :root. Phones have two sizes, lead and
+	   title (the menu aside), so base and md start at the lead size */
 	--text-sm: 1.3rem;
 	--text-sm--line-height: 1;
-	--text-base: 1.6rem;
+	--text-base: 2.2rem;
 	--text-base--line-height: 1;
-	--text-md: 1.8rem;
+	--text-md: 2.2rem;
 	--text-md--line-height: 1;
 	/* Sizes that don't change at md: the menu's footer links, the homepage's
 	   quick links and the search intro on phones; and page titles in the
