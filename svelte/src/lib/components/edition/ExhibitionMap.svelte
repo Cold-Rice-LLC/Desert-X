@@ -1,7 +1,6 @@
 <script>
 	import { PUBLIC_MAPBOX_TOKEN } from '$env/static/public';
 	import { mount, tick, unmount } from 'svelte';
-	import { MediaQuery } from 'svelte/reactivity';
 	import { artworkCredit, isLocated } from '$lib/art';
 	import LogoMark from '$lib/components/icons/LogoMark.svelte';
 	import ImageFrame from '$lib/components/ImageFrame.svelte';
@@ -21,12 +20,11 @@
 	 * it. The map is recoloured to the site's greys,
 	 * without labels, under a grid that moves with it. Mapbox only loads
 	 * once the map nears the viewport, which also keeps it off the server,
-	 * and the page has loaded (see afterLoad).
-	 * From lg up the map is locked, framed on every X and refit as it
-	 * resizes. Below lg it pans and zooms, and choosing an X flies the map
-	 * to it: on phones with a finger and a pinch, from md up with two
-	 * fingers or Ctrl and the wheel, so scrolling past it still scrolls. Left out with no located
-	 * artworks. `class` passes to its section, and `headingLevel` to its heading.
+	 * and the page has loaded (see afterLoad). The map is locked at every
+	 * size, with no panning or zooming, framed on every X and refit as it
+	 * resizes, so scrolling past it always scrolls the page. Left out with
+	 * no located artworks. `class` passes to its section, and `headingLevel`
+	 * to its heading.
 	 */
 	let {
 		artworks,
@@ -36,10 +34,6 @@
 		headingLevel,
 		class: className
 	} = $props();
-
-	// Tailwind's lg: rem in a media query is the browser's 16px, not the root's
-	const locked = new MediaQuery('width >= 64rem');
-	const wide = new MediaQuery('width >= 48rem');
 
 	const style = 'mapbox://styles/mapbox/light-v11';
 
@@ -55,7 +49,7 @@
 	let mapEl = $state();
 	let cardEl = $state();
 
-	let map = $state.raw();
+	let map;
 	let markers = [];
 	let selectedId = $state(null);
 	let selected = $derived(located.find((pin) => pin.artwork._id === selectedId));
@@ -82,16 +76,6 @@
 		selectedId = id;
 		await tick();
 		if (focus) cardEl?.focus({ preventScroll: true });
-		const pin = located.find((p) => p.artwork._id === id);
-		if (pin && map && !locked.current) {
-			// Keeps the chosen X clear of the card, measured once it's shown:
-			// beside it from md up, above it on phones
-			const gap = 40;
-			const padding = { top: gap, bottom: gap, left: gap, right: gap };
-			if (wide.current) padding.right += cardEl?.offsetWidth ?? 0;
-			else padding.bottom += cardEl?.offsetHeight ?? 0;
-			map.flyTo({ center: pin.lngLat, zoom: Math.max(map.getZoom(), 13), padding });
-		}
 	}
 
 	// Focus inside the card goes back to its X, so it isn't lost as the card
@@ -175,7 +159,7 @@
 		}
 	}
 
-	// Every X in view: the opening view, and the locked map's at any size
+	// Every X in view, at any size
 	const view = () =>
 		located.length > 1
 			? { bounds: bounds(located), fitBoundsOptions: { padding: 80, maxZoom: 13 } }
@@ -187,27 +171,6 @@
 		else instance.jumpTo(camera);
 	}
 
-	// The gestures that move the map, off from lg up
-	const handlers = [
-		'dragPan',
-		'scrollZoom',
-		'boxZoom',
-		'doubleClickZoom',
-		'keyboard',
-		'touchZoomRotate'
-	];
-
-	// Cooperative gestures go off first: disabling a handler with them on
-	// detaches its "use two fingers" hint, and enabling it never puts it back
-	$effect(() => {
-		if (!map) return;
-		const lock = locked.current;
-		map.setCooperativeGestures(!lock && wide.current);
-		for (const handler of handlers) map[handler][lock ? 'disable' : 'enable']();
-		if (lock) frame(map);
-		else map.touchZoomRotate.disableRotation();
-	});
-
 	function createMap(mapboxgl) {
 		mapboxgl.accessToken = PUBLIC_MAPBOX_TOKEN;
 
@@ -215,14 +178,19 @@
 			container: mapEl,
 			style,
 			...view(),
-			cooperativeGestures: true,
+			// No gesture moves it; interactive stays on so clicks on the map
+			// still close the card
+			dragPan: false,
+			scrollZoom: false,
+			boxZoom: false,
+			doubleClickZoom: false,
+			keyboard: false,
+			touchZoomRotate: false,
 			dragRotate: false,
-			pitchWithRotate: false,
 			touchPitch: false,
 			attributionControl: false
 		});
-		instance.touchZoomRotate.disableRotation();
-		instance.on('resize', () => locked.current && frame(instance));
+		instance.on('resize', () => frame(instance));
 		instance.addControl(new mapboxgl.AttributionControl({ compact: true }), 'bottom-right');
 
 		// Before the first render, so the light style never flashes
@@ -371,12 +339,10 @@
 {/if}
 
 <style>
-	/* Mapbox's grab cursor, for a map that can't be dragged from lg up.
-	   Scoped to outrank Mapbox's CSS, which loads after this */
+	/* Mapbox's grab cursor, for a map that can't be dragged. Scoped to
+	   outrank Mapbox's CSS, which loads after this */
 	div :global(.mapboxgl-canvas-container.mapboxgl-interactive) {
-		@media (width >= 64rem) {
-			cursor: default;
-		}
+		cursor: default;
 	}
 
 	/* The markers, built here for Mapbox outside Svelte's scope. Not
