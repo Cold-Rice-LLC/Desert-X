@@ -2,8 +2,8 @@ import {defineArrayMember, defineType} from 'sanity'
 import {linkTargetFields} from './linkTarget'
 
 /**
- * Shared rich text: paragraphs with italic and links only, wherever a
- * field takes formatted text.
+ * Shared rich text: normal and small paragraphs, with italic and links
+ * only, wherever a field takes formatted text.
  */
 export default defineType({
   name: 'richText',
@@ -12,7 +12,11 @@ export default defineType({
   of: [
     defineArrayMember({
       type: 'block',
-      styles: [{title: 'Normal', value: 'normal'}],
+      // Small: a closing credit, like "Generous support provided by…"
+      styles: [
+        {title: 'Normal', value: 'normal'},
+        {title: 'Small', value: 'small'},
+      ],
       lists: [],
       marks: {
         decorators: [{title: 'Italic', value: 'em'}],
