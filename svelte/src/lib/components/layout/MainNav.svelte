@@ -18,8 +18,9 @@
 	 * from md up only, in italics, cut to one line at 40rem.
 	 * Lines that get cut keep a little room below them, as the font's
 	 * descenders hang below its 1 line height and would be clipped.
-	 * With `stacked` it goes on a line of its own under the title on phones,
-	 * as an edition's location does (see TopBar).
+	 * With `stacked` it follows the title on phones as it does from md up,
+	 * uncut, wrapping to a line of its own under it only where it doesn't
+	 * fit, as an edition's location does (see TopBar).
 	 * `donateLink` is an underlined link at the right edge from md up; phones
 	 * have Donate in the menu.
 	 */
@@ -30,6 +31,30 @@
 	// its height below the middle
 	const onHamburger = '-translate-y-[calc(0.35em-var(--spacing-hamburger)/2)]';
 </script>
+
+{#snippet heading()}
+	{#if title && href}
+		<a {href} class={['link-fade', onHamburger]}>{title}</a>
+	{:else if title}
+		<p class={onHamburger}>{title}</p>
+	{/if}
+	{#if detail}
+		<p
+			class={[
+				'-mb-[0.2em] min-w-0 truncate pb-[0.2em]',
+				'md:overflow-visible md:whitespace-normal',
+				onHamburger
+			]}
+		>
+			{#if detailPhone}
+				<span class="md:hidden">{detailPhone}</span>
+				<span class="hidden md:inline">{detail}</span>
+			{:else}
+				{detail}
+			{/if}
+		</p>
+	{/if}
+{/snippet}
 
 <TopBar
 	as="header"
@@ -43,26 +68,13 @@
 		home ? 'pointer-events-none -mb-nav text-white *:pointer-events-auto' : 'bg-white'
 	]}
 >
-	{#if title && href}
-		<a {href} class={['link-fade', onHamburger]}>{title}</a>
-	{:else if title}
-		<p class={onHamburger}>{title}</p>
-	{/if}
-	{#if detail}
-		<p
-			class={[
-				'col-start-2 -mb-[0.2em] min-w-0 truncate pb-[0.2em]',
-				'md:overflow-visible md:whitespace-normal',
-				onHamburger
-			]}
-		>
-			{#if detailPhone}
-				<span class="md:hidden">{detailPhone}</span>
-				<span class="hidden md:inline">{detail}</span>
-			{:else}
-				{detail}
-			{/if}
-		</p>
+	{#if stacked}
+		<!-- One wrapping row on phones; from md up its two are the bar's own -->
+		<div class="row-span-2 flex min-w-0 flex-wrap gap-x-[0.8em] md:contents">
+			{@render heading()}
+		</div>
+	{:else}
+		{@render heading()}
 	{/if}
 	{#if work}
 		<p

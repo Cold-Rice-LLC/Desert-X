@@ -6,10 +6,11 @@
 	 * as the menu opens: the hamburger, then with `logo` the logo in the
 	 * menu's size, then `children`. On phones what follows the hamburger is
 	 * a fixed 3.2rem on; from md up the hamburger sits in the left margin,
-	 * so what follows starts at the gutter. With `stacked`, phones get a
-	 * second line, in the column after the hamburger, for what has
-	 * `col-start-2`: the bar grows by a line, its first where a single line
-	 * would be, so the hamburger doesn't move as the menu opens over it.
+	 * so what follows starts at the gutter. With `stacked`, phones leave
+	 * room for a second line, in the column after the hamburger, for what
+	 * has `row-span-2` and wraps: the bar grows by a line only when it does,
+	 * its first where a single line would be, so the hamburger doesn't move
+	 * as the menu opens over it.
 	 * `onclick` is the hamburger's and the logo's, other attributes like
 	 * `aria-label` go to the hamburger, `as` names the element and `class`
 	 * goes on it.
@@ -30,7 +31,7 @@
 	class={[
 		'items-center gap-x-[3.2rem] px-edge md:gap-x-[0.8em] md:pl-gutter md:text-md',
 		stacked
-			? 'grid grid-cols-[auto_1fr] py-[calc((var(--spacing-nav)-1lh)/2)] md:flex md:h-nav md:py-0'
+			? 'grid grid-cols-[auto_1fr] grid-rows-[1lh] py-[calc((var(--spacing-nav)-1lh)/2)] md:flex md:h-nav md:py-0'
 			: 'flex h-nav',
 		className
 	]}
