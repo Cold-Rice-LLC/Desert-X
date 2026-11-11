@@ -15,7 +15,8 @@
 	 * article's date or an artwork's artists, cut to one line on phones,
 	 * where `detailPhone` takes its place if given (a news article's date
 	 * with a two-digit year). `work`, an artwork's title, follows the title
-	 * from md up only, in italics, cut to one line at 40rem.
+	 * from md up only, in italics, cut to one line where it would reach
+	 * Donate, the bar's gap short of it.
 	 * Lines that get cut keep a little room below them, as the font's
 	 * descenders hang below its 1 line height and would be clipped.
 	 * With `stacked` it follows the title on phones as it does from md up,
@@ -77,9 +78,7 @@
 		{@render heading()}
 	{/if}
 	{#if work}
-		<p
-			class={['-mb-[0.2em] hidden max-w-[40rem] truncate pb-[0.2em] italic md:block', onHamburger]}
-		>
+		<p class={['-mb-[0.2em] hidden truncate pb-[0.2em] italic md:block', onHamburger]}>
 			{work}
 		</p>
 	{/if}
