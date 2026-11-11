@@ -1,5 +1,5 @@
 <script>
-	import { isLocated } from '$lib/art';
+	import { isMapped } from '$lib/art';
 	import ExhibitionMap from '$lib/components/edition/ExhibitionMap.svelte';
 	import Modules from '$lib/components/modules/Modules.svelte';
 	import { showUnderNav } from '$lib/ui.svelte.js';
@@ -9,9 +9,7 @@
 	// Editions with Visit Info or a map to show; an edition without either
 	// would leave an empty run
 	let editions = $derived(
-		data.editions.filter(
-			(edition) => edition.visitModules?.length || edition.artworks?.some(isLocated)
-		)
+		data.editions.filter((edition) => edition.visitModules?.length || isMapped(edition.artworks))
 	);
 
 	// One run of modules, so the editions and news space like the rest: the

@@ -60,7 +60,20 @@ const joinNames = (names) =>
 	names.length > 1 ? `${names.slice(0, -1).join(', ')} & ${names.at(-1)}` : (names[0] ?? '');
 
 /** Whether an artwork has coordinates, for an exhibition map's X. */
-export const isLocated = (artwork) => Number.isFinite(artwork.coordinates?.lat);
+export const isLocated = (artwork) =>
+	Number.isFinite(artwork.coordinates?.lat) && Number.isFinite(artwork.coordinates?.lng);
+
+/**
+ * Whether an edition's artworks can go on its exhibition map: only when
+ * those with coordinates stand in at least two different places, so a map
+ * of one X, or of every X stacked on one placeholder point, is left out.
+ */
+export const isMapped = (artworks) =>
+	new Set(
+		(artworks ?? [])
+			.filter(isLocated)
+			.map(({ coordinates }) => `${coordinates.lat},${coordinates.lng}`)
+	).size > 1;
 
 /**
  * An artwork's artists as one credit: its Artist Credit, or else all

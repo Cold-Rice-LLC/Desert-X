@@ -1,7 +1,7 @@
 <script>
 	import { PUBLIC_MAPBOX_TOKEN } from '$env/static/public';
 	import { mount, tick, unmount } from 'svelte';
-	import { artworkCredit, isLocated } from '$lib/art';
+	import { artworkCredit, isLocated, isMapped } from '$lib/art';
 	import LogoMark from '$lib/components/icons/LogoMark.svelte';
 	import ImageFrame from '$lib/components/ImageFrame.svelte';
 	import ModuleHeading from '$lib/components/modules/ModuleHeading.svelte';
@@ -10,11 +10,11 @@
 	/**
 	 * A heading ("Exhibition Map" unless overridden) over a Mapbox map of an
 	 * edition's artworks with coordinates, each marked with the logo's X,
-	 * then `text` and, given `href`, a "View Exhibition" link. Choosing
-	 * an X turns it black and opens a card, in a news tile's text size, with the artist,
-	 * title (up to two lines), a Close button, the thumbnail, a Details link
-	 * to the artwork and a Next button, which moves on to the next X, round
-	 * to the first after the last. It's across the bottom on phones and in
+	 * then `text` and, given `href`, a "View Exhibition" link. Choosing an
+	 * X turns it black and opens a card, in a news tile's text size, with
+	 * the artist, title (up to two lines), a Close button, the thumbnail, a
+	 * Details link to the artwork and a Next button, which moves on to the
+	 * next X, round to the first after the last. It's across the bottom on phones and in
 	 * the top right from md up, scrolls if it's taller than the map, and
 	 * passes under the nav, as the map's own layers do. Close, Escape or a
 	 * click on the map closes it. The map is recoloured to the site's greys,
@@ -22,9 +22,9 @@
 	 * once the map nears the viewport, which also keeps it off the server,
 	 * and the page has loaded (see afterLoad). The map is locked at every
 	 * size, with no panning or zooming, framed on every X and refit as it
-	 * resizes, so scrolling past it always scrolls the page. Left out with
-	 * no located artworks. `class` passes to its section, and `headingLevel`
-	 * to its heading.
+	 * resizes, so scrolling past it always scrolls the page. Left out
+	 * unless they stand in at least two different places. `class` passes
+	 * to its section, and `headingLevel` to its heading.
 	 */
 	let {
 		artworks,
@@ -37,12 +37,15 @@
 
 	const style = 'mapbox://styles/mapbox/light-v11';
 
+	// Those with coordinates, or none unless they're in two places or more
 	let located = $derived(
-		artworks.filter(isLocated).map((artwork) => ({
-			artwork,
-			lngLat: [artwork.coordinates.lng, artwork.coordinates.lat],
-			artists: artworkCredit(artwork)
-		}))
+		isMapped(artworks)
+			? artworks.filter(isLocated).map((artwork) => ({
+					artwork,
+					lngLat: [artwork.coordinates.lng, artwork.coordinates.lat],
+					artists: artworkCredit(artwork)
+				}))
+			: []
 	);
 
 	let frameEl = $state();
@@ -159,17 +162,11 @@
 		}
 	}
 
-	// Every X in view, at any size
-	const view = () =>
-		located.length > 1
-			? { bounds: bounds(located), fitBoundsOptions: { padding: 80, maxZoom: 13 } }
-			: { center: located[0].lngLat, zoom: 13 };
+	// Every X in view, at any size. There are always two places or more
+	// (see isMapped), so there are always bounds to fit.
+	const fit = { padding: 80, maxZoom: 13 };
 
-	function frame(instance) {
-		const { bounds, fitBoundsOptions, ...camera } = view();
-		if (bounds) instance.fitBounds(bounds, { ...fitBoundsOptions, animate: false });
-		else instance.jumpTo(camera);
-	}
+	const frame = (instance) => instance.fitBounds(bounds(located), { ...fit, animate: false });
 
 	function createMap(mapboxgl) {
 		mapboxgl.accessToken = PUBLIC_MAPBOX_TOKEN;
@@ -177,7 +174,8 @@
 		const instance = new mapboxgl.Map({
 			container: mapEl,
 			style,
-			...view(),
+			bounds: bounds(located),
+			fitBoundsOptions: fit,
 			// No gesture moves it; interactive stays on so clicks on the map
 			// still close the card
 			dragPan: false,
@@ -318,9 +316,7 @@
 						{/key}
 						<div class="flex justify-between gap-base">
 							<a href="/art/{selected.artwork.slug}" class="link-underline">Details</a>
-							{#if located.length > 1}
-								<button type="button" class="link-underline" onclick={next}>Next</button>
-							{/if}
+							<button type="button" class="link-underline" onclick={next}>Next</button>
 						</div>
 					</section>
 				{/if}
