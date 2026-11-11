@@ -14,10 +14,6 @@ const SLIDE_MEDIA_TYPES = [
   {title: 'Video', value: 'video'},
 ]
 
-// With Quick Links on, slides have a headline instead of a link and title
-const quickLinksOn = ({document}) => Boolean(document?.quickLinks)
-const quickLinksOff = (context) => !quickLinksOn(context)
-
 // Slides saved before videos were added have no media type: they're images
 const isSlideType =
   (type) =>
@@ -34,20 +30,11 @@ export default defineType({
       slug: shownWhere(({document}) => !isHomepage(document), {required: 'Slug is required.'}),
     }),
     defineField({
-      name: 'quickLinks',
-      type: 'boolean',
-      title: 'Quick Links',
-      description:
-        'Shows the footer’s links along the bottom of the carousel (bottom left from tablet size up), and each slide’s Headline centred over it, in place of its link and Title.',
-      initialValue: false,
-      hidden: ({document}) => !isHomepage(document),
-    }),
-    defineField({
       name: 'slides',
       type: 'array',
       title: 'Slides',
       description:
-        'The homepage carousel, in order. Each slide fills the window; clicking its left or right half goes back or on, and the last loops round to the first.',
+        'The homepage carousel, in order, with the footer’s links along its bottom (bottom left from tablet size up). Each slide fills the window; clicking its left or right half goes back or on, and the last loops round to the first.',
       hidden: ({document}) => !isHomepage(document),
       of: [
         defineArrayMember({
@@ -93,16 +80,14 @@ export default defineType({
               rows: 2,
               description:
                 'Optional. Centred over the slide, fading in as it arrives. Consecutive slides can carry on one sentence.',
-              hidden: quickLinksOff,
             }),
-            ...linkTargetFields({shown: quickLinksOff}),
+            ...linkTargetFields(),
             defineField({
               name: 'title',
               type: 'string',
               title: 'Title',
               description:
-                'Shown bottom left of the slide, linking to where it goes. Leave empty for the linked artwork’s artist and title, or the linked page’s title.',
-              hidden: quickLinksOn,
+                'Optional. Shown bottom right of the slide, linking to where it goes if it has a link. Leave empty for the linked artwork’s artist and title, or the linked page’s title.',
             }),
           ],
           preview: {
@@ -115,10 +100,9 @@ export default defineType({
               headline: 'headline',
               ...linkTargetSelect,
             },
-            // A slide doesn't see the document's Quick Links: the headline
-            // when there is one, else what it links to
+            // Its headline, or else what its caption says or links to
             prepare: ({mediaType, image, poster, videoName, title, headline, ...link}) => ({
-              title: headline || title || linkTargetSubtitle(link) || 'No link',
+              title: headline || title || linkTargetSubtitle(link) || 'No text',
               subtitle:
                 mediaType === 'video' ? ['Video', videoName].filter(Boolean).join(' · ') : 'Image',
               media: mediaType === 'video' ? poster : image,

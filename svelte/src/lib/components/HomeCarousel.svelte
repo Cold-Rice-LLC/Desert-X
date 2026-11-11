@@ -18,13 +18,14 @@
 	 * Clicking the left half goes back a slide and the right half on, under
 	 * a resize cursor pointing that way; the arrow keys, a swipe and a mouse drag move it
 	 * too, and the last loops round to the first. Tabbing reaches the halves
-	 * as Previous and Next buttons, labelled while they have focus. The
-	 * current slide's caption sits bottom left, over the halves, linking to
-	 * where the slide goes. Or, given `quickLinks`, the footer's search and
-	 * two link columns sit there on its bottom edge, as the menu has them on
-	 * phones and the footer from md up (see FooterLinks). Each
-	 * slide's headline sits centred on it in the menu's size, fading in as
-	 * the slide arrives and moving away with it.
+	 * as Previous and Next buttons, labelled while they have focus. Over
+	 * the halves, `quickLinks`, the footer's search and two link columns,
+	 * sit on its bottom edge, as the menu has them on phones and the footer
+	 * from md up (see FooterLinks). A slide can have a headline, a caption
+	 * or both, moving with it. Its caption sits bottom right, linking to
+	 * where the slide goes, or flush left above the links on phones. Its
+	 * headline sits centred in the menu's size, fading in as the slide
+	 * arrives.
 	 *
 	 * Only the current slide's video plays, and none with reduced motion,
 	 * which also cuts between slides. The browser's lazy loading only looks
@@ -38,11 +39,21 @@
 	let leaving = $state(null);
 	let swiper;
 
+	// The links' height, which captions sit above on phones. Until it's
+	// measured they're hidden there.
+	let linksHeight = $state();
+
 	let several = $derived(slides.length > 1);
-	let current = $derived(slides[active]);
 
 	const offset = (index) => loopOffset(index, active, slides.length);
 	const near = (index) => Math.abs(offset(index)) <= 1;
+
+	// Flush left above the links on phones, and bottom right beside them
+	// from md up, over the halves so clicking it follows the link
+	let captionClass = $derived([
+		'pointer-events-auto absolute inset-x-edge bottom-[calc(var(--spacing-edge)_+_var(--quick-links)_+_var(--spacing-sm))] w-fit text-base text-white md:bottom-edge md:left-1/2 md:ml-auto',
+		!linksHeight && 'invisible md:visible'
+	]);
 
 	const posterUrl = (poster) => poster?.asset && urlFor(poster).width(2400).auto('format').url();
 
@@ -72,7 +83,12 @@
 	{#if work}<i>{work}</i>{/if}
 {/snippet}
 
-<section class="relative flex-1 bg-grey-1" aria-roledescription="carousel" aria-label="Featured">
+<section
+	class="relative flex-1 bg-grey-1"
+	style:--quick-links="{linksHeight}px"
+	aria-roledescription="carousel"
+	aria-label="Featured"
+>
 	<div class="swiper" {@attach several && carousel}>
 		{#if several}
 			<CarouselHalves
@@ -111,7 +127,7 @@
 					<!-- In its slide, so it moves with it. It fades in as its slide
 					     arrives, and is hidden at once after it's gone, ready to fade in
 					     again -->
-					{#if quickLinks && slide.headline}
+					{#if slide.headline}
 						<p
 							class={[
 								'absolute inset-0 flex items-center justify-center px-gutter text-center text-menu tracking-tight text-balance text-white',
@@ -123,31 +139,31 @@
 							{slide.headline}
 						</p>
 					{/if}
+					{#if slide.caption && linkHref(slide)}
+						<!-- Only the current slide's link is tabbed to -->
+						<AppLink
+							link={slide}
+							tabindex={index === active ? undefined : -1}
+							class={[captionClass, 'link-underline']}
+						>
+							{@render caption(slide.caption)}
+						</AppLink>
+					{:else if slide.caption}
+						<p class={captionClass}>{@render caption(slide.caption)}</p>
+					{/if}
 				</div>
 			{/each}
 		</div>
 	</div>
 
-	<!-- Outside Swiper, over the halves, so clicking it follows the link -->
-	{#if quickLinks}
-		<nav
-			aria-label="Quick links"
-			class="pointer-events-none absolute inset-x-0 bottom-edge z-20 grid grid-cols-12 items-end px-edge text-lead text-white *:pointer-events-auto md:text-md md:tracking-tight"
-		>
-			<FooterLinks links={quickLinks} compact />
-		</nav>
-	{:else if current?.caption && linkHref(current)}
-		<AppLink
-			link={current}
-			class="absolute inset-x-edge bottom-edge z-20 w-fit text-base text-white link-underline"
-		>
-			{@render caption(current.caption)}
-		</AppLink>
-	{:else if current?.caption}
-		<p class="absolute inset-x-edge bottom-edge z-20 text-base text-white">
-			{@render caption(current.caption)}
-		</p>
-	{/if}
+	<!-- Outside Swiper, over the halves, so clicking them follows the link -->
+	<nav
+		aria-label="Quick links"
+		class="pointer-events-none absolute inset-x-0 bottom-edge z-20 grid grid-cols-12 items-end px-edge text-lead text-white *:pointer-events-auto md:text-md md:tracking-tight"
+		bind:offsetHeight={linksHeight}
+	>
+		<FooterLinks links={quickLinks} compact />
+	</nav>
 </section>
 
 <style>
@@ -156,5 +172,12 @@
 	.swiper {
 		position: absolute;
 		inset: 0;
+	}
+
+	/* Over the halves, for the captions' links, but letting clicks through
+	   everywhere else; Swiper's own CSS puts it under them */
+	.swiper-wrapper {
+		z-index: 20;
+		pointer-events: none;
 	}
 </style>

@@ -7,7 +7,7 @@ import { pageSeo, seoFields } from '$lib/sanity/seo';
 // What links to a slide's caption needs from the document it links to
 const linkedFields = `{ _type, title, artistCredit, "artists": artists[]->{ title } }`;
 
-// What a slide shows bottom left: its own Title, or else what it links to,
+// What a slide shows bottom right: its own Title, or else what it links to,
 // an artwork by its artist then its title in italics, anything else by
 // its title
 const caption = ({ title, linked }) => {
@@ -29,7 +29,6 @@ const media = `(coalesce(mediaType, "image") == "image" && image.${still}) || (m
 export async function load() {
 	const homepage = await client.fetch(`
 		*[_id == "homepage"][0]{
-			quickLinks,
 			slides[${media}]{
 				_key,
 				"mediaType": coalesce(mediaType, "image"),
@@ -50,10 +49,7 @@ export async function load() {
 	const seo = pageSeo(homepage?.seo);
 
 	if (homepage?.slides?.length) {
-		// With Quick Links on, slides have headlines rather than captions
-		const quickLinks = Boolean(homepage.quickLinks);
-		const slides = quickLinks ? homepage.slides : withCaptions(homepage.slides);
-		return { slides, quickLinks, seo };
+		return { slides: withCaptions(homepage.slides), seo };
 	}
 
 	// PROTOTYPE: until the Homepage has slides in the Studio, stand in the
