@@ -9,9 +9,9 @@
 
 	/**
 	 * The location's other editions as dropdowns, one open at a time, each
-	 * titled with its year and location, and its dates from md up. Opening
-	 * one shows the edition as its own page does, with a link to that page,
-	 * and on phones twice as far below the title as a page's gallery sits
+	 * titled with its year and location, and its dates from md up, ruled
+	 * underneath while closed. Opening one shows the edition as its own page
+	 * does, on phones twice as far below the title as a page's gallery sits
 	 * below the nav (the two margins collapse into the larger). Its content is
 	 * only built while open, so closed ones load no images and the carousel
 	 * can measure itself. While the open one passes under the nav, the nav
@@ -58,7 +58,7 @@
 				id="edition-{edition.slug}"
 				name="other-editions"
 				bind:open={() => openSlug === edition.slug, (open) => toggle(edition.slug, open)}
-				summaryClass="mx-gutter border-b-2 group-open:mb-[calc(2*var(--spacing-sm))] md:border-b-[0.25rem] md:group-open:mb-0"
+				summaryClass="mx-gutter border-b-2 group-open:border-transparent group-open:mb-[calc(2*var(--spacing-sm))] md:border-b-[0.25rem] md:group-open:mb-0"
 			>
 				{#snippet summary()}
 					<span class="flex gap-x-[0.8em]">
@@ -70,14 +70,7 @@
 					</span>
 				{/snippet}
 				{#if openSlug === edition.slug}
-					<EditionContent {edition} {news} headingLevel={3} class="pb-2xl">
-						<p class="px-gutter">
-							<a href="/exhibitions/{edition.slug}" class="link-underline">
-								View {edition.location}
-								{edition.year}
-							</a>
-						</p>
-					</EditionContent>
+					<EditionContent {edition} {news} headingLevel={3} class="pb-2xl" />
 				{/if}
 			</Dropdown>
 		{/each}
