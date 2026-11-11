@@ -9,6 +9,19 @@ const navLinkFields = `_key, label, ${linkFields}`;
 // A location's editions, from inside a projection of the location
 const editionsOf = '*[_type == "edition" && location._ref == ^._id]';
 
+// A location as a footer link
+const locationLink = `{
+	"_key": _id,
+	"label": title,
+	"linkType": "internal",
+	"internal": {
+		_id,
+		_type,
+		"slug": ${editionsOf} | order(year desc)[0].slug.current
+	},
+	"since": ${editionsOf} | order(year asc)[0].year
+}`;
+
 export async function load() {
 	const { settings, locations } = await client.fetch(`{
 		"settings": *[_id == "siteSettings"][0]{
@@ -22,19 +35,14 @@ export async function load() {
 			footerText[]{ ${richTextFields} },
 			credits[]{ ${richTextFields} }
 		},
-		// For the footer: each location with an edition, oldest first, as a
-		// link to its newest edition, like a menu link to a location
-		"locations": *[_type == "location" && count(${editionsOf}) > 0]{
-			"_key": _id,
-			"label": title,
-			"linkType": "internal",
-			"internal": {
-				_id,
-				_type,
-				"slug": ${editionsOf} | order(year desc)[0].slug.current
-			},
-			"since": ${editionsOf} | order(year asc)[0].year
-		} | order(since asc)
+		// For the footer: the locations Menu, Footer & SEO lists, in its
+		// order, or else each one, oldest first, as a link to its newest
+		// edition, like a menu link to a location. Locations with no edition
+		// have nowhere to go.
+		"locations": coalesce(
+			*[_id == "siteSettings"][0].footerLocations[]->[count(${editionsOf}) > 0]${locationLink},
+			*[_type == "location" && count(${editionsOf}) > 0]${locationLink} | order(since asc)
+		)
 	}`);
 
 	return {

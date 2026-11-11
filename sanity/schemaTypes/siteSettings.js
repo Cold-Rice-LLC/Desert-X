@@ -108,14 +108,29 @@ export default defineType({
       fieldset: 'menu',
       rows: 3,
     }),
-    // The footer's second column; the first lists the locations. Named for
-    // when both were links, so its content didn't need moving.
+    defineField({
+      name: 'footerLocations',
+      type: 'array',
+      title: 'Locations',
+      description:
+        'The footer’s first column, in order, each linking to its newest exhibition. Locations with no exhibition yet are left out. Leave empty to list every location with an exhibition, oldest first.',
+      fieldset: 'footer',
+      of: [
+        defineArrayMember({
+          type: 'reference',
+          to: [{type: 'location'}],
+          options: {disableNew: true},
+        }),
+      ],
+      validation: (rule) => rule.unique(),
+    }),
+    // The footer's second column. Named for when both were links, so its
+    // content didn't need moving.
     defineField({
       name: 'footerLinks2',
       type: 'array',
       title: 'Links',
-      description:
-        'The footer’s second column. The first lists each location, linking to its newest exhibition.',
+      description: 'The footer’s second column.',
       fieldset: 'footer',
       of: [defineArrayMember({type: 'navLink'})],
     }),
