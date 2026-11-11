@@ -19,10 +19,16 @@
 	--text-lead--line-height: 1;
 	--text-title: 3.5rem;
 	--text-title--line-height: 1;
-	/* Cards' text: news tiles, the exhibition map's card and the
-	   lightbox's Close. The same at every width. */
+	/* The lightbox's Close. The same at every width. */
 	--text-card: 2.3rem;
 	--text-card--line-height: 1;
+	/* A news tile's text, as NewsTile sizes it from the tile (17 of the mono
+	   font's 0.62em-wide characters across 88% of it), but from the
+	   viewport, for the exhibition map's card. On phones a tile is 5 of 6
+	   columns between the edges; md up, a third of what's between the
+	   gutters and the two gaps (see :root). */
+	--text-tile: calc((100vw - 2 * var(--spacing-edge)) * 5 / 6 * 0.88 / (17 * 0.62));
+	--text-tile--line-height: 1;
 	/* The site's biggest size: the menu's logo, links and text, and the
 	   homepage's headlines. The same at every width. */
 	--text-menu: 4.8rem;
@@ -182,6 +188,9 @@ html {
 		--spacing-gutter: 7.8rem;
 		--spacing-nav: 7.5rem;
 		--spacing-page-top: 9.25rem;
+		--text-tile: calc(
+			(100vw - 2 * var(--spacing-gutter) - 2 * var(--spacing-base)) / 3 * 0.88 / (17 * 0.62)
+		);
 	}
 }
 

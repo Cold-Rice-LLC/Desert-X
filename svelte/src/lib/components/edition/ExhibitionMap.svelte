@@ -11,7 +11,7 @@
 	 * A heading ("Exhibition Map" unless overridden) over a Mapbox map of an
 	 * edition's artworks with coordinates, each marked with the logo's X,
 	 * then `text` and, given `href`, a "View Exhibition" link. Choosing
-	 * an X turns it black and opens a card, in the card size, with the artist,
+	 * an X turns it black and opens a card, in a news tile's text size, with the artist,
 	 * title (up to two lines), a Close button, the thumbnail, a Details link
 	 * to the artwork and a Next button, which moves on to the next X, round
 	 * to the first after the last. It's across the bottom on phones and in
@@ -288,7 +288,7 @@
 						bind:this={cardEl}
 						tabindex="-1"
 						aria-label="Installation"
-						class="absolute inset-x-sm bottom-sm z-10 max-h-[calc(100%-2*var(--spacing-sm))] space-y-line overflow-y-auto overscroll-contain bg-white p-sm font-mono text-card [scrollbar-width:none] md:inset-x-auto md:top-base md:right-base md:bottom-auto md:max-h-[calc(100%-2*var(--spacing-base))] md:w-[40rem] md:p-base"
+						class="absolute inset-x-sm bottom-sm z-10 max-h-[calc(100%-2*var(--spacing-sm))] space-y-line overflow-y-auto overscroll-contain bg-white p-sm font-mono text-tile [scrollbar-width:none] md:inset-x-auto md:top-base md:right-base md:bottom-auto md:max-h-[calc(100%-2*var(--spacing-base))] md:w-[40rem] md:p-base"
 					>
 						<div class="flex items-start justify-between gap-base">
 							<p>
