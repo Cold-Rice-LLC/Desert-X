@@ -11,6 +11,12 @@
 	let spanish = $derived(page.url.searchParams.get('lang') === 'es' && data.spanish);
 	let artwork = $derived(spanish ? { ...data.artwork, ...spanish } : data.artwork);
 
+	// Its exhibition, "Coachella Valley 2023", linked when it has a page
+	let exhibition = $derived.by(() => {
+		const { location, year, slug } = data.artwork.edition ?? {};
+		return slug && [location, year].filter(Boolean).join(' ');
+	});
+
 	// For images with no alt text of their own, in English as the gallery
 	// is: "Bloom by Bahraini-Danish"
 	let alt = $derived([data.artwork.title, data.artwork.credit].filter(Boolean).join(' by '));
@@ -52,7 +58,12 @@
 				>
 			</p>
 		{/if}
-		<h1>{artwork.title}</h1>
+		<!-- Clear of the credit beside it from md up -->
+		<h1 class="md:pr-gutter">
+			<span class="italic">{artwork.title}</span>{#if exhibition},
+				<a href="/exhibitions/{data.artwork.edition.slug}" class="link-fade">{exhibition}</a
+				>{/if}
+		</h1>
 		{#if artwork.credit || artwork.artistInfo}
 			<p class="whitespace-pre-line">
 				{[artwork.credit, artwork.artistInfo].filter(Boolean).join('\n')}

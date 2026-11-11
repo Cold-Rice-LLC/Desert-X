@@ -11,8 +11,10 @@ import { visualArtwork } from '$lib/structuredData';
 const SPANISH_FIELDS = ['title', 'artistInfo'];
 
 /**
- * An artwork by slug. Its artists' names show beside it and in the nav,
- * under Art on phones, unless an Artist Credit replaces them. Shared,
+ * An artwork by slug. Its artists' names show beside it, unless an
+ * Artist Credit replaces them, and its title after Art in the nav from
+ * md up, with its exhibition (location and year) linked after it under
+ * the carousel. Shared,
  * it's titled with both, and shows the start of its text (or else the
  * artist info) and its first image; to search engines it's a
  * VisualArtwork, all in English. With any Spanish, it also comes in
@@ -27,6 +29,11 @@ export async function load({ params, url, untrack }) {
 				titleEs,
 				artistCredit,
 				"artists": artists[]->{ title },
+				"edition": edition->{
+					year,
+					"slug": slug.current,
+					"location": location->title
+				},
 				artistInfo,
 				artistInfoEs,
 				images[]{ _key, ${imageFields} },
@@ -49,8 +56,7 @@ export async function load({ params, url, untrack }) {
 		spanish: hasSpanish(artwork, SPANISH_FIELDS) ? inSpanish(artwork, SPANISH_FIELDS) : undefined,
 		navTitle: landingTitle || 'Art',
 		navHref: '/art',
-		navDetail: credit,
-		navStacked: true,
+		navWork: artwork.title,
 		seo: pageSeo(artwork.seo, {
 			title: credit ? `${credit}, ${artwork.title}` : artwork.title,
 			description,

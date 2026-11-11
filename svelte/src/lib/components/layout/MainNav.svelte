@@ -14,13 +14,16 @@
 	 * link up a level, like a breadcrumb; `detail` follows it, e.g. a news
 	 * article's date or an artwork's artists, cut to one line on phones,
 	 * where `detailPhone` takes its place if given (a news article's date
-	 * with a two-digit year).
+	 * with a two-digit year). `work`, an artwork's title, follows the title
+	 * from md up only, in italics, cut to one line at 40rem.
+	 * Lines that get cut keep a little room below them, as the font's
+	 * descenders hang below its 1 line height and would be clipped.
 	 * With `stacked` it goes on a line of its own under the title on phones,
 	 * as an edition's location does (see TopBar).
 	 * `donateLink` is an underlined link at the right edge from md up; phones
 	 * have Donate in the menu.
 	 */
-	let { home, title, href, detail, detailPhone, stacked, donateLink } = $props();
+	let { home, title, href, detail, detailPhone, work, stacked, donateLink } = $props();
 
 	// Centred in the bar, as the hamburger is, text has its baseline 0.35em
 	// below the middle; this lifts it to the hamburger's bottom edge, half
@@ -47,7 +50,11 @@
 	{/if}
 	{#if detail}
 		<p
-			class={['col-start-2 min-w-0 truncate md:overflow-visible md:whitespace-normal', onHamburger]}
+			class={[
+				'col-start-2 -mb-[0.2em] min-w-0 truncate pb-[0.2em]',
+				'md:overflow-visible md:whitespace-normal',
+				onHamburger
+			]}
 		>
 			{#if detailPhone}
 				<span class="md:hidden">{detailPhone}</span>
@@ -55,6 +62,13 @@
 			{:else}
 				{detail}
 			{/if}
+		</p>
+	{/if}
+	{#if work}
+		<p
+			class={['-mb-[0.2em] hidden max-w-[40rem] truncate pb-[0.2em] italic md:block', onHamburger]}
+		>
+			{work}
 		</p>
 	{/if}
 	{#if donateLink?.label}

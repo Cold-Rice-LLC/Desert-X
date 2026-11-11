@@ -35,13 +35,20 @@
 
 	// What the nav shows beside the menu button: the page's title, which
 	// can link up a level (navHref), and an optional detail after it, with
-	// a shorter one for phones (navDetailPhone)
+	// a shorter one for phones (navDetailPhone), or an artwork's title
+	// (navWork)
 	let nav = $derived.by(() => {
 		if (page.status === 404) return { title: 'Not Found' };
 		if (page.error) return { title: 'Error' };
 		if (ui.nav) return ui.nav;
-		const { navTitle, navHref, navDetail, navDetailPhone } = page.data;
-		return { title: navTitle, href: navHref, detail: navDetail, detailPhone: navDetailPhone };
+		const { navTitle, navHref, navDetail, navDetailPhone, navWork } = page.data;
+		return {
+			title: navTitle,
+			href: navHref,
+			detail: navDetail,
+			detailPhone: navDetailPhone,
+			work: navWork
+		};
 	});
 </script>
 
