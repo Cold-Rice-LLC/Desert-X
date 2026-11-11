@@ -12,28 +12,29 @@
 	/**
 	 * Full-screen menu, opened by either nav's hamburger. A modal <dialog>,
 	 * so focus stays inside, Escape closes it and the page behind is inert.
-	 * On phones items are indented by a column of the 12-column grid; ones
-	 * with sub-items run across, and the rest fill two columns, down then
-	 * across, the second starting halfway along the grid. From md up they
-	 * sit in a row, spread across it, never closer than a word-like gap.
-	 * Items whose Link Type is Sub-items show them under the item on phones,
-	 * always, with the item an underlined label; from md up the item is a
-	 * button that opens them in place of the menu text, under the whole
-	 * row, placed against it so they stay nested in their item's list. The
-	 * rest are plain links. The menu text is left off phones, which have the
-	 * site footer at the bottom instead, and the menu scrolls if it runs
-	 * past the screen. Sub-items linking to
-	 * a location get the Desert X mark; one that goes nowhere, like a
-	 * location with no editions yet, shows faded as plain text. The top bar
-	 * is the homepage nav's (see TopBar), so the hamburger and logo stay
-	 * put. Always
-	 * rendered, so it can fade on opacity alone: while closed it's transparent, ignores the
-	 * pointer and is inert, and it's fixed and stacked above the nav so the
-	 * fade-out isn't cut off when the dialog leaves the top layer.
+	 * Below the menu breakpoint (see layout.css), phones and tablets, items
+	 * are indented by a column of the 12-column grid; ones with sub-items
+	 * run across, and the rest fill two columns, down then across, the
+	 * second starting halfway along the grid. From there up they sit in one
+	 * row from the left, a word-like gap apart, never wrapping.
+	 * Items whose Link Type is Sub-items show them under the item below the
+	 * breakpoint, always, with the item an underlined label; from it the
+	 * item is a button that opens them in place of the menu text, under the
+	 * whole row, placed against it so they stay nested in their item's
+	 * list. The rest are plain links. Below the breakpoint the menu text is
+	 * left off, and the site footer is at the bottom instead; the menu
+	 * scrolls if it runs past the screen. Sub-items linking to a location
+	 * get the Desert X mark; one that goes nowhere, like a location with no
+	 * exhibitions yet, shows faded as plain text. The top bar is the
+	 * homepage nav's (see TopBar), so the hamburger and logo stay put.
+	 * Always rendered, so it can fade on opacity alone: while closed it's
+	 * transparent, ignores the pointer and is inert, and it's fixed and
+	 * stacked above the nav so the fade-out isn't cut off when the dialog
+	 * leaves the top layer.
 	 */
 	let { menu, footer } = $props();
 
-	const desktop = new MediaQuery('width >= 48rem');
+	const desktop = new MediaQuery('width >= 70rem');
 	let dialog;
 	let activeKey = $state(null);
 	let active = $derived(menu.items.find((item) => item._key === activeKey));
@@ -88,7 +89,7 @@
 
 	<nav aria-label="Main">
 		<ul
-			class="mt-[0.9rem] grid grid-flow-col grid-cols-[5fr_6fr] pr-edge pl-indent md:relative md:mt-[2.3rem] md:flex md:justify-between md:gap-x-[0.8em] md:px-gutter"
+			class="mt-[0.9rem] grid grid-flow-col grid-cols-[5fr_6fr] pr-edge pl-indent menu:relative menu:mt-[2.3rem] menu:flex menu:gap-x-[0.8em] menu:px-gutter menu:whitespace-nowrap"
 			style:grid-template-rows="repeat({rows}, auto)"
 		>
 			{#each menu.items as item (item._key)}
@@ -109,7 +110,7 @@
 						{#if item === active || !desktop.current}
 							<ul
 								id="menu-sub-items-{item._key}"
-								class="my-line flex flex-col md:absolute md:inset-x-0 md:top-full md:mt-md md:mb-0 md:flex-row md:flex-wrap md:gap-x-[0.8em] md:px-gutter"
+								class="my-line flex flex-col menu:absolute menu:inset-x-0 menu:top-full menu:mt-md menu:mb-0 menu:flex-row menu:flex-wrap menu:gap-x-[0.8em] menu:px-gutter"
 							>
 								{#each item.subItems ?? [] as subItem (subItem._key)}
 									{#snippet label()}
@@ -146,8 +147,8 @@
 	</nav>
 
 	{#if menu.text && !active}
-		<p class="mt-line hidden px-gutter tracking-tight md:block">{menu.text}</p>
+		<p class="mt-line hidden px-gutter tracking-tight menu:block">{menu.text}</p>
 	{/if}
 
-	<Footer {footer} menu class="pt-md md:hidden" />
+	<Footer {footer} menu class="pt-md menu:hidden" />
 </dialog>

@@ -19,12 +19,14 @@
 	--text-lead--line-height: 1;
 	--text-title: 3.5rem;
 	--text-title--line-height: 1;
-	/* The site's biggest size: the menu's logo, links and text. Stacked on
-	   phones, then from md up the wireframes' 5.5rem, scaled down with the
-	   viewport where that's needed for their seven top-level links, 23.3em
-	   wide, to fit on one line between the gutters (see :root) */
+	/* The site's biggest size: the menu's logo, links and text, and the
+	   homepage's headlines. The same at every width. */
 	--text-menu: 4.8rem;
 	--text-menu--line-height: 1;
+	/* Where the menu's links go from stacked to one row (menu:): as wide
+	   as the row needs at the menu size, between the gutters, with a
+	   little to spare */
+	--breakpoint-menu: 70rem;
 
 	/* The wireframes' -1% letter spacing, for the bigger sizes */
 	--tracking-tight: -0.01em;
@@ -164,7 +166,6 @@ html {
 		--spacing-gutter: 7.8rem;
 		--spacing-nav: 7.5rem;
 		--spacing-page-top: 9.25rem;
-		--text-menu: min(5.5rem, (100vw - 2 * var(--spacing-gutter)) / 23.3);
 	}
 }
 
