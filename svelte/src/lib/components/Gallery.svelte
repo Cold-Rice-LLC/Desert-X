@@ -24,9 +24,9 @@
 	 * still swipe. Click the current image to see them all full screen (see
 	 * Lightbox), and come back to the one left on. Tabbing reaches Previous,
 	 * Full Screen and Next buttons, which only show while they have focus;
-	 * a single image is a button itself. An image's caption sits under it,
-	 * flush left, moving with its slide; from md up, with any captions, the
-	 * images leave a line of the caption size for them.
+	 * a single image is a button itself. From md up, an image's caption sits
+	 * under it, flush left at the body size, moving with its slide, and with
+	 * any captions the images leave a line for them; phones show none.
 	 *
 	 * The browser's lazy loading only looks again on scroll, not when a
 	 * slide moves into view, so the current slide and its neighbours are
@@ -114,7 +114,7 @@
 	{#if value?.length}
 		<!-- Each place this is rendered is straight inside a figure -->
 		<!-- svelte-ignore a11y_figcaption_parent -->
-		<figcaption class="mt-xs text-base">
+		<figcaption class="mt-xs hidden text-md md:block">
 			<Portable {value} />
 		</figcaption>
 	{/if}
@@ -217,7 +217,7 @@
 
 	/* The caption's margin and one line at its size, line-height 1 */
 	.captioned {
-		--caption: calc(var(--spacing-xs) + var(--text-base));
+		--caption: calc(var(--spacing-xs) + var(--text-md));
 	}
 
 	/* The track of slides is as tall as its tallest, centred in the

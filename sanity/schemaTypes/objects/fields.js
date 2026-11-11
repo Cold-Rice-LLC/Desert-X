@@ -108,7 +108,7 @@ const galleryCaption = {
   type: 'richText',
   title: 'Caption',
   description:
-    'Optional. Shown under the image in the carousel, e.g. the artist, the title in italics and the year.',
+    'Optional. Shown under the image in the carousel on larger screens (not on phones), e.g. the artist, the title in italics and the year.',
 }
 
 /**
