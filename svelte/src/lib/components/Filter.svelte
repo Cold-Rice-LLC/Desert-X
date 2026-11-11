@@ -13,7 +13,7 @@
 	 * From md up the options stay open while a filter is on (`active`). On
 	 * phones they close once one is chosen, and the choice, as it's written
 	 * rather than in capitals, takes All's place; choosing it again clears
-	 * it.
+	 * it. While a filter is on, Filter is the one underlined, open or not.
 	 * `label` names the <nav>, and `class` goes on it.
 	 */
 	let { label, allHref, groups, active, class: className } = $props();
@@ -39,19 +39,21 @@
 <nav aria-label={label} class={['space-y-line px-gutter text-title md:text-md', className]}>
 	<p class="uppercase">
 		<!-- On phones only a record of what's shown, as the options clear it -->
-		<span class={['md:hidden', !openNarrow && 'link-current', selected && 'normal-case']}>
+		<span
+			class={['md:hidden', !openNarrow && !active && 'link-current', selected && 'normal-case']}
+		>
 			{selected?.label ?? 'All'}
 		</span>
 		<a
 			href={allHref}
-			class={['max-md:hidden', openWide ? 'link-fade' : 'link-current']}
+			class={['max-md:hidden', openWide || active ? 'link-fade' : 'link-current']}
 			onclick={() => (openWide = false)}>All</a
 		>
 		/
 		<button
 			class={[
-				openNarrow ? 'max-md:link-current' : 'max-md:link-fade',
-				openWide ? 'md:link-current' : 'md:link-fade'
+				openNarrow || active ? 'max-md:link-current' : 'max-md:link-fade',
+				openWide || active ? 'md:link-current' : 'md:link-fade'
 			]}
 			aria-expanded={wide.current ? openWide : openNarrow}
 			aria-controls={optionsId}
