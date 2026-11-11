@@ -65,7 +65,7 @@ const landingFields = {
   visitLanding: [
     modulesField(moduleMembers, {
       description:
-        'General visitor information, shown first. Each edition that’s on (today is between its Start and End Date, or from its Show on Visit Page From date if set) follows with its Visit Info and map, then the latest news.',
+        'General visitor information, shown first. Each exhibition that’s on (today is between its Start and End Date, or from its Show on Visit Page From date if set) follows with its Visit Info and map, then the latest news.',
     }),
   ],
   searchLanding: [

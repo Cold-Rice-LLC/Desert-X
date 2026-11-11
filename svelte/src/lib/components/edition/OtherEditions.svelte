@@ -51,7 +51,7 @@
 </script>
 
 <section class="space-y-line">
-	<ModuleHeading heading="Previous Editions" />
+	<ModuleHeading heading="Previous Exhibitions" />
 	<div>
 		{#each editions as edition (edition._id)}
 			<Dropdown
@@ -72,7 +72,7 @@
 				{#if openSlug === edition.slug}
 					<EditionContent {edition} {news} headingLevel={3} class="pb-2xl">
 						<p class="px-gutter">
-							<a href="/editions/{edition.slug}" class="link-underline">
+							<a href="/exhibitions/{edition.slug}" class="link-underline">
 								View {edition.location}
 								{edition.year}
 							</a>

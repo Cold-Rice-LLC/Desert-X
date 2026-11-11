@@ -2,7 +2,7 @@
 export const templates = [
   {
     id: 'edition-in-location',
-    title: 'Edition in location',
+    title: 'Exhibition in location',
     schemaType: 'edition',
     parameters: [{name: 'locationId', type: 'string'}],
     value: ({locationId}) => ({
@@ -11,7 +11,7 @@ export const templates = [
   },
   {
     id: 'artwork-in-edition',
-    title: 'Artwork in edition',
+    title: 'Artwork in exhibition',
     schemaType: 'artwork',
     parameters: [{name: 'editionId', type: 'string'}],
     value: ({editionId}) => ({

@@ -1,5 +1,6 @@
 import {defineArrayMember, defineType} from 'sanity'
 import {linkTargetFields} from './linkTarget'
+import SmallText from './SmallText'
 
 /**
  * Shared rich text: normal and small paragraphs, with italic and links
@@ -15,7 +16,7 @@ export default defineType({
       // Small: a closing credit, like "Generous support provided by…"
       styles: [
         {title: 'Normal', value: 'normal'},
-        {title: 'Small', value: 'small'},
+        {title: 'Small', value: 'small', component: SmallText},
       ],
       lists: [],
       marks: {

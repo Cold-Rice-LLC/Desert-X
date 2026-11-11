@@ -18,10 +18,9 @@
 	 * With `stacked` it goes on a line of its own under the title on phones,
 	 * as an edition's location does (see TopBar).
 	 * `donateLink` is an underlined link at the right edge from md up; phones
-	 * have Donate in the menu, and instead any `action` there, a `{ label,
-	 * href }` link like the Art landing's switch to its other view.
+	 * have Donate in the menu.
 	 */
-	let { home, title, href, detail, detailPhone, stacked, action, donateLink } = $props();
+	let { home, title, href, detail, detailPhone, stacked, donateLink } = $props();
 
 	// Centred in the bar, as the hamburger is, text has its baseline 0.35em
 	// below the middle; this lifts it to the hamburger's bottom edge, half
@@ -57,15 +56,6 @@
 				{detail}
 			{/if}
 		</p>
-	{/if}
-	{#if action}
-		<a
-			href={action.href}
-			aria-label="{action.label} view"
-			class={['ml-auto uppercase link-underline md:hidden', onHamburger]}
-		>
-			{action.label}
-		</a>
 	{/if}
 	{#if donateLink?.label}
 		<AppLink link={donateLink} class={['ml-auto hidden link-underline md:block', onHamburger]}>

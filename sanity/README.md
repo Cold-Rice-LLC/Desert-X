@@ -7,7 +7,7 @@ npm run dev      # the Studio at localhost:3333
 npm run deploy   # deploy the Studio
 ```
 
-- **Singletons:** Site Settings, the Homepage (a `page` with the id `homepage`) and the landing pages (`newsLanding`, `artLanding`, `visitLanding`, `searchLanding`, listed in `schemaTypes/documents/landingPages.js`) each have one fixed document, laid out in `myStructure.js`.
+- **Singletons:** Menu, Footer & SEO, the Homepage (a `page` with the id `homepage`) and the landing pages (`newsLanding`, `artLanding`, `visitLanding`, `searchLanding`, listed in `schemaTypes/documents/landingPages.js`) each have one fixed document, laid out in `myStructure.js`.
 - **Shared schema pieces:** `schemaTypes/objects/fields.js` (title and slug, heading, SEO, modules, fields shown for one case) and `schemaTypes/objects/linkTarget.js` (link fields).
 - **Scripts**, run with `npx sanity exec scripts/<name>.js --with-user-token`:
   - `createLandings.js` creates any missing landing documents. Safe to rerun.

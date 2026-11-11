@@ -50,7 +50,7 @@ export default defineType({
     defineField({
       name: 'edition',
       type: 'reference',
-      title: 'Edition',
+      title: 'Exhibition',
       to: [{type: 'edition'}],
     }),
     defineField({

@@ -28,7 +28,7 @@ export const moduleDescription = ({ moduleText, title }) => {
 /**
  * A page's title, description and share image for the layout's head
  * tags: the Studio's overrides where set, or else `defaults` from the page
- * itself. Whatever's still empty falls back to Site Settings there.
+ * itself. Whatever's still empty falls back to Menu, Footer & SEO there.
  */
 export const pageSeo = (overrides, defaults = {}) => ({
 	title: overrides?.title || defaults.title,

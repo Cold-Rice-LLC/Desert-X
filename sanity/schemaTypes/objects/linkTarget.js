@@ -48,7 +48,8 @@ export const linkTargetFields = ({
     name: 'internalLink',
     type: 'reference',
     title: 'Page',
-    description: 'The page on this site the link goes to. A location goes to its newest edition.',
+    description:
+      'The page on this site the link goes to. A location goes to its newest exhibition.',
     to: [
       {type: 'page'},
       {type: 'edition'},

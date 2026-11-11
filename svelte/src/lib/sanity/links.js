@@ -30,8 +30,8 @@ const paths = {
 	page: (slug) => `/${slug}`,
 	news: (slug) => `/news/${slug}`,
 	artwork: (slug) => `/art/${slug}`,
-	edition: (slug) => `/editions/${slug}`,
-	location: (slug) => `/editions/${slug}`
+	edition: (slug) => `/exhibitions/${slug}`,
+	location: (slug) => `/exhibitions/${slug}`
 };
 
 /** The href for a link, or null when it points nowhere. */

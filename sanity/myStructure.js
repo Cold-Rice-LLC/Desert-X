@@ -87,21 +87,21 @@ export const myStructure = (S) =>
             .child((id) =>
               editorWith(S, 'location', id, [
                 {
-                  title: 'Editions',
+                  title: 'Exhibitions',
                   query: '*[_type == "edition" && location._ref == $id] | order(year desc)',
                   template: {schemaType: 'edition', id: 'edition-in-location'},
                   parameter: 'locationId',
-                  label: 'New edition in',
+                  label: 'New exhibition in',
                 },
               ]),
             ),
         ),
       S.listItem()
-        .title('Editions')
+        .title('Exhibitions')
         .icon(CalendarIcon)
         .child(
           S.documentTypeList('edition')
-            .title('Editions')
+            .title('Exhibitions')
             .defaultOrdering([{field: 'year', direction: 'desc'}])
             .child((id) =>
               editorWith(S, 'edition', id, [
@@ -149,7 +149,7 @@ export const myStructure = (S) =>
       S.divider(),
 
       S.listItem()
-        .title('Site Settings')
+        .title('Menu, Footer & SEO')
         .icon(CogIcon)
         .child(S.document().schemaType('siteSettings').documentId('siteSettings')),
     ])

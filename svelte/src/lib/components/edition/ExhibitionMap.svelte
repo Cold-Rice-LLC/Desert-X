@@ -10,7 +10,7 @@
 	/**
 	 * A heading ("Exhibition Map" unless overridden) over a Mapbox map of an
 	 * edition's artworks with coordinates, each marked with the logo's X,
-	 * then `text` and, given `href`, a "View Edition" link. Choosing
+	 * then `text` and, given `href`, a "View Exhibition" link. Choosing
 	 * an X turns it black and opens a card with the artist, title (up to two
 	 * lines), thumbnail, a Details link to the artwork and a Next button,
 	 * which moves on to the next X, round to the first after the last. It's
@@ -332,7 +332,7 @@
 				</div>
 			{/if}
 			{#if href}
-				<p class="mt-base">View <a {href} class="link-underline">Edition</a></p>
+				<p class="mt-base">View <a {href} class="link-underline">Exhibition</a></p>
 			{/if}
 		</div>
 	</section>

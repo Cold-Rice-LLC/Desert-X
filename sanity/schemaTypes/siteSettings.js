@@ -9,7 +9,7 @@ const menuItemLinkFields = linkTargetFields({types: ['internal', 'external', 'su
 export default defineType({
   name: 'siteSettings',
   type: 'document',
-  title: 'Site Settings',
+  title: 'Menu, Footer & SEO',
   fieldsets: [
     {
       name: 'metadata',
@@ -115,7 +115,7 @@ export default defineType({
       type: 'array',
       title: 'Links',
       description:
-        'The footer’s second column. The first lists each location, linking to its newest edition.',
+        'The footer’s second column. The first lists each location, linking to its newest exhibition.',
       fieldset: 'footer',
       of: [defineArrayMember({type: 'navLink'})],
     }),

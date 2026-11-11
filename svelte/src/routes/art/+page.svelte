@@ -18,11 +18,16 @@
 	const search = (event) =>
 		replaceQuery(currentPage.url, { page: null, q: event.currentTarget.value });
 
-	// A location and a year, one of each at a time; choosing the current
-	// one again clears it
+	// A location or a year, one at a time: choosing one clears the other,
+	// and choosing the current one again clears it
 	const option = (param, value, label) => {
 		const current = data[param] === String(value);
-		return { key: value, label, href: href({ [param]: current ? null : value }), current };
+		return {
+			key: value,
+			label,
+			href: href({ location: null, year: null, [param]: current ? null : value }),
+			current
+		};
 	};
 	let filters = $derived([
 		data.locations.map(({ slug, title }) => option('location', slug, title)),
@@ -38,16 +43,13 @@
 
 <div class="pt-page-top pb-page-bottom text-md">
 	<!-- On phones the intro is in the lead size and the search and filters
-	     in the title size, and the views switch from the nav (see +page.js).
-	     The filters' years only fit two columns in their half at that size
-	     on phones 400px wide and up, as the wireframes are, so they scale
-	     down with narrower ones. -->
+	     in the title size. -->
 	<header class="px-gutter text-lead tracking-tight md:text-md md:tracking-normal">
 		{#if data.landing?.intro}
 			<Portable value={data.landing.intro} />
 		{/if}
 
-		<nav aria-label="Artwork views" class="mt-line hidden uppercase md:block">
+		<nav aria-label="Artwork views" class="mt-line uppercase">
 			<Choice href={href({ view: null })} current={data.view === 'grid'}>Grid</Choice>
 			/
 			<Choice href={href({ view: 'list' })} current={data.view === 'list'}>List</Choice>

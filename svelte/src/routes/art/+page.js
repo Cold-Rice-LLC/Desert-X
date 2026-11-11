@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 import { artworkEntries, collator, searchEntries, sortEntries } from '$lib/art';
-import { pageParam, queryHref } from '$lib/url';
+import { pageParam } from '$lib/url';
 
 const PAGE_SIZE = 18;
 
@@ -12,8 +12,6 @@ const PAGE_SIZE = 18;
  * batches of 18 to show (see LoadMore).
  * The filters offer each location A–Z and each year newest first, of the
  * artworks there are. `total` is how many artworks match, all pages' worth.
- * On phones the nav switches to the other view (`navAction`), keeping the
- * search and filters.
  */
 export function load({ data, url }) {
 	const view = url.searchParams.get('view') === 'list' ? 'list' : 'grid';
@@ -63,10 +61,6 @@ export function load({ data, url }) {
 		page,
 		pageCount,
 		total,
-		entries: shown,
-		navAction: {
-			label: view === 'list' ? 'Grid' : 'List',
-			href: queryHref(url, { view: view === 'list' ? null : 'list', page: null })
-		}
+		entries: shown
 	};
 }

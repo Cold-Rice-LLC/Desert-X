@@ -5,7 +5,7 @@
 
 	/**
 	 * The head tags for search engines and shared links, from the page's
-	 * `seo` (see pageSeo), falling back to Site Settings (`defaults`). Titles
+	 * `seo` (see pageSeo), falling back to Menu, Footer & SEO (`defaults`). Titles
 	 * read "Page — DESERT X"; a page with no title of its own, like the
 	 * homepage, is the site's title alone. Descriptions are cut to about
 	 * 160 characters, at a word, and share images cropped to 1200 × 630.

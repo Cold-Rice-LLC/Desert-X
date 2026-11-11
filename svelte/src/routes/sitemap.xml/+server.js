@@ -5,7 +5,7 @@ import { client } from '$lib/sanity/client';
 const LANDINGS = ['/', '/art', '/news', '/visit'];
 
 // Where each document type lives, as in linkHref
-const PREFIXES = { page: '/', edition: '/editions/', artwork: '/art/', news: '/news/' };
+const PREFIXES = { page: '/', edition: '/exhibitions/', artwork: '/art/', news: '/news/' };
 
 const escape = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 

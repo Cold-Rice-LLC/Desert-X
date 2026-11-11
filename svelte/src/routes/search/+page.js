@@ -42,7 +42,7 @@ export function load({ data, url }) {
 			key: edition._id,
 			title: edition.title,
 			href: hrefOf(edition),
-			action: 'View edition'
+			action: 'View exhibition'
 		}));
 
 	// A page whose path a landing's route already takes (a page slugged
@@ -71,7 +71,7 @@ export function load({ data, url }) {
 		});
 
 	for (const [name, rows] of [
-		['Editions', editions],
+		['Exhibitions', editions],
 		['Pages', pages],
 		['News', news]
 	]) {

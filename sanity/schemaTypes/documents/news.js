@@ -53,8 +53,8 @@ export default defineType({
     defineField({
       name: 'edition',
       type: 'reference',
-      title: 'Edition',
-      description: 'Optional. Shows this in the News on the edition’s page.',
+      title: 'Exhibition',
+      description: 'Optional. Shows this in the News on the exhibition’s page.',
       to: [{type: 'edition'}],
       options: {disableNew: true},
     }),

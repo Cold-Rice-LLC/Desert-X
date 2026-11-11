@@ -66,7 +66,6 @@
 	{home}
 	{...nav}
 	stacked={page.data.navStacked}
-	action={page.data.navAction}
 	donateLink={linkHref(data.donateLink) === page.url.pathname ? null : data.donateLink}
 />
 

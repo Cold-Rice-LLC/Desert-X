@@ -5,7 +5,7 @@
 	/**
 	 * Search results under "25 Results / Clear", stacked on phones, the link
 	 * clearing the search (`clearHref`). From md up each group is a row
-	 * (see GroupedList): its name, an artist or Editions, Pages or News,
+	 * (see GroupedList): its name, an artist or Exhibitions, Pages or News,
 	 * and its rows beside it, each title across 6 columns with its link,
 	 * e.g. "View artwork", at the end, the whole row one link. Phones have
 	 * the rows as running text, an artwork's title in italics after its

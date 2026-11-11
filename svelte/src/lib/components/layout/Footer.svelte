@@ -4,7 +4,7 @@
 
 	/**
 	 * Site footer, on every page but the homepage. On phones it's search and
-	 * the two link columns (the locations, then Site Settings' links),
+	 * the two link columns (the locations, then Menu, Footer & SEO's links),
 	 * centred in the space after search. From md up, on the 12-column grid:
 	 * search in column 1, the link columns in columns 2 and 4, and the
 	 * text, copyright and credits across columns 6–12. Everything sits on
@@ -29,7 +29,7 @@
 		{#if footer.text}
 			<Portable value={footer.text} />
 		{/if}
-		<p>© Desert Biennale {new Date().getFullYear()}. DESERT X is a ® registered trademark.</p>
+		<p>© Desert Biennial {new Date().getFullYear()}. DESERT X is a ® registered trademark.</p>
 		{#if footer.credits}
 			<Portable value={footer.credits} />
 		{/if}

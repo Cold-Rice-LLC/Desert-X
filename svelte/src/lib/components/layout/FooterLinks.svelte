@@ -4,7 +4,7 @@
 
 	/**
 	 * Search, then the footer's two link columns (`links`: the locations,
-	 * then Site Settings' links), each centred, for a 12-column grid from md
+	 * then Menu, Footer & SEO's links), each centred, for a 12-column grid from md
 	 * up: search in column 1 and the columns centred on columns 2 and 4. On
 	 * phones they suit the grid the footer has there, or, `compact`, a
 	 * 12-column one, as the menu has them: search across 2 columns, the link

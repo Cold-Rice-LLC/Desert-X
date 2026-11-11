@@ -250,13 +250,13 @@ const PATHS = new Map([
 	['/dx/archive/tyre-nichols', '/art/originals'],
 	['/learn/news', '/news'],
 	['/learn/news/desert-x-2021-artists-announced', '/news/desert-x-2021-artists-announced'],
-	['/learn/news/desert-x-2021-dates-to-be-announced-soon', '/editions/california-2021'],
+	['/learn/news/desert-x-2021-dates-to-be-announced-soon', '/exhibitions/california-2021'],
 	['/learn/news/desert-x-2021-is-now-closed', '/news/desert-x-2021-is-now-closed'],
-	['/learn/news/desert-x-2021-opens-march-12', '/editions/california-2021'],
+	['/learn/news/desert-x-2021-opens-march-12', '/exhibitions/california-2021'],
 	['/learn/news/desert-x-2021-the-film', '/news/desert-x-2021-the-film'],
 	[
 		'/learn/news/desert-x-2021-the-film-nominated-for-los-angeles-emmy-award',
-		'/editions/california-2021'
+		'/exhibitions/california-2021'
 	],
 	[
 		'/learn/news/desert-x-2021-the-film-official-selection',
@@ -295,16 +295,16 @@ const PATHS = new Map([
 
 // Old edition folders under /dx/ to their edition pages
 const EDITIONS = new Map([
-	['desert-x-17', '/editions/california-2017'],
-	['desert-x-19', '/editions/california-2019'],
-	['desert-x-alula-2020', '/editions/alula-2020'],
-	['desert-x-21', '/editions/california-2021'],
-	['desert-x-alula-2022', '/editions/alula-2022'],
-	['dx-23', '/editions/california-2023'],
-	['dx24-alula', '/editions/alula-2024'],
-	['dx-25-coachella-valley', '/editions/california-2025'],
-	['dx-26-alula', '/editions/alula-2026'],
-	['dx-27-coachella-valley', '/editions/california-2027']
+	['desert-x-17', '/exhibitions/california-2017'],
+	['desert-x-19', '/exhibitions/california-2019'],
+	['desert-x-alula-2020', '/exhibitions/alula-2020'],
+	['desert-x-21', '/exhibitions/california-2021'],
+	['desert-x-alula-2022', '/exhibitions/alula-2022'],
+	['dx-23', '/exhibitions/california-2023'],
+	['dx24-alula', '/exhibitions/alula-2024'],
+	['dx-25-coachella-valley', '/exhibitions/california-2025'],
+	['dx-26-alula', '/exhibitions/alula-2026'],
+	['dx-27-coachella-valley', '/exhibitions/california-2027']
 ]);
 
 /**
@@ -322,6 +322,8 @@ export const redirectFor = (pathname) => {
 	if (exact) return exact;
 
 	const [, section, folder] = path.split('/');
+	// Editions were renamed exhibitions, /editions/<slug> with them
+	if (section === 'editions' && folder) return path.replace(/^\/editions/, '/exhibitions');
 	if (section === 'dx') {
 		if (!folder) return '/art';
 		if (folder === 'archive') return '/art';

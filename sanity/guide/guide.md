@@ -11,14 +11,14 @@ Last updated 10 November 2026.
 3. [Homepage](#3-homepage)
 4. [Landing pages: Art, News, Visit, Search](#4-landing-pages-art-news-visit-search)
 5. [Locations](#5-locations)
-6. [Editions](#6-editions)
+6. [Exhibitions](#6-exhibitions)
 7. [Artists](#7-artists)
 8. [Artworks](#8-artworks)
 9. [Spanish translations](#9-spanish-translations)
 10. [News and press](#10-news-and-press)
 11. [Pages](#11-pages)
 12. [Modules](#12-modules)
-13. [Site Settings: menu, footer and defaults](#13-site-settings-menu-footer-and-defaults)
+13. [Menu, Footer & SEO](#13-menu-footer--seo)
 14. [Images, video, alt text and captions](#14-images-video-alt-text-and-captions)
 15. [Search engines and sharing](#15-search-engines-and-sharing)
 16. [Why isn't it showing up?](#16-why-isnt-it-showing-up)
@@ -36,17 +36,17 @@ The Studio lives at `desert-x.sanity.studio`. Sign in with the Sanity account yo
 
 The Content list in **Structure** is arranged like this:
 
-| Item              | What it holds                                                                                     |
-| ----------------- | ------------------------------------------------------------------------------------------------- |
-| **Pages**         | The Homepage, the four landing pages (News, Art, Visit, Search) and every other page, e.g. About. |
-| **Locations**     | Each place Desert X happens, e.g. Coachella Valley, AlUla. Each has its own colours.              |
-| **Editions**      | One per exhibition: a location in a year, e.g. Coachella Valley 2025.                             |
-| **Artists**       | One per artist, linked from their artworks.                                                       |
-| **Artworks**      | One per work, belonging to an edition.                                                            |
-| **News**          | News articles, and press items that link out to an article elsewhere.                             |
-| **Site Settings** | The menu, footer, Donate link and the site-wide sharing defaults.                                 |
+| Item                   | What it holds                                                                                     |
+| ---------------------- | ------------------------------------------------------------------------------------------------- |
+| **Pages**              | The Homepage, the four landing pages (News, Art, Visit, Search) and every other page, e.g. About. |
+| **Locations**          | Each place Desert X happens, e.g. Coachella Valley, AlUla. Each has its own colours.              |
+| **Exhibitions**        | A location in a year, e.g. Coachella Valley 2025.                                                 |
+| **Artists**            | One per artist, linked from their artworks.                                                       |
+| **Artworks**           | One per work, belonging to an exhibition.                                                         |
+| **News**               | News articles, and press items that link out to an article elsewhere.                             |
+| **Menu, Footer & SEO** | The menu, footer, Donate link and the site-wide sharing defaults.                                 |
 
-The pieces connect in a chain: a **location** has **editions**, an edition has **artworks**, and an artwork has one or more **artists**. Open a location, edition or artist and you'll find a second tab beside the form, **Editions** or **Artworks**, listing everything connected to it, with a **New …** button that starts a new one already linked back. That's the quickest way to add, say, a new artwork to an edition.
+The pieces connect in a chain: a **location** has **exhibitions**, an exhibition has **artworks**, and an artwork has one or more **artists**. Open a location, exhibition or artist and you'll find a second tab beside the form, **Exhibitions** or **Artworks**, listing everything connected to it, with a **New …** button that starts a new one already linked back. That's the quickest way to add, say, a new artwork to an exhibition.
 
 ## 2. Things that work the same everywhere
 
@@ -56,7 +56,7 @@ Your changes save as a draft as you type, but nothing changes on the live site u
 
 A document that's never been published doesn't exist on the site at all: links to it, lists and the map leave it out.
 
-The Homepage, the landing pages and Site Settings are fixed documents. They can be edited and published, but not deleted or duplicated.
+The Homepage, the landing pages and Menu, Footer & SEO are fixed documents. They can be edited and published, but not deleted or duplicated.
 
 ### Title and Slug
 
@@ -68,13 +68,13 @@ Change a slug carefully once a page is live: the old address stops working, and 
 
 Wherever you can add a link (menu items, footer links, homepage slides, links inside text) you choose a **Link Type**:
 
-- **Internal** links to a page on the site: pick a page, edition, artwork, news article, landing page or location. Linking to a **location** goes to its newest edition, so the link stays current year to year.
+- **Internal** links to a page on the site: pick a page, exhibition, artwork, news article, landing page or location. Linking to a **location** goes to its newest exhibition, so the link stays current year to year.
 - **External** links to a full web address, which opens in a new tab. Links inside text also take `mailto:` and `tel:` addresses.
 - **None**, where offered, removes the link.
 
 ### Rich text
 
-Formatted text fields offer two paragraph styles, **Normal** and **Small** (for closing credits like "Generous support provided by…"), plus italics and links. There are no headings or bullet lists in rich text; use a module's Heading, or the Dropdowns or Schedule modules, for structure.
+Formatted text fields offer two paragraph styles, **Normal** and **Small** (for closing credits like "Generous support provided by…"; it shows smaller and grey in the editor), plus italics and links. There are no headings or bullet lists in rich text; use a module's Heading, or the Dropdowns or Schedule modules, for structure.
 
 ### Modules
 
@@ -96,7 +96,7 @@ Most documents end with a collapsed **SEO** section. Every field in it is option
 What else a slide shows depends on **Quick Links**, a switch at the top:
 
 - **Quick Links off:** each slide has a **Link** and a **Title**, shown at the bottom left and linking where the slide goes. Leave the Title empty to use the linked artwork's artist and title, or the linked page's title.
-- **Quick Links on:** the footer's links (from Site Settings) run along the bottom of the carousel, and each slide has a **Headline** centred over it instead, fading in as the slide arrives. Consecutive slides can carry one sentence across them.
+- **Quick Links on:** the footer's links (from Menu, Footer & SEO) run along the bottom of the carousel, and each slide has a **Headline** centred over it instead, fading in as the slide arrives. Consecutive slides can carry one sentence across them.
 
 ## 4. Landing pages: Art, News, Visit, Search
 
@@ -104,34 +104,34 @@ What else a slide shows depends on **Quick Links**, a switch at the top:
 
 - **Art** lists every artwork, grouped by artist. Its **Intro** shows above the list and grid.
 - **News** lists all news and press, newest first. Its **General Palette** is the four colours used for news tiles that have no location (see [section 10](#10-news-and-press)).
-- **Visit** shows its own **Modules** first: general visitor information. Then each edition that's on follows with its **Visit Info** and map (see [section 6](#6-editions)), then the latest news.
+- **Visit** shows its own **Modules** first: general visitor information. Then each exhibition that's on follows with its **Visit Info** and map (see [section 6](#6-exhibitions)), then the latest news.
 - **Search** has an **Intro** shown above the search field.
 
 ## 5. Locations
 
 **Locations** are the places Desert X happens. Each has a **Title**, a **Slug** and a **Palette** of exactly four colours. News tiles for that location mix the palette into a gradient.
 
-The footer's first column lists every location, each linking to its newest edition. A location has no page of its own: linking to one always goes to its newest edition.
+The footer's first column lists every location, each linking to its newest exhibition. A location has no page of its own: linking to one always goes to its newest exhibition.
 
-## 6. Editions
+## 6. Exhibitions
 
-**Editions** are the exhibitions. A new one is easiest to start from its location's **Editions** tab.
+**Exhibitions** are a location in a year, e.g. Coachella Valley 2025. A new one is easiest to start from its location's **Exhibitions** tab.
 
 | Field                        | What it does                                                                                                                                            |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Title**                    | E.g. Coachella Valley 2025.                                                                                                                             |
-| **Slug**                     | The location then the year, e.g. `california-2025`. The page is at `desertx.org/editions/california-2025`.                                              |
-| **Location**, **Year**       | Required. The newest year is the location's current edition.                                                                                            |
-| **Start Date**, **End Date** | When it's on. Shown on the page, and they decide when the edition appears on the Visit page.                                                            |
-| **Show on Visit Page From**  | Optional. Puts the edition on the Visit page ahead of its Start Date, e.g. to announce it. It still leaves after its End Date.                          |
-| **Images**                   | Shown at the top, cropped to 4:3. Two or more become a carousel. Leave empty to use the first image of each of the edition's artworks.                  |
+| **Slug**                     | The location then the year, e.g. `california-2025`. The page is at `desertx.org/exhibitions/california-2025`.                                           |
+| **Location**, **Year**       | Required. The newest year is the location's current exhibition.                                                                                         |
+| **Start Date**, **End Date** | When it's on. Shown on the page, and they decide when the exhibition appears on the Visit page.                                                         |
+| **Show on Visit Page From**  | Optional. Puts the exhibition on the Visit page ahead of its Start Date, e.g. to announce it. It still leaves after its End Date.                       |
+| **Images**                   | Shown at the top, cropped to 4:3. Two or more become a carousel. Leave empty to use the first image of each of the exhibition's artworks.               |
 | **Description**              | Shown under the dates.                                                                                                                                  |
 | **Map Text**                 | Shown under the exhibition map, e.g. a link to the app.                                                                                                 |
-| **Visit Info**               | Modules shown on the Visit page while the edition is on, above its map, e.g. Hours and Dates, Getting There and Accessibility as Dropdowns.             |
+| **Visit Info**               | Modules shown on the Visit page while the exhibition is on, above its map, e.g. Hours and Dates, Getting There and Accessibility as Dropdowns.          |
 | **Sponsor Groups**           | Panels of logos under the artworks, e.g. Premier Sponsors. Groups pair up side by side unless set to **Full Width**, which also makes the logos larger. |
 | **Sponsor Lists**            | Up to four titled columns of names under the logos, e.g. Galleries. One name per line; select a name and add a link to link it.                         |
 
-The edition's artworks list themselves on its page; you don't add them here. Its **Artworks** tab shows them. The **exhibition map** shows every artwork in the edition that has **Coordinates**.
+The exhibition's artworks list themselves on its page; you don't add them here. Its **Artworks** tab shows them. The **exhibition map** shows every artwork in the exhibition that has **Coordinates**.
 
 **Sponsor logos:** each logo needs a **Name** (read out by screen readers in place of the logo) and an image. Use an SVG or a transparent PNG, trimmed to the logo's edges. A white background is blended away, so a JPG with a white background will also work. **Link** is optional.
 
@@ -145,7 +145,7 @@ An artist's **Artworks** tab lists their works, with a button to start a new one
 
 ## 8. Artworks
 
-**Artworks** are the heart of the site: each has a page at `desertx.org/art/<slug>`, appears on the Art page and its edition's page, and on the exhibition map if it has coordinates.
+**Artworks** are the heart of the site: each has a page at `desertx.org/art/<slug>`, appears on the Art page and its exhibition's page, and on the exhibition map if it has coordinates.
 
 | Field             | What it does                                                                                                                                                                                                     |
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -155,7 +155,7 @@ An artist's **Artworks** tab lists their works, with a button to start a new one
 | **Artist Credit** | Optional. Replaces the artists' names on the page, e.g. Lauren Bon and Metabolic Studio.                                                                                                                         |
 | **Artist Info**   | Shown under the artist's name, line for line, e.g. `b. 1973, Chicago` then `Based in New York` on the next line.                                                                                                 |
 | **Spanish**       | Spanish versions of the title, artist info and some module text. See [section 9](#9-spanish-translations).                                                                                                       |
-| **Edition**       | The edition it was shown in.                                                                                                                                                                                     |
+| **Exhibition**    | The exhibition it was shown in.                                                                                                                                                                                  |
 | **Images**        | Shown at the top, cropped to 4:3. Two or more become a carousel.                                                                                                                                                 |
 | **Thumbnail**     | Optional. Shown on the map when the artwork is chosen, cropped to 4:3. Without one, the first image is used.                                                                                                     |
 | **Modules**       | The rest of the page: text, more images and video, interviews and so on. See [section 12](#12-modules).                                                                                                          |
@@ -181,7 +181,7 @@ Anything left empty shows in English, so a partial translation is fine. **EN / E
 - **News** is an article with its own page, at `desertx.org/news/<slug>`.
 - **Press** is a link out to coverage elsewhere. It has no page of its own; its tile opens the article in a new tab.
 
-Both kinds have a **Title**, a **Publish Date** (the listing is ordered by it, newest first) and an optional **Edition**. Linking an edition shows the item in the News on that edition's page.
+Both kinds have a **Title**, a **Publish Date** (the listing is ordered by it, newest first) and an optional **Exhibition**. Linking an exhibition shows the item in the News on that exhibition's page.
 
 **News articles** also have:
 
@@ -199,7 +199,7 @@ Both kinds have a **Title**, a **Publish Date** (the listing is ordered by it, n
 
 **Pages → All pages** holds every other page, e.g. About or Support. A page's address is its slug, e.g. `desertx.org/about`.
 
-A page is a **Title** and **Modules**. Pages can use every module, including three that only pages offer: **News**, **Donate** and **Newsletter Signup**. A new page isn't in the menu or footer until you add a link to it in [Site Settings](#13-site-settings-menu-footer-and-defaults).
+A page is a **Title** and **Modules**. Pages can use every module, including three that only pages offer: **News**, **Donate** and **Newsletter Signup**. A new page isn't in the menu or footer until you add a link to it in [Menu, Footer & SEO](#13-menu-footer--seo).
 
 ## 12. Modules
 
@@ -229,9 +229,9 @@ Choose a **Media Type**:
 
 Videos can have a **Poster** image, shown before they play. **Caption** is shown under the media, e.g. the artist, the title in italics and the year. For images and MP4s, leaving it empty uses the caption saved on the file in the Media library (see [section 14](#14-images-video-alt-text-and-captions)).
 
-## 13. Site Settings: menu, footer and defaults
+## 13. Menu, Footer & SEO
 
-**Site Settings** holds what appears on every page.
+**Menu, Footer & SEO** holds what appears on every page.
 
 **Donate Link** is the underlined link at the top right of the nav.
 
@@ -255,7 +255,7 @@ Drag an image onto any image field, or click **Select** to choose one already in
 
 ### Hotspot and crop
 
-Most images on the site are cropped to fit their space: 4:3 at the top of artworks and editions, the full window on the homepage, 1200 × 630 when shared. Click the crop icon on an image field to set the **hotspot**, the circle marking the part of the image that must stay in view. The crop rectangle trims the image everywhere it's used.
+Most images on the site are cropped to fit their space: 4:3 at the top of artworks and exhibitions, the full window on the homepage, 1200 × 630 when shared. Click the crop icon on an image field to set the **hotspot**, the circle marking the part of the image that must stay in view. The crop rectangle trims the image everywhere it's used.
 
 ### Alt text and captions
 
@@ -269,7 +269,7 @@ What search results and shared links show comes, for each page, from the first o
 
 1. the document's own **SEO** section: **Title** (keep it under about 60 characters; "— Desert X" is added after it), **Description** (under about 160 characters) and **Share Image**
 2. the page itself: its title, the start of its text, its first image
-3. **Site Settings → Metadata**: **Site Title**, **Meta Description** and **Share Image**
+3. **Menu, Footer & SEO → Metadata**: **Site Title**, **Meta Description** and **Share Image**
 
 So most pages need nothing filled in. Use SEO when the automatic version reads badly, e.g. a description that starts mid-sentence. Share images are cropped to 1200 × 630 around the hotspot.
 
@@ -279,13 +279,13 @@ Spanish versions of artworks share the English page's address in search results.
 
 - **Did you publish?** Drafts never show on the site. Check that the button at the bottom says **Published** rather than **Publish**.
 - **Give it a minute.** Published changes can take about a minute to appear. Reload the page.
-- **An artwork isn't on its edition's page:** check its **Edition** field.
-- **An artwork isn't on the map:** it needs **Coordinates** and an **Edition**.
-- **An edition isn't on the Visit page:** today needs to be between its Start and End Date, or after its Show on Visit Page From date. Check the dates are filled in.
+- **An artwork isn't on its exhibition's page:** check its **Exhibition** field.
+- **An artwork isn't on the map:** it needs **Coordinates** and an **Exhibition**.
+- **An exhibition isn't on the Visit page:** today needs to be between its Start and End Date, or after its Show on Visit Page From date. Check the dates are filled in.
 - **EN / ES isn't showing on an artwork:** at least one Spanish field needs to be filled in.
 - **A news tile is the wrong colour:** it takes its colours from its Location, or from the News page's General Palette when it has none.
 - **Card Text is cut off:** tiles stop after 13 lines; shorten it or remove blank lines.
-- **A new page isn't in the menu:** add it under Site Settings → Menu Items or the footer Links.
-- **A link goes to the wrong edition:** a link to a location always goes to its newest edition (highest Year). Link to the edition itself to pin it.
+- **A new page isn't in the menu:** add it under Menu, Footer & SEO → Menu Items or the footer Links.
+- **A link goes to the wrong exhibition:** a link to a location always goes to its newest exhibition (highest Year). Link to the exhibition itself to pin it.
 - **A slug change broke a link:** the old address no longer works. Change the slug back, or update the links pointing at it.
 - **Something can't be published:** a red error marker beside Publish lists what's missing. Click it to jump to the field.
