@@ -1,5 +1,4 @@
 <script>
-	import Logo from '$lib/components/icons/Logo.svelte';
 	import MenuButton from '$lib/components/layout/MenuButton.svelte';
 
 	/**
@@ -39,11 +38,13 @@
 	<MenuButton {...button} {onclick} />
 	{#if logo}
 		<!-- For the mouse: keyboards and screen readers have the hamburger
-		     beside it, which does the same. The height the font gives its own
-		     logo, which it draws for "[logo]" at 0.576em tall. -->
-		<button tabindex="-1" aria-hidden="true" class="text-menu" {onclick}>
-			<Logo class="h-[0.58em] w-auto" />
-		</button>
+		     beside it, which does the same. The font draws the logo for
+		     "[logo]", its X the same as the menu's "[x]". Its ink centres
+		     0.077em below the line's middle, so it's raised by that to centre
+		     on the hamburger. -->
+		<button tabindex="-1" aria-hidden="true" class="-translate-y-[0.077em] text-menu" {onclick}
+			>[logo]</button
+		>
 	{/if}
 	{@render children?.()}
 </svelte:element>

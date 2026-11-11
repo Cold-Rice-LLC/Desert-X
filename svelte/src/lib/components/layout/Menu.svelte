@@ -3,7 +3,6 @@
 	import { page } from '$app/state';
 	import AppLink from '$lib/components/AppLink.svelte';
 	import Footer from '$lib/components/layout/Footer.svelte';
-	import LogoMark from '$lib/components/icons/LogoMark.svelte';
 	import TopBar from '$lib/components/layout/TopBar.svelte';
 	import { linkHref } from '$lib/sanity/links';
 	import { ui } from '$lib/ui.svelte.js';
@@ -24,7 +23,8 @@
 	 * list. The rest are plain links. Below the breakpoint the menu text is
 	 * left off, and the site footer is at the bottom instead; the menu
 	 * scrolls if it runs past the screen. Sub-items linking to a location
-	 * get the Desert X mark; one that goes nowhere, like a location with no
+	 * get the Desert X mark, the font's "[x]", the size of the logo's X;
+	 * one that goes nowhere, like a location with no
 	 * exhibitions yet, shows faded as plain text. The top bar is the
 	 * homepage nav's (see TopBar), so the hamburger and logo stay put.
 	 * Always rendered, so it can fade on opacity alone: while closed it's
@@ -114,23 +114,16 @@
 							>
 								{#each item.subItems ?? [] as subItem (subItem._key)}
 									{#snippet label()}
-										{#if subItem.internal?._type === 'location'}
-											<LogoMark class="h-[0.5em] w-auto" />
-										{/if}
-										{subItem.label}
+										{#if subItem.internal?._type === 'location'}<span aria-hidden="true">[x]</span
+											>&nbsp;{/if}{subItem.label}
 									{/snippet}
 									<li>
 										{#if linkHref(subItem)}
-											<AppLink
-												link={subItem}
-												aria-current={current(subItem)}
-												class="flex items-center gap-[0.3em] link-fade"
-											>
+											<AppLink link={subItem} aria-current={current(subItem)} class="link-fade">
 												{@render label()}
 											</AppLink>
 										{:else}
-											<span class="flex items-center gap-[0.3em] opacity-30">{@render label()}</span
-											>
+											<span class="opacity-30">{@render label()}</span>
 										{/if}
 									</li>
 								{/each}
