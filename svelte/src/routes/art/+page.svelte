@@ -42,14 +42,14 @@
 <p role="status" class="sr-only">{data.total} {data.total === 1 ? 'artwork' : 'artworks'}</p>
 
 <div class="pt-page-top pb-page-bottom text-md">
-	<!-- On phones the intro is in the lead size and the search and filters
-	     in the title size. -->
+	<!-- On phones the intro is in the lead size and the views, search and
+	     filters in the title size. -->
 	<header class="px-gutter text-lead tracking-tight md:text-md md:tracking-normal">
 		{#if data.landing?.intro}
 			<Portable value={data.landing.intro} />
 		{/if}
 
-		<nav aria-label="Artwork views" class="mt-line uppercase">
+		<nav aria-label="Artwork views" class="mt-line text-title uppercase md:text-md">
 			<Choice href={href({ view: null })} current={data.view === 'grid'}>Grid</Choice>
 			/
 			<Choice href={href({ view: 'list' })} current={data.view === 'list'}>List</Choice>
@@ -68,7 +68,7 @@
 		allHref={href({ location: null, year: null })}
 		groups={filters}
 		active={!!(data.location || data.year)}
-		class="mt-2xl mb-md"
+		class="mt-lg mb-md md:mt-2xl"
 	/>
 
 	{#if !data.entries.length}
