@@ -155,6 +155,18 @@
 
 html {
 	font-size: 10px;
+
+	/* The page stays put while a dialog (the menu, a lightbox) is open,
+	   without its scrollbar, which macOS would otherwise flash at each
+	   attempt to scroll it; the pseudo-element for Safari before 18.2 */
+	&:has(dialog[open]) {
+		overflow: hidden;
+		scrollbar-width: none;
+
+		&::-webkit-scrollbar {
+			display: none;
+		}
+	}
 }
 
 /* Theme values that change with the viewport. 48rem is Tailwind's md, in
