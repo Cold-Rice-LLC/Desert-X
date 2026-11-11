@@ -6,8 +6,9 @@
 	/**
 	 * Optional centred heading over a list of bios. On phones they're a row,
 	 * as the news row is, a profile and a fifth of the next across, that
-	 * scrolls sideways without a scrollbar: each the 4:5 image and its text
-	 * under it, without the bio text. From md up each bio is a 12-column
+	 * scrolls sideways without a scrollbar: each the 4:5 image with its text
+	 * and then the bio text under it, the page scrolling down past the row
+	 * however long the longest runs. From md up each bio is a 12-column
 	 * row: the image, its text beside it, and the bio text across the right
 	 * half.
 	 */
@@ -24,7 +25,9 @@
 			class="-mb-xs scroll-row flex gap-base px-gutter pb-xs text-base md:mb-0 md:block md:space-y-base md:pb-0"
 		>
 			{#each module.bios as bio (bio._key)}
-				<li class="grid w-5/6 shrink-0 items-start gap-y-sm md:w-auto md:grid-cols-12">
+				<li
+					class="grid w-5/6 shrink-0 content-start items-start gap-y-sm md:w-auto md:grid-cols-12"
+				>
 					<ImageFrame
 						image={bio.image}
 						aspect={4 / 5}
@@ -35,7 +38,7 @@
 						<p class="whitespace-pre-line md:col-span-3 md:pl-[6rem]">{bio.imageText}</p>
 					{/if}
 					{#if bio.text}
-						<div class="hidden space-y-line md:col-span-6 md:block">
+						<div class="space-y-line md:col-span-6">
 							<Portable value={bio.text} />
 						</div>
 					{/if}
