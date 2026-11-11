@@ -19,8 +19,8 @@
 	--text-lead--line-height: 1;
 	--text-title: 3.5rem;
 	--text-title--line-height: 1;
-	/* Cards' text: news tiles and the exhibition map's card. The same at
-	   every width. */
+	/* Cards' text: news tiles, the exhibition map's card and the
+	   lightbox's Close. The same at every width. */
 	--text-card: 2.3rem;
 	--text-card--line-height: 1;
 	/* The site's biggest size: the menu's logo, links and text, and the

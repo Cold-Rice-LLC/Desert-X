@@ -29,6 +29,15 @@ export const coverSizes = (image) => {
 };
 
 /**
+ * `sizes` for an image as tall as the window, in its own shape: as wide as
+ * that height makes it.
+ */
+export const heightSizes = (image) => {
+	const size = croppedSize(image);
+	return size ? `calc(100svh * ${(size.width / size.height).toFixed(3)})` : '100vw';
+};
+
+/**
  * Swiper options for a carousel filling the screen, as the homepage's and
  * the lightbox's are: looping, moved by the arrow keys, and by a drag or
  * swipe over the halves too (see CarouselHalves), which isn't a click.
