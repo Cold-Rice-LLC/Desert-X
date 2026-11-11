@@ -11,13 +11,13 @@
 	 * A heading ("Exhibition Map" unless overridden) over a Mapbox map of an
 	 * edition's artworks with coordinates, each marked with the logo's X,
 	 * then `text` and, given `href`, a "View Exhibition" link. Choosing
-	 * an X turns it black and opens a card with the artist, title (up to two
-	 * lines), thumbnail, a Details link to the artwork and a Next button,
-	 * which moves on to the next X, round to the first after the last. It's
-	 * across the bottom on phones and in the top right from md up, scrolls
-	 * if it's taller than the map, and passes under the nav, as the map's
-	 * own layers do. The close button, Escape or a click on the map closes
-	 * it. The map is recoloured to the site's greys,
+	 * an X turns it black and opens a card, in the card size, with the artist,
+	 * title (up to two lines), a Close button, the thumbnail, a Details link
+	 * to the artwork and a Next button, which moves on to the next X, round
+	 * to the first after the last. It's across the bottom on phones and in
+	 * the top right from md up, scrolls if it's taller than the map, and
+	 * passes under the nav, as the map's own layers do. Close, Escape or a
+	 * click on the map closes it. The map is recoloured to the site's greys,
 	 * without labels, under a grid that moves with it. Mapbox only loads
 	 * once the map nears the viewport, which also keeps it off the server,
 	 * and the page has loaded (see afterLoad). The map is locked at every
@@ -288,7 +288,7 @@
 						bind:this={cardEl}
 						tabindex="-1"
 						aria-label="Installation"
-						class="absolute inset-x-sm bottom-sm z-10 max-h-[calc(100%-2*var(--spacing-sm))] space-y-line overflow-y-auto overscroll-contain bg-white p-sm font-mono [scrollbar-width:none] md:inset-x-auto md:top-base md:right-base md:bottom-auto md:max-h-[calc(100%-2*var(--spacing-base))] md:w-[40rem] md:p-base"
+						class="absolute inset-x-sm bottom-sm z-10 max-h-[calc(100%-2*var(--spacing-sm))] space-y-line overflow-y-auto overscroll-contain bg-white p-sm font-mono text-card [scrollbar-width:none] md:inset-x-auto md:top-base md:right-base md:bottom-auto md:max-h-[calc(100%-2*var(--spacing-base))] md:w-[40rem] md:p-base"
 					>
 						<div class="flex items-start justify-between gap-base">
 							<p>
@@ -298,10 +298,10 @@
 							<button
 								type="button"
 								aria-label="Close installation"
-								class="link-fade"
+								class="link-underline"
 								onclick={close}
 							>
-								X
+								Close
 							</button>
 						</div>
 						<!-- Keyed so a new artwork's image fades in on the grey frame, not
