@@ -1,6 +1,5 @@
 <script>
 	import { MediaQuery } from 'svelte/reactivity';
-	import Choice from '$lib/components/Choice.svelte';
 
 	/**
 	 * "All / Filter" over a list. From md up All goes to `allHref`,
@@ -13,7 +12,9 @@
 	 * From md up the options stay open while a filter is on (`active`). On
 	 * phones they close once one is chosen, and the choice, as it's written
 	 * rather than in capitals, takes All's place; choosing it again clears
-	 * it. While a filter is on, Filter is the one underlined, open or not.
+	 * it. While a filter is on, Filter is the one underlined, open or not;
+	 * the options never are, the current one included, which is only
+	 * marked as the current page.
 	 * `label` names the <nav>, and `class` goes on it.
 	 */
 	let { label, allHref, groups, active, class: className } = $props();
@@ -65,8 +66,11 @@
 	{#snippet items(options)}
 		{#each options as option (option.key)}
 			<li>
-				<Choice href={option.href} current={option.current} onclick={() => (openNarrow = false)}
-					>{option.label}</Choice
+				<a
+					href={option.href}
+					aria-current={option.current ? 'page' : undefined}
+					class="link-fade"
+					onclick={() => (openNarrow = false)}>{option.label}</a
 				>
 			</li>
 		{/each}
