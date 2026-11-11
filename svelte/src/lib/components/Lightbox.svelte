@@ -83,10 +83,17 @@
 		closed();
 	};
 
-	const open = (node) => node.showModal();
+	// Opened by whichever of the carousel and the row is shown, before it
+	// measures itself: their attachments run before the dialog's own would,
+	// and a closed dialog has no size, so every image would measure 0
+	const open = (node) => {
+		const parent = node.closest('dialog');
+		if (!parent.open) parent.showModal();
+	};
 
 	// Untracked, so moving doesn't build it again
 	const carousel = (node) => {
+		open(node);
 		if (!untrack(() => several)) return;
 		swiper = new Swiper(node, {
 			...fullScreenOptions(),
@@ -103,6 +110,7 @@
 	// as it scrolls, once a frame at most. Untracked, so scrolling doesn't
 	// send it back to the start
 	const row = (node) => {
+		open(node);
 		node.scrollLeft = node.children[untrack(() => active)]?.offsetLeft ?? 0;
 
 		let frame;
@@ -129,7 +137,6 @@
 
 <dialog
 	bind:this={dialog}
-	{@attach open}
 	oncancel={(event) => {
 		event.preventDefault();
 		close();
