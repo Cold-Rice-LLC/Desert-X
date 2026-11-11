@@ -17,15 +17,16 @@
 		return slug && [location, year].filter(Boolean).join(' ');
 	});
 
-	// For images with no alt text of their own, in English as the gallery
-	// is: "Bloom by Bahraini-Danish"
+	// For images with no alt text of their own, in English as the gallery's
+	// alt text is, though its captions follow the language: "Bloom by
+	// Bahraini-Danish"
 	let alt = $derived([data.artwork.title, data.artwork.credit].filter(Boolean).join(' by '));
 </script>
 
 <!-- Keyed, so moving to another artwork starts its carousel afresh -->
 {#key data.artwork._id}
 	{#if data.artwork.images?.length}
-		<Gallery images={data.artwork.images} {alt} />
+		<Gallery images={artwork.images} {alt} />
 	{/if}
 {/key}
 <Modules modules={artwork.modules} lang={spanish ? 'es' : undefined}>
@@ -61,8 +62,7 @@
 		<!-- Clear of the credit beside it from md up -->
 		<h1 class="md:pr-gutter">
 			<span class="italic">{artwork.title}</span>{#if exhibition},
-				<a href="/exhibitions/{data.artwork.edition.slug}" class="link-fade">{exhibition}</a
-				>{/if}
+				<a href="/exhibitions/{data.artwork.edition.slug}" class="link-fade">{exhibition}</a>{/if}
 		</h1>
 		{#if artwork.credit || artwork.artistInfo}
 			<p class="whitespace-pre-line">

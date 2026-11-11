@@ -1,4 +1,5 @@
 import { urlFor } from '$lib/sanity/client';
+import { richTextFields } from '$lib/sanity/links';
 
 /**
  * GROQ projection for an image field rendered by Image: the image itself
@@ -10,6 +11,17 @@ export const imageFields = `
 	"alt": asset->altText,
 	"width": asset->metadata.dimensions.width,
 	"height": asset->metadata.dimensions.height
+`;
+
+/**
+ * GROQ projection for an image in a Gallery: its key, imageFields, and
+ * its caption with its Spanish twin, their links resolved.
+ */
+export const galleryImageFields = `
+	_key,
+	${imageFields},
+	caption[]{ ${richTextFields} },
+	captionEs[]{ ${richTextFields} }
 `;
 
 // Widths offered in every srcset. Sanity's CDN resizes on request, so these

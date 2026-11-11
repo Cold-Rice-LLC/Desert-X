@@ -1,5 +1,5 @@
 import { artworkListFields } from '$lib/art';
-import { imageFields } from '$lib/sanity/images';
+import { galleryImageFields, imageFields } from '$lib/sanity/images';
 import { richTextFields } from '$lib/sanity/links';
 import { newsTileFields } from '$lib/sanity/news';
 
@@ -27,7 +27,7 @@ export const editionFields = `
 	startDate,
 	endDate,
 	"location": location->title,
-	images[]{ _key, ${imageFields} },
+	images[]{ ${galleryImageFields} },
 	description[]{ ${richTextFields} },
 	mapText[]{ ${richTextFields} },
 	sponsorGroups[]{

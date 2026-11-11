@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
 import { artworkCredit } from '$lib/art';
 import { client } from '$lib/sanity/client';
-import { imageFields } from '$lib/sanity/images';
+import { galleryImageFields } from '$lib/sanity/images';
 import { modulesFields } from '$lib/sanity/modules';
 import { moduleDescription, moduleTextField, pageSeo, seoFields } from '$lib/sanity/seo';
 import { hasSpanish, inSpanish, spanishModuleFields } from '$lib/sanity/spanish';
@@ -36,7 +36,7 @@ export async function load({ params, url, untrack }) {
 				},
 				artistInfo,
 				artistInfoEs,
-				images[]{ _key, ${imageFields} },
+				images[]{ ${galleryImageFields} },
 				modules[]{ ${modulesFields}, ${spanishModuleFields} },
 				${moduleTextField},
 				${seoFields}

@@ -1,4 +1,4 @@
-import {defineField} from 'sanity'
+import {defineArrayMember, defineField} from 'sanity'
 
 /**
  * Fields and helpers several types share.
@@ -102,3 +102,33 @@ export const spanishField = ({name, title, hidden, validation, description, ...f
 
 /** A count for previews: "1 bio", "3 bios". */
 export const countLabel = (count = 0, word) => `${count} ${count === 1 ? word : `${word}s`}`
+
+const galleryCaption = {
+  name: 'caption',
+  type: 'richText',
+  title: 'Caption',
+  description:
+    'Optional. Shown under the image in the carousel, e.g. the artist, the title in italics and the year.',
+}
+
+/**
+ * The Images at the top of an artwork or exhibition, each with an optional
+ * Caption (and its Spanish twin, on artworks). `description` says what
+ * shows without any.
+ */
+export const galleryImagesField = (description) =>
+  defineField({
+    name: 'images',
+    type: 'array',
+    title: 'Images',
+    description,
+    of: [
+      defineArrayMember({
+        type: 'image',
+        options: {hotspot: true},
+        fieldsets: [spanishFieldset],
+        fields: [defineField(galleryCaption), spanishField(galleryCaption)],
+      }),
+    ],
+    options: {layout: 'grid'},
+  })

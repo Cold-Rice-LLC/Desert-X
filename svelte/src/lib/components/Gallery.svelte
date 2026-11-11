@@ -7,6 +7,7 @@
 	import { loopOffset, numberedAlt } from '$lib/carousel';
 	import ImageFrame from '$lib/components/ImageFrame.svelte';
 	import Lightbox from '$lib/components/Lightbox.svelte';
+	import Portable from '$lib/components/Portable.svelte';
 
 	/**
 	 * Images at the top of an artwork or edition page, 4:3 across the middle
@@ -23,7 +24,9 @@
 	 * still swipe. Click the current image to see them all full screen (see
 	 * Lightbox), and come back to the one left on. Tabbing reaches Previous,
 	 * Full Screen and Next buttons, which only show while they have focus;
-	 * a single image is a button itself.
+	 * a single image is a button itself. An image's caption sits under it,
+	 * flush left, moving with its slide; from md up, with any captions, the
+	 * images leave a line of the caption size for them.
 	 *
 	 * The browser's lazy loading only looks again on scroll, not when a
 	 * slide moves into view, so the current slide and its neighbours are
@@ -41,6 +44,8 @@
 
 	// Two would show the same image on both sides
 	let loop = $derived(images.length > 2);
+
+	let captioned = $derived(images.some((image) => image.caption?.length));
 
 	let slides = $derived(
 		(images.length === 3 ? [0, 1] : [0]).flatMap((copy) =>
@@ -68,7 +73,10 @@
 
 	const sizes = '(width >= 768px) calc((100vw - 50px) * 3 / 4), calc((100vw - 50px) * 5 / 6)';
 	// The section's space above and height, whichever way the images show
-	const section = 'gallery mt-sm md:mt-0 md:h-[max(60rem,calc(100svh-var(--spacing-nav)))]';
+	let section = $derived([
+		'gallery mt-sm md:mt-0 md:h-[max(60rem,calc(100svh-var(--spacing-nav)))]',
+		captioned && 'captioned'
+	]);
 
 	const carousel = (node) => {
 		swiper = new Swiper(node, {
@@ -102,28 +110,43 @@
 	</button>
 {/snippet}
 
+{#snippet caption(value)}
+	{#if value?.length}
+		<!-- Each place this is rendered is straight inside a figure -->
+		<!-- svelte-ignore a11y_figcaption_parent -->
+		<figcaption class="mt-xs text-base">
+			<Portable {value} />
+		</figcaption>
+	{/if}
+{/snippet}
+
 {#if images.length > 1}
 	<!-- Swiper's own auto side margins would shrink it to its content in the
 	     body's flex column, so it would start at no width and grow as its
 	     images load: w-full keeps it full width -->
-	<div class={['swiper w-full', section]} {@attach carousel}>
+	<div class={['swiper carousel w-full', section]} {@attach carousel}>
 		{@render step('Previous', 'Previous image', 'left-edge -translate-y-1/2', () =>
 			swiper.slidePrev()
 		)}
 		{@render step('Full Screen', undefined, 'left-1/2 -translate-1/2', openLightbox)}
 		{@render step('Next', 'Next image', 'right-edge -translate-y-1/2', () => swiper.slideNext())}
-		<div class="swiper-wrapper items-center">
+		<div class="swiper-wrapper track">
 			{#each slides as { image, alt, key }, index (key)}
 				<!-- The arrow keys move it too (Swiper's Keyboard module) -->
-				<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-				<div
+				<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions -->
+				<figure
 					class={[
 						'swiper-slide slide',
 						offset(index) < 0 && 'cursor-w-resize',
 						offset(index) === 0 && 'cursor-zoom-in',
 						offset(index) > 0 && 'cursor-e-resize'
 					]}
-					onclick={() => (offset(index) === 0 ? openLightbox() : swiper.slideToLoop(index))}
+					onclick={(event) => {
+						// A link in the caption only follows the link
+						if (event.target.closest('a')) return;
+						if (offset(index) === 0) openLightbox();
+						else swiper.slideToLoop(index);
+					}}
 				>
 					<ImageFrame
 						{image}
@@ -133,27 +156,31 @@
 						loading={Math.abs(offset(index)) <= 1 ? 'eager' : 'lazy'}
 						fetchpriority={offset(index) === 0 ? 'high' : 'low'}
 					/>
-				</div>
+					{@render caption(image.caption)}
+				</figure>
 			{/each}
 		</div>
 	</div>
 {:else}
 	<div class={['flex items-center justify-center', section]}>
-		<button
-			type="button"
-			aria-label="Full screen"
-			class="w-(--image) cursor-zoom-in"
-			onclick={openLightbox}
-		>
-			<ImageFrame
-				image={images[0]}
-				aspect={4 / 3}
-				{sizes}
-				{alt}
-				loading="eager"
-				fetchpriority="high"
-			/>
-		</button>
+		<figure class="w-(--image)">
+			<button
+				type="button"
+				aria-label="Full screen"
+				class="w-full cursor-zoom-in"
+				onclick={openLightbox}
+			>
+				<ImageFrame
+					image={images[0]}
+					aspect={4 / 3}
+					{sizes}
+					{alt}
+					loading="eager"
+					fetchpriority="high"
+				/>
+			</button>
+			{@render caption(images[0].caption)}
+		</figure>
 	</div>
 {/if}
 
@@ -172,22 +199,42 @@
 <style>
 	/* Percentages are of the gallery's width, wherever these are used. An
 	   image is 20 columns on phones, and from md up 18, or as wide as fits
-	   the section's height at 4:3, less base space above and below. */
+	   the section's height at 4:3, less base space above and below, and a
+	   caption's line under it if any image has a caption. */
 	.gallery {
+		/* A length, not 0, as calc() can't subtract a plain number */
+		--caption: 0rem;
 		--column: calc((100% - 2 * var(--spacing-edge)) / 24);
 		--image: calc(var(--column) * 20);
 
 		@media (width >= 48rem) {
 			--image: min(
 				var(--column) * 18,
-				(max(60rem, 100svh - var(--spacing-nav)) - 2 * var(--spacing-base)) * 4 / 3
+				(max(60rem, 100svh - var(--spacing-nav)) - 2 * var(--spacing-base) - var(--caption)) * 4 / 3
 			);
 		}
 	}
 
+	/* The caption's margin and one line at its size, line-height 1 */
+	.captioned {
+		--caption: calc(var(--spacing-xs) + var(--text-base));
+	}
+
+	/* The track of slides is as tall as its tallest, centred in the
+	   section, so images line up along the top whatever their captions.
+	   Scoped to outrank Swiper's own display and height. */
+	.carousel {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	.track {
+		height: auto;
+	}
+
 	/* Each slide is an image plus half a column either side, so slides sit
-	   a column apart. Its own height, not Swiper's full one, so the wrapper
-	   can centre it. */
+	   a column apart, as tall as the track. */
 	.slide {
 		height: auto;
 		width: calc(var(--image) + var(--column));

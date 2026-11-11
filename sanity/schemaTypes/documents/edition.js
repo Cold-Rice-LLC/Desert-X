@@ -1,7 +1,7 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {CalendarIcon} from '@sanity/icons'
 import {moduleMembers} from '../modules'
-import {countLabel, seoField, titleSlugFields} from '../objects/fields'
+import {countLabel, galleryImagesField, seoField, titleSlugFields} from '../objects/fields'
 import {blocksToText} from '../objects/richText'
 
 export default defineType({
@@ -58,15 +58,9 @@ export default defineType({
           )
           .warning(),
     }),
-    defineField({
-      name: 'images',
-      type: 'array',
-      title: 'Images',
-      description:
-        'Shown at the top, cropped to 4:3. Two or more become a carousel. Leave empty to show the first image of each artwork in the exhibition.',
-      of: [defineArrayMember({type: 'image', options: {hotspot: true}})],
-      options: {layout: 'grid'},
-    }),
+    galleryImagesField(
+      'Shown at the top, cropped to 4:3. Two or more become a carousel. Leave empty to show the first image of each artwork in the exhibition.',
+    ),
     defineField({
       name: 'description',
       type: 'richText',

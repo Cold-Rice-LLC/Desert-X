@@ -1,7 +1,8 @@
-import {defineArrayMember, defineField, defineType} from 'sanity'
+import {defineField, defineType} from 'sanity'
 import {ImageIcon} from '@sanity/icons'
 import {moduleMembers} from '../modules'
 import {
+  galleryImagesField,
   modulesField,
   seoField,
   spanishField,
@@ -53,14 +54,7 @@ export default defineType({
       title: 'Exhibition',
       to: [{type: 'edition'}],
     }),
-    defineField({
-      name: 'images',
-      type: 'array',
-      title: 'Images',
-      description: 'Shown at the top, cropped to 4:3. Two or more become a carousel.',
-      of: [defineArrayMember({type: 'image', options: {hotspot: true}})],
-      options: {layout: 'grid'},
-    }),
+    galleryImagesField('Shown at the top, cropped to 4:3. Two or more become a carousel.'),
     defineField({
       name: 'thumbnail',
       type: 'image',
