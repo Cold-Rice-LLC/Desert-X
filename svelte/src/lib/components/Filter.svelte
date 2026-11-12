@@ -1,58 +1,38 @@
 <script>
-	import { MediaQuery } from 'svelte/reactivity';
-
 	/**
-	 * "All / Filter" over a list. From md up All goes to `allHref`,
-	 * clearing the filter; on phones it only says what's shown, All or the
-	 * choice. Filter shows two `groups` of options as links, each `{ key,
-	 * label, href, current }`, one current at most: in one row from md up,
-	 * and on phones a line each, the first down the left half of the page
-	 * and the second down the right, as the News landing's General and
-	 * locations, or the Art landing's locations and years.
-	 * From md up the options stay open while a filter is on (`active`). On
-	 * phones they close once one is chosen, and the choice, as it's written
-	 * rather than in capitals, takes All's place; choosing it again clears
-	 * it. Filter is underlined while they're open or a filter is on; All
-	 * and the options never are, the current option included, which is
-	 * only marked as the current page.
+	 * "All / Filter" over a list, where All says what's shown: All, or the
+	 * choice, as it's written rather than in capitals. Filter opens two
+	 * `groups` of options as links, each `{ key, label, href, current }`,
+	 * one current at most, led by an All that goes to `allHref`, clearing
+	 * the filter (current while none is on): in one row from md up, and on
+	 * phones a line each, the first down the left half of the page and the
+	 * second down the right, as the News landing's General and locations,
+	 * or the Art landing's locations and years. They close once one is
+	 * chosen; choosing the current one again clears it.
+	 * Filter is underlined while they're open or a filter is on (`active`);
+	 * the options never are, the current one included, which is only
+	 * marked as the current page.
 	 * `label` names the <nav>, and `class` goes on it.
 	 */
 	let { label, allHref, groups, active, class: className } = $props();
 
-	// Open or not on phones and from md up apart, so each renders right
-	// from the server; only where they start, as the visitor opens and
-	// closes them from there
-	// svelte-ignore state_referenced_locally
-	let openWide = $state(active);
-	let openNarrow = $state(false);
-	const wide = new MediaQuery('width >= 48rem');
+	let open = $state(false);
 
 	let selected = $derived(groups.flat().find((option) => option.current));
-
-	const toggle = () => {
-		if (wide.current) openWide = !openWide;
-		else openNarrow = !openNarrow;
-	};
+	let all = $derived({ key: 'all', label: 'All', href: allHref, current: !selected });
 
 	const optionsId = $props.id();
 </script>
 
 <nav aria-label={label} class={['space-y-line px-gutter text-title md:text-md', className]}>
 	<p class="uppercase">
-		<!-- On phones only a record of what's shown, as the options clear it -->
-		<span class={['md:hidden', selected && 'normal-case']}>
-			{selected?.label ?? 'All'}
-		</span>
-		<a href={allHref} class="link-fade max-md:hidden" onclick={() => (openWide = false)}>All</a>
+		<span class={[selected && 'normal-case']}>{selected?.label ?? 'All'}</span>
 		/
 		<button
-			class={[
-				openNarrow || active ? 'max-md:link-current' : 'max-md:link-fade',
-				openWide || active ? 'md:link-current' : 'md:link-fade'
-			]}
-			aria-expanded={wide.current ? openWide : openNarrow}
+			class={open || active ? 'link-current' : 'link-fade'}
+			aria-expanded={open}
 			aria-controls={optionsId}
-			onclick={toggle}
+			onclick={() => (open = !open)}
 		>
 			Filter
 		</button>
@@ -64,22 +44,15 @@
 					href={option.href}
 					aria-current={option.current ? 'page' : undefined}
 					class="link-fade"
-					onclick={() => (openNarrow = false)}>{option.label}</a
+					onclick={() => (open = false)}>{option.label}</a
 				>
 			</li>
 		{/each}
 	{/snippet}
-	{#if openWide || openNarrow}
+	{#if open}
 		<!-- From md up the lists give way, so their items share one row -->
-		<div
-			id={optionsId}
-			class={[
-				'grid grid-cols-2',
-				!openNarrow && 'max-md:hidden',
-				openWide ? 'md:flex md:flex-wrap md:gap-x-[0.45em]' : 'md:hidden'
-			]}
-		>
-			<ul class="md:contents">{@render items(groups[0])}</ul>
+		<div id={optionsId} class="grid grid-cols-2 md:flex md:flex-wrap md:gap-x-[0.45em]">
+			<ul class="md:contents">{@render items([all, ...groups[0]])}</ul>
 			<ul class="md:contents">{@render items(groups[1])}</ul>
 		</div>
 	{/if}
