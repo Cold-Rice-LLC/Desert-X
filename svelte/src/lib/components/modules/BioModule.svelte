@@ -11,6 +11,8 @@
 	 * however long the longest runs. From md up each bio is a 12-column
 	 * row: the image, its text beside it, and the bio text across the right
 	 * half.
+	 * A lone bio on phones has nothing to scroll to, so it takes the full
+	 * width, its image the usual size but centred.
 	 */
 	let { module } = $props();
 </script>
@@ -26,13 +28,13 @@
 		>
 			{#each module.bios as bio (bio._key)}
 				<li
-					class="grid w-5/6 shrink-0 content-start items-start gap-y-sm md:w-auto md:grid-cols-12"
+					class="group/bio grid w-5/6 shrink-0 content-start items-start gap-y-sm only:w-full md:w-auto md:grid-cols-12"
 				>
 					<ImageFrame
 						image={bio.image}
 						aspect={4 / 5}
 						sizes="(width >= 768px) calc((100vw - 156px) / 4), calc((100vw - 50px) * 5 / 6)"
-						class="md:col-span-3"
+						class="group-only/bio:w-5/6 group-only/bio:justify-self-center md:col-span-3 md:group-only/bio:w-auto md:group-only/bio:justify-self-stretch"
 					/>
 					{#if bio.imageText}
 						<p class="whitespace-pre-line md:col-span-3 md:pl-[6rem]">{bio.imageText}</p>
