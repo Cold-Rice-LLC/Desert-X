@@ -14,7 +14,7 @@
 	 * X turns it black and opens a card, in a news tile's text size, with
 	 * the artist, title (up to two lines), a Close button, the thumbnail, a
 	 * Details link to the artwork and a Next button, which moves on to the
-	 * next X, round to the first after the last. It's across the top on phones and in
+	 * next X, round to the first after the last. It's across the middle on phones and in
 	 * the top right from md up, scrolls if it's taller than the map, and
 	 * passes under the nav, as the map's own layers do. Close, Escape or a
 	 * click on the map closes it. The map is recoloured to the site's greys,
@@ -276,7 +276,7 @@
 		<div class="mt-line px-gutter">
 			<div
 				bind:this={frameEl}
-				class="relative isolate h-[60vh] overflow-hidden bg-grey-2 md:h-[80vh]"
+				class="relative isolate h-[72vh] overflow-hidden bg-grey-2 md:h-[80vh]"
 			>
 				<!-- Mapbox's own CSS makes this position: relative, so it fills by size instead -->
 				<div bind:this={mapEl} class="size-full"></div>
@@ -286,7 +286,7 @@
 						bind:this={cardEl}
 						tabindex="-1"
 						aria-label="Installation"
-						class="absolute inset-x-sm top-sm z-10 max-h-[calc(100%-2*var(--spacing-sm))] space-y-line overflow-y-auto overscroll-contain bg-white p-sm font-mono text-tile [scrollbar-width:none] md:inset-x-auto md:top-base md:right-base md:max-h-[calc(100%-2*var(--spacing-base))] md:w-[40rem] md:p-base"
+						class="absolute inset-sm z-10 my-auto h-fit max-h-[calc(100%-2*var(--spacing-sm))] space-y-line overflow-y-auto overscroll-contain bg-white p-sm font-mono text-tile [scrollbar-width:none] md:inset-x-auto md:top-base md:right-base md:bottom-auto md:my-0 md:max-h-[calc(100%-2*var(--spacing-base))] md:w-[40rem] md:p-base"
 					>
 						<!-- The artist and title take what Close leaves, breaking a word
 						     too long for it rather than pushing Close off the card -->
