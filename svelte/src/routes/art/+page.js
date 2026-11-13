@@ -40,8 +40,7 @@ export function load({ data, url }) {
 
 	const pageCount = Math.max(1, Math.ceil(entries.length / PAGE_SIZE));
 	if (view === 'grid' && page > pageCount) error(404, 'Not found');
-	// Artworks, not tiles: one by two artists has a tile under each
-	const total = new Set(entries.map(({ artwork }) => artwork._id)).size;
+	const total = entries.length;
 	const shown = view === 'grid' ? entries.slice(0, page * PAGE_SIZE) : entries;
 
 	return {

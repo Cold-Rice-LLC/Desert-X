@@ -5,8 +5,7 @@
 	 * Artwork tiles, one across on phones, 5 of 6 columns wide and centred,
 	 * and three from md up between the gutters: the first image at
 	 * 4:3, then in the smaller text the artist, the title in italics cut to
-	 * one line, and the edition's year and location. An artwork by two
-	 * artists has a tile under each. With `eager`, for a grid at the top of
+	 * one line, and the edition's year and location. With `eager`, for a grid at the top of
 	 * its page, the first tile's image loads straight away, ahead of the
 	 * rest; on phones the next ones are below the fold, and would compete.
 	 * With `edition`, for an edition's own artworks, there are two across
