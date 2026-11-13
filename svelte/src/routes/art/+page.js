@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { artworkEntries, collator, searchEntries, sortEntries } from '$lib/art';
+import { artLandingContext, artLandingEntries, collator } from '$lib/art';
 import { pageParam } from '$lib/url';
 
 const PAGE_SIZE = 18;
@@ -12,6 +12,7 @@ const PAGE_SIZE = 18;
  * batches of 18 to show (see LoadMore).
  * The filters offer each location A–Z and each year newest first, of the
  * artworks there are. `total` is how many artworks match, all pages' worth.
+ * `context` is the query the artworks' links carry (see artLandingContext).
  */
 export function load({ data, url }) {
 	const view = url.searchParams.get('view') === 'list' ? 'list' : 'grid';
@@ -35,14 +36,7 @@ export function load({ data, url }) {
 		(a, b) => b - a
 	);
 
-	const filtered = artworks.filter(
-		(artwork) =>
-			(!location || artwork.locationSlug === location) && (!year || String(artwork.year) === year)
-	);
-	const entries = sortEntries(
-		searchEntries(artworkEntries(filtered), query, { details: true }),
-		'year'
-	);
+	const entries = artLandingEntries(artworks, { location, year, query });
 
 	const pageCount = Math.max(1, Math.ceil(entries.length / PAGE_SIZE));
 	if (view === 'grid' && page > pageCount) error(404, 'Not found');
@@ -61,6 +55,7 @@ export function load({ data, url }) {
 		page,
 		pageCount,
 		total,
+		context: artLandingContext({ location, year, query }),
 		entries: shown
 	};
 }

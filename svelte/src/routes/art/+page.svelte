@@ -74,9 +74,9 @@
 	{#if !data.entries.length}
 		<p class="px-gutter">No artworks found.</p>
 	{:else if data.view === 'list'}
-		<ArtList entries={data.entries} />
+		<ArtList entries={data.entries} context={data.context} />
 	{:else}
-		<ArtGrid entries={data.entries} eager />
+		<ArtGrid entries={data.entries} context={data.context} eager />
 		<LoadMore page={data.page} pageCount={data.pageCount} class="mt-md" />
 	{/if}
 </div>

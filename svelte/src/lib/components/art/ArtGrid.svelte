@@ -11,8 +11,9 @@
 	 * rest; on phones the next ones are below the fold, and would compete.
 	 * With `edition`, for an edition's own artworks, there are two across
 	 * from md up, with just the artist and title, in the medium size.
+	 * `context` is a query each link carries (see artLandingContext).
 	 */
-	let { entries, eager = false, edition = false } = $props();
+	let { entries, eager = false, edition = false, context = '' } = $props();
 
 	let sizes = $derived(
 		edition
@@ -29,7 +30,7 @@
 >
 	{#each entries as { artwork, artistId, name }, index (`${artwork._id}-${artistId}`)}
 		<li>
-			<a href="/art/{artwork.slug}" class="block space-y-xs">
+			<a href="/art/{artwork.slug}{context}" class="block space-y-xs">
 				<ImageFrame
 					image={artwork.image}
 					aspect={4 / 3}

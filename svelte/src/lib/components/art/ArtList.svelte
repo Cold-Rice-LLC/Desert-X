@@ -16,8 +16,10 @@
 	 * Name starts with (# for anything but a letter), in the lead size: the
 	 * artist across half the grid, then the location across 4 columns and
 	 * the year at the right edge.
+	 *
+	 * `context` is a query each link carries (see artLandingContext).
 	 */
-	let { entries } = $props();
+	let { entries, context = '' } = $props();
 
 	// Sorted entries under a heading per run with the same `heading`, each
 	// section's grouped by artist
@@ -53,7 +55,7 @@
 						{#each items as artwork, index (artwork._id)}
 							<li>
 								<a
-									href="/art/{artwork.slug}"
+									href="/art/{artwork.slug}{context}"
 									aria-label="{artwork.title} by {name}, {[artwork.location, artwork.year]
 										.filter(Boolean)
 										.join(' ')}"

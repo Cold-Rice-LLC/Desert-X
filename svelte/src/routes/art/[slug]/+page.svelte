@@ -3,6 +3,8 @@
 	import Gallery from '$lib/components/Gallery.svelte';
 	import Modules from '$lib/components/modules/Modules.svelte';
 	import { page } from '$app/state';
+	import { artworkCredit } from '$lib/art';
+	import { queryHref } from '$lib/url';
 
 	let { data } = $props();
 
@@ -21,6 +23,15 @@
 	// alt text is, though its captions follow the language: "Bloom by
 	// Bahraini-Danish"
 	let alt = $derived([data.artwork.title, data.artwork.credit].filter(Boolean).join(' by '));
+
+	// Previous and Next keep the query, so they stay among the same
+	// artworks (see the load) and in the same language
+	const neighbourLink = (artwork) => ({
+		href: `/art/${artwork.slug}${page.url.search}`,
+		name: [artwork.title, artworkCredit(artwork)].filter(Boolean).join(' by ')
+	});
+	let previous = $derived(data.neighbours && neighbourLink(data.neighbours.previous));
+	let next = $derived(data.neighbours && neighbourLink(data.neighbours.next));
 </script>
 
 <!-- Keyed, so moving to another artwork starts its carousel afresh -->
@@ -44,7 +55,7 @@
 			>
 				<Choice
 					current={!spanish}
-					href={page.url.pathname}
+					href={queryHref(page.url, { lang: null })}
 					hreflang="en"
 					lang="en"
 					aria-label="English">EN</Choice
@@ -52,7 +63,7 @@
 				/
 				<Choice
 					current={Boolean(spanish)}
-					href="?lang=es"
+					href={queryHref(page.url, { lang: 'es' })}
 					hreflang="es"
 					lang="es"
 					aria-label="Español">ES</Choice
@@ -70,4 +81,20 @@
 			</p>
 		{/if}
 	</header>
+
+	{#snippet footer()}
+		{#if previous && next}
+			<nav aria-label="Artworks" class="flex justify-between gap-base px-module text-title md:text-md">
+				<a
+					href={previous.href}
+					rel="prev"
+					aria-label="Previous: {previous.name}"
+					class="link-underline">Prev Art</a
+				>
+				<a href={next.href} rel="next" aria-label="Next: {next.name}" class="link-underline"
+					>Next Art</a
+				>
+			</nav>
+		{/if}
+	{/snippet}
 </Modules>

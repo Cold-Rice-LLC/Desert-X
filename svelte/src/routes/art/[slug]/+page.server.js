@@ -1,5 +1,12 @@
 import { error } from '@sveltejs/kit';
-import { artworkCredit } from '$lib/art';
+import {
+	artLandingEntries,
+	artworkCredit,
+	artworkEntries,
+	artworkEntryFields,
+	neighbours,
+	sortEntries
+} from '$lib/art';
 import { client } from '$lib/sanity/client';
 import { galleryImageFields } from '$lib/sanity/images';
 import { modulesFields } from '$lib/sanity/modules';
@@ -19,9 +26,16 @@ const SPANISH_FIELDS = ['title', 'artistInfo'];
  * artist info) and its first image; to search engines it's a
  * VisualArtwork, all in English. With any Spanish, it also comes in
  * Spanish (`spanish`), for the page's EN / ES (see $lib/sanity/spanish).
+ *
+ * `neighbours` are the artworks before and after it, for its Previous
+ * and Next: reached from the Art landing (`?from=art`, see
+ * artLandingContext), among what the landing showed, with its filters and
+ * search, newest first; otherwise among its own edition's, by artist, as
+ * the exhibition page lists them.
  */
 export async function load({ params, url, untrack }) {
-	const { artwork, landingTitle } = await client.fetch(
+	const fromArt = url.searchParams.get('from') === 'art';
+	const { artwork, landingTitle, sequence } = await client.fetch(
 		`{
 			"artwork": *[_type == "artwork" && slug.current == $slug][0]{
 				_id,
@@ -41,14 +55,31 @@ export async function load({ params, url, untrack }) {
 				${moduleTextField},
 				${seoFields}
 			},
-			"landingTitle": *[_id == "artLanding"][0].title
+			"landingTitle": *[_id == "artLanding"][0].title,
+			"sequence": *[
+				_type == "artwork" && defined(slug.current) && ($fromArt || (
+					defined(edition) &&
+					edition._ref == *[_type == "artwork" && slug.current == $slug][0].edition._ref
+				))
+			]{
+				${artworkEntryFields},
+				"location": edition->location->title,
+				"locationSlug": edition->location->slug.current
+			}
 		}`,
-		{ slug: params.slug }
+		{ slug: params.slug, fromArt }
 	);
 
 	if (!artwork) error(404, 'Not found');
 
 	const credit = artworkCredit(artwork);
+	const entries = fromArt
+		? artLandingEntries(sequence, {
+				location: url.searchParams.get('location'),
+				year: url.searchParams.get('year'),
+				query: url.searchParams.get('q') ?? ''
+			})
+		: sortEntries(artworkEntries(sequence));
 	const description = moduleDescription(artwork) || artwork.artistInfo;
 
 	return {
@@ -57,6 +88,7 @@ export async function load({ params, url, untrack }) {
 		navTitle: landingTitle || 'Art',
 		navHref: '/art',
 		navWork: artwork.title,
+		neighbours: neighbours(entries, artwork._id),
 		seo: pageSeo(artwork.seo, {
 			title: credit ? `${credit}, ${artwork.title}` : artwork.title,
 			description,

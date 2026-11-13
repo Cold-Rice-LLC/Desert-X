@@ -16,13 +16,22 @@
 	 * page can slot its own sections in among them (the Visit page's maps),
 	 * or are skipped. Modules sit an xl step apart, or two blank lines between
 	 * consecutive text modules. `children` comes first, spaced like a module
-	 * (a news article's title). `narrow` runs text-led modules from column 2
+	 * (a news article's title), and `footer` last, spaced like one too (an
+	 * artwork's Previous and Next). `narrow` runs text-led modules from column 2
 	 * to 11 of the 12-column grid from md up, as news does.
 	 * `nested` is a run inside another's, from its `custom` snippet, spaced
 	 * as one module there, without the page's space above and below (the
 	 * Visit page's editions); other attributes go on its element.
 	 */
-	let { modules, narrow = false, nested = false, children, custom, ...attributes } = $props();
+	let {
+		modules,
+		narrow = false,
+		nested = false,
+		children,
+		custom,
+		footer,
+		...attributes
+	} = $props();
 
 	const components = {
 		textModule: TextModule,
@@ -52,6 +61,7 @@
 			{@render custom?.(module)}
 		{/if}
 	{/each}
+	{@render footer?.()}
 </div>
 
 <style>

@@ -140,3 +140,45 @@ export const groupByArtist = (entries) =>
 		else groups.push({ artistId, name, items: [artwork] });
 		return groups;
 	}, []);
+
+/**
+ * The Art landing's entries for its `location` and `year` filters (a
+ * location's slug, a year) and its search `query`, newest first, as it
+ * shows them and as an artwork reached from it steps through them.
+ */
+export const artLandingEntries = (artworks, { location, year, query }) =>
+	sortEntries(
+		searchEntries(
+			artworkEntries(
+				artworks.filter(
+					(artwork) =>
+						(!location || artwork.locationSlug === location) &&
+						(!year || String(artwork.year) === year)
+				)
+			),
+			query,
+			{ details: true }
+		),
+		'year'
+	);
+
+/**
+ * The query an artwork's link carries from the Art landing, so its
+ * Previous and Next step through what the landing showed: `from=art` and
+ * any filter and search. Links from elsewhere carry none, and step through
+ * the artwork's own edition.
+ */
+export const artLandingContext = ({ location, year, query }) =>
+	`?${new URLSearchParams({ from: 'art', ...(location && { location }), ...(year && { year }), ...(query && { q: query }) })}`;
+
+/**
+ * The artworks before and after the one with `id` in sorted `entries`,
+ * each artwork once, round to the last before the first and the first
+ * after the last. None unless it's there among others.
+ */
+export const neighbours = (entries, id) => {
+	const artworks = [...new Map(entries.map(({ artwork }) => [artwork._id, artwork])).values()];
+	const index = artworks.findIndex((artwork) => artwork._id === id);
+	if (index < 0 || artworks.length < 2) return undefined;
+	return { previous: artworks.at(index - 1), next: artworks[(index + 1) % artworks.length] };
+};
