@@ -6,9 +6,10 @@
 	 * the Art landing's are, and three from md up, between the gutters.
 	 * `class` goes on the <ul>. With `eager`, for a grid at the top
 	 * of its page, the first image in the first row loads straight away,
-	 * ahead of the rest. Only press tiles show one. With `row`, phones show
-	 * them in a row instead, between the gutters, a tile and a fifth of the
-	 * next across, that scrolls sideways freely, without a scrollbar.
+	 * ahead of the rest. Only press tiles show one. With `row`, they're a
+	 * row instead, between the gutters, that scrolls sideways freely,
+	 * without a scrollbar: a tile and a fifth of the next across on phones,
+	 * three from md up, the size the grid's are.
 	 */
 	let { items, generalPalette, eager = false, row = false, class: className } = $props();
 
@@ -22,13 +23,13 @@
 
 <ul
 	class={[
-		'gap-base md:grid md:grid-cols-3 md:px-gutter',
-		row ? 'scroll-row flex px-gutter' : 'grid px-indent',
+		'gap-base',
+		row ? 'scroll-row flex px-gutter' : 'grid px-indent md:grid-cols-3 md:px-gutter',
 		className
 	]}
 >
 	{#each items as item, index (item._id)}
-		<li class={row && 'w-5/6 shrink-0 md:w-auto'}>
+		<li class={row && 'w-5/6 shrink-0 md:w-[calc((100%-2*var(--spacing-base))/3)]'}>
 			<NewsTile
 				{item}
 				{generalPalette}
