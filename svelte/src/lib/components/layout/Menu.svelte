@@ -26,7 +26,8 @@
 	 * get the Desert X mark, the font's "[x]", the size of the logo's X;
 	 * one that goes nowhere, like a location with no
 	 * exhibitions yet, shows faded as plain text. The top bar is the
-	 * homepage nav's (see TopBar), so the hamburger and logo stay put.
+	 * homepage nav's (see TopBar), so the hamburger and logo stay put; here
+	 * the hamburger closes the menu and the logo links home.
 	 * Always rendered, so it can fade on opacity alone: while closed it's
 	 * transparent, ignores the pointer and is inert, and it's fixed and
 	 * stacked above the nav so the fade-out isn't cut off when the dialog
@@ -81,7 +82,7 @@
 	aria-label="Menu"
 >
 	<TopBar
-		logo
+		logo="home"
 		aria-label="Close menu"
 		onclick={() => (ui.menuOpen = false)}
 		class="relative shrink-0"
