@@ -11,7 +11,8 @@
 	 * trademark under them all. From md up they're a row, each as wide as
 	 * its content and the edge margin apart, with the trademark filling the
 	 * rest of the row, or under them across the footer when that would
-	 * leave it less than 36.5rem. `footer` is `{ groups, credits }`.
+	 * leave it less than 36.5rem. Its lines sit against the right edge
+	 * while none of them wraps, and fill its space once one does. `footer` is `{ groups, credits }`.
 	 */
 	let { footer } = $props();
 </script>
@@ -43,7 +44,11 @@
 		{/each}
 	</div>
 
-	<div class="pt-[2rem] md:min-w-[36.5rem] md:flex-1">
+	<!-- One column as wide as its longest line, up to all its space, at the
+	     right -->
+	<div
+		class="pt-[2rem] md:grid md:min-w-[36.5rem] md:flex-1 md:grid-cols-[minmax(0,max-content)] md:justify-end"
+	>
 		<p>
 			<span aria-hidden="true">[logo]</span><span class="sr-only">DESERT X</span> is a ® registered
 			trademark. © Desert Biennial {new Date().getFullYear()}.
