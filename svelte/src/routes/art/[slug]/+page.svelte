@@ -84,7 +84,7 @@
 
 	{#snippet footer()}
 		{#if previous && next}
-			<nav aria-label="Artworks" class="flex justify-between gap-base px-module text-title md:text-md">
+			<nav aria-label="Artworks" class="flex justify-between gap-x-edge px-module text-title md:justify-start md:text-md">
 				<a
 					href={previous.href}
 					rel="prev"
