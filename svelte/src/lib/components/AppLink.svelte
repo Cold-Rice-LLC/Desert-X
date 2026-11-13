@@ -11,6 +11,7 @@
 </script>
 
 <a {...rest} {...external && newTabAttributes} href={linkHref(link)}>
-	{@render children()}
-	{#if external}<span class="sr-only">(opens in new tab)</span>{/if}
+	<!-- Together, so no space between them shows before punctuation that
+	     follows the link -->
+	{@render children()}{#if external}<span class="sr-only">(opens in new tab)</span>{/if}
 </a>
