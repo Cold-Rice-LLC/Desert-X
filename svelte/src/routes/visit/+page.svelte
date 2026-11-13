@@ -52,6 +52,7 @@
 						artworks={edition.artworks}
 						text={edition.mapText}
 						href="/exhibitions/{edition.slug}"
+						exhibition="DESERT X {edition.title}"
 						heading="DESERT X {edition.location} Exhibition Map"
 					/>
 				{/snippet}

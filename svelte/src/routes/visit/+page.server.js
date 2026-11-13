@@ -20,6 +20,7 @@ export async function load() {
 				"editions": *[_type == "edition" && coalesce(visitFrom, startDate) <= $today && endDate >= $today]
 					| order(startDate asc){
 						_id,
+						title,
 						"slug": slug.current,
 						startDate,
 						endDate,

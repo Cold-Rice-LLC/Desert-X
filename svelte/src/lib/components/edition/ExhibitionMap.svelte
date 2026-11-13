@@ -10,7 +10,8 @@
 	/**
 	 * A heading ("Exhibition Map" unless overridden) over a Mapbox map of an
 	 * edition's artworks with coordinates, each marked with the logo's X,
-	 * then `text` and, given `href`, a "View Exhibition" link. Choosing an
+	 * then `text` and, given `href`, a "View more information about" link
+	 * to the exhibition, named by `exhibition`. Choosing an
 	 * X turns it black and opens a card, in a news tile's text size, with
 	 * the artist, title (up to two lines), a Close button, the thumbnail, a
 	 * Details link to the artwork and a Next button, which moves on to the
@@ -30,6 +31,7 @@
 		artworks,
 		text,
 		href,
+		exhibition = 'the exhibition',
 		heading = 'Exhibition Map',
 		headingLevel,
 		class: className
@@ -330,7 +332,9 @@
 				</div>
 			{/if}
 			{#if href}
-				<p class="mt-base">View <a {href} class="link-underline">Exhibition</a></p>
+				<p class="mt-base">
+					View more information about <a {href} class="link-underline">{exhibition}</a>
+				</p>
 			{/if}
 		</div>
 	</section>
