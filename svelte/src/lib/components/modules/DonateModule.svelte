@@ -4,30 +4,25 @@
 	import ModuleHeading from '$lib/components/modules/ModuleHeading.svelte';
 
 	/**
-	 * A grey card: an image, and the visitor's choice of one-time or monthly
-	 * and an amount (a preset, or their own), side by side from md up. On
-	 * phones it's one column, the title over the image. Donate opens the Blackbaud form
-	 * at /donate/checkout with that choice filled in, through the URL
-	 * parameters Blackbaud's loader passes on: onetimeamt, or rgamt for a
-	 * recurring gift. It's a full page load, so the loader runs.
+	 * A grey card: an image, and the visitor's choice of amount (a preset,
+	 * or their own), side by side from md up. On phones it's one column,
+	 * the title over the image. Donate opens the Blackbaud form at
+	 * /donate/checkout with that one-time amount filled in, through the
+	 * onetimeamt parameter Blackbaud's loader passes on. It's a full page
+	 * load, so the loader runs.
+	 *
+	 * One-time only: pledges are on the form's own Pledge tab, which no URL
+	 * parameter can open (plgamt fills the amount but leaves the form on
+	 * One-time), so offering Pledge here would land visitors on the wrong tab.
 	 */
 	let { module } = $props();
 
-	let frequency = $state('once');
 	let selected = $state(null);
 	let custom = $state('');
 
 	let amount = $derived(selected === 'custom' ? Number(custom) || null : selected);
-	let href = $derived.by(() => {
-		if (!amount) return '/donate/checkout';
-		const parameter = frequency === 'monthly' ? 'rgamt' : 'onetimeamt';
-		return `/donate/checkout?${parameter}=${amount}`;
-	});
+	let href = $derived(amount ? `/donate/checkout?onetimeamt=${amount}` : '/donate/checkout');
 </script>
-
-{#snippet frequencyButton(value, label)}
-	<Choice current={frequency === value} onclick={() => (frequency = value)}>{label}</Choice>
-{/snippet}
 
 <div>
 	<ModuleHeading heading={module.heading} />
@@ -51,12 +46,6 @@
 			{#if module.text}
 				<p class="whitespace-pre-line md:mt-line">{module.text}</p>
 			{/if}
-
-			<div role="group" aria-label="How often" class="uppercase md:mt-line">
-				{@render frequencyButton('once', 'One-time')}
-				/
-				{@render frequencyButton('monthly', 'Monthly')}
-			</div>
 
 			<div role="group" aria-label="Amount" class="flex flex-wrap gap-x-[0.6em] md:mt-line">
 				{#each module.amounts ?? [] as preset (preset)}

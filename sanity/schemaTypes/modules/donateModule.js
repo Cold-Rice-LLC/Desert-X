@@ -2,9 +2,8 @@ import {defineArrayMember, defineField, defineType} from 'sanity'
 import {HeartIcon} from '@sanity/icons'
 import {headingField} from '../objects/fields'
 
-// A designed donate card: the visitor picks one-time or monthly and an
-// amount here, and Donate opens the Blackbaud form at /donate/checkout
-// with that choice filled in
+// A designed donate card: the visitor picks a one-time amount here, and
+// Donate opens the Blackbaud form at /donate/checkout with it filled in
 export default defineType({
   name: 'donateModule',
   type: 'object',

@@ -2,7 +2,7 @@
 	/**
 	 * Blackbaud's donation form, embedded. Its loader swaps the div for an
 	 * iframe it hosts, so the form's look is set in Raiser's Edge NXT, not
-	 * here, and passes this page's URL parameters (onetimeamt, rgamt) on to
+	 * here, and passes this page's onetimeamt URL parameter on to
 	 * pre-fill it. The loader only scans the page when it loads, so links
 	 * here need a full page load (data-sveltekit-reload).
 	 */
