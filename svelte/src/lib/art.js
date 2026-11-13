@@ -160,3 +160,15 @@ export const neighbours = (entries, id) => {
 	if (index < 0 || artworks.length < 2) return undefined;
 	return { previous: artworks.at(index - 1), next: artworks[(index + 1) % artworks.length] };
 };
+
+/**
+ * An edition's gallery: its images, or else each artwork's first, by
+ * artist, without the caption written for the artwork's page.
+ */
+export const editionImages = (edition) => {
+	if (edition.images?.length) return edition.images;
+	return sortEntries(artworkEntries(edition.artworks ?? []))
+		.map(({ artwork }) => artwork)
+		.filter((artwork) => artwork.image?.asset)
+		.map((artwork) => ({ ...artwork.image, caption: undefined, _key: artwork._id }));
+};

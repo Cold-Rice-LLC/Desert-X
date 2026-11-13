@@ -1,5 +1,5 @@
 <script>
-	import { artworkEntries, sortEntries } from '$lib/art';
+	import { artworkEntries, editionImages, sortEntries } from '$lib/art';
 	import { formatDateRange } from '$lib/dates';
 	import ArtGrid from '$lib/components/art/ArtGrid.svelte';
 	import ExhibitionMap from '$lib/components/edition/ExhibitionMap.svelte';
@@ -25,15 +25,7 @@
 
 	let entries = $derived(sortEntries(artworkEntries(edition.artworks ?? [])));
 
-	// Each artwork's first image, by artist, for an edition without images
-	// of its own, without the caption written for the artwork's page
-	let images = $derived.by(() => {
-		if (edition.images?.length) return edition.images;
-		const artworks = new Set(entries.map((entry) => entry.artwork));
-		return [...artworks]
-			.filter((artwork) => artwork.image?.asset)
-			.map((artwork) => ({ ...artwork.image, caption: undefined, _key: artwork._id }));
-	});
+	let images = $derived(editionImages(edition));
 	let dates = $derived(formatDateRange(edition.startDate, edition.endDate));
 </script>
 

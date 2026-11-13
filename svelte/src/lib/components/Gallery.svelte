@@ -4,7 +4,7 @@
 	import { A11y, Keyboard } from 'swiper/modules';
 	import 'swiper/css';
 	import 'swiper/css/a11y';
-	import { loopOffset, numberedAlt } from '$lib/carousel';
+	import { gallerySizes as sizes, loopOffset, numberedAlt } from '$lib/carousel';
 	import ImageFrame from '$lib/components/ImageFrame.svelte';
 	import Lightbox from '$lib/components/Lightbox.svelte';
 	import Portable from '$lib/components/Portable.svelte';
@@ -71,7 +71,6 @@
 		swiper?.keyboard.enable();
 	};
 
-	const sizes = '(width >= 768px) calc((100vw - 50px) * 3 / 4), calc((100vw - 50px) * 5 / 6)';
 	// The section's space above and height, whichever way the images show
 	let section = $derived([
 		'gallery mt-sm md:mt-0 md:h-[max(60rem,calc(100svh-var(--spacing-nav)))]',

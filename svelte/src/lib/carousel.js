@@ -1,6 +1,6 @@
 import { prefersReducedMotion } from 'svelte/motion';
 import { A11y, Keyboard } from 'swiper/modules';
-import { croppedSize } from '$lib/sanity/images';
+import { croppedSize, imageSources } from '$lib/sanity/images';
 
 /**
  * How far slide `index` is from the `active` one of `count` looping round,
@@ -53,3 +53,29 @@ export const fullScreenOptions = () => ({
 	keyboard: { enabled: true },
 	speed: prefersReducedMotion.current ? 0 : 300
 });
+
+/** How wide a Gallery's images display, for their `sizes`. */
+export const gallerySizes =
+	'(width >= 768px) calc((100vw - 50px) * 3 / 4), calc((100vw - 50px) * 5 / 6)';
+
+/**
+ * Loads the images a Gallery of `images` shows first (the first, and its
+ * neighbours either side), picking the files it will from the same
+ * srcset and sizes, so it opens with them ready. Settles once they've
+ * loaded or failed, or after `timeout` ms, whichever is first.
+ */
+export const preloadGallery = (images, timeout = 5000) => {
+	const first = [...new Set([images[0], images[1], images.at(-1)])].filter(Boolean);
+	const loads = first.map(
+		(image) =>
+			new Promise((resolve) => {
+				const { src, srcset } = imageSources(image, 4 / 3);
+				const img = new Image();
+				img.onload = img.onerror = resolve;
+				img.sizes = gallerySizes;
+				img.srcset = srcset;
+				img.src = src;
+			})
+	);
+	return Promise.race([Promise.all(loads), new Promise((resolve) => setTimeout(resolve, timeout))]);
+};

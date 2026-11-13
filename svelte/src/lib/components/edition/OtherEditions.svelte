@@ -1,5 +1,7 @@
 <script>
 	import { page } from '$app/state';
+	import { editionImages } from '$lib/art';
+	import { preloadGallery } from '$lib/carousel';
 	import { formatDateRange } from '$lib/dates';
 	import Dropdown from '$lib/components/Dropdown.svelte';
 	import EditionContent from '$lib/components/edition/EditionContent.svelte';
@@ -16,6 +18,10 @@
 	 * only built while open, so closed ones load no images and the carousel
 	 * can measure itself. While the open one passes under the nav, the nav
 	 * shows its year and location. They show no news (see EditionContent).
+	 * Clicking one shut doesn't open it straight away: its gallery's first
+	 * images load first, under a progress cursor, so it opens with them
+	 * there rather than filling in (preloadGallery gives up after a few
+	 * seconds). Find-in-page and Back open one at once.
 	 *
 	 * The open one is in the URL, as ?edition=its-slug, replacing the history
 	 * entry rather than adding one: Back from a page linked inside it comes
@@ -38,6 +44,26 @@
 		replaceQuery(page.url, { edition: open ? slug : null });
 	};
 
+	// The one whose images are loading before it opens
+	let loading = $state(null);
+
+	const openWhenLoaded = async (event, edition) => {
+		if (openSlug === edition.slug) return;
+		event.preventDefault();
+		if (loading === edition.slug) return;
+		loading = edition.slug;
+		await preloadGallery(editionImages(edition));
+		// Unless another was clicked meanwhile
+		if (loading !== edition.slug) return;
+		loading = null;
+		replaceQuery(page.url, { edition: edition.slug });
+	};
+
+	// The progress cursor everywhere while loading, the titles' pointer too
+	$effect(() => {
+		document.documentElement.classList.toggle('[&_*]:cursor-progress!', !!loading);
+	});
+
 	$effect(() => {
 		const edition = editions.find(({ slug }) => slug === openSlug);
 		if (!edition) return;
@@ -58,6 +84,7 @@
 				id="edition-{edition.slug}"
 				name="other-editions"
 				bind:open={() => openSlug === edition.slug, (open) => toggle(edition.slug, open)}
+				onsummaryclick={(event) => openWhenLoaded(event, edition)}
 				summaryClass="mx-gutter border-b-2 group-open:border-transparent group-open:mb-[calc(2*var(--spacing-sm))] md:border-b-[0.25rem] md:group-open:mb-0"
 			>
 				{#snippet summary()}
