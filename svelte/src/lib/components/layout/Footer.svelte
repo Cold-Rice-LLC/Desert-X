@@ -6,7 +6,8 @@
 	/**
 	 * Site footer, on every page but the homepage: search over a rule, then
 	 * the footer's `groups`, each its links or text, untitled, and the
-	 * trademark and copyright the site writes itself, over the `credits`.
+	 * trademark and copyright the site writes itself, the `credits` run on
+	 * after it.
 	 * On phones the groups go two to a row, the edge margin apart, a rule
 	 * under each row, the trademark under them all. From md up they're a
 	 * row, each as wide as its content and the edge margin apart, with the
@@ -81,9 +82,9 @@
 				>DESERT X</span
 			>
 			is a ® registered trademark. © Desert Biennial {new Date().getFullYear()}.
+			{#if footer.credits}
+				<Portable value={footer.credits} inline />
+			{/if}
 		</p>
-		{#if footer.credits}
-			<Portable value={footer.credits} />
-		{/if}
 	</div>
 </footer>

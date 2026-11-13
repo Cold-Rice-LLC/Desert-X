@@ -183,7 +183,7 @@ export default defineType({
       type: 'richText',
       title: 'Footer Note',
       description:
-        'Under “DESERT X is a ® registered trademark. © Desert Biennial [year].”, which the site writes itself.',
+        'Runs on after “DESERT X is a ® registered trademark. © Desert Biennial [year].”, which the site writes itself.',
       fieldset: 'footer',
     }),
     // The homepage's second column of quick links. Named for when the
