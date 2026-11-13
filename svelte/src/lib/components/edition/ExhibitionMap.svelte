@@ -278,7 +278,7 @@
 		<div class="mt-line px-gutter">
 			<div
 				bind:this={frameEl}
-				class="relative isolate h-[72vh] overflow-hidden bg-grey-2 md:h-[80vh]"
+				class="relative isolate h-[58vh] overflow-hidden bg-grey-2 md:h-[80vh]"
 			>
 				<!-- Mapbox's own CSS makes this position: relative, so it fills by size instead -->
 				<div bind:this={mapEl} class="size-full"></div>
