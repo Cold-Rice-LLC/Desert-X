@@ -15,7 +15,7 @@
 	 * below the nav (the two margins collapse into the larger). Its content is
 	 * only built while open, so closed ones load no images and the carousel
 	 * can measure itself. While the open one passes under the nav, the nav
-	 * shows its year and location. `news` passes to EditionContent.
+	 * shows its year and location. They show no news (see EditionContent).
 	 *
 	 * The open one is in the URL, as ?edition=its-slug, replacing the history
 	 * entry rather than adding one: Back from a page linked inside it comes
@@ -23,7 +23,7 @@
 	 * Changing it is a navigation, which loads nothing: the page's data
 	 * doesn't depend on it.
 	 */
-	let { editions, news } = $props();
+	let { editions } = $props();
 
 	// The URL is the open one's only record, so Back, which restores it,
 	// reopens it
@@ -70,7 +70,7 @@
 					</span>
 				{/snippet}
 				{#if openSlug === edition.slug}
-					<EditionContent {edition} {news} headingLevel={3} class="pb-2xl" />
+					<EditionContent {edition} headingLevel={3} class="pb-2xl" />
 				{/if}
 			</Dropdown>
 		{/each}

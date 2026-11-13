@@ -13,7 +13,7 @@
 	<div class="pb-page-bottom">
 		<EditionContent edition={data.edition} news={data.news}>
 			{#if data.edition.others.length}
-				<OtherEditions editions={data.edition.others} news={data.news} />
+				<OtherEditions editions={data.edition.others} />
 			{/if}
 		</EditionContent>
 	</div>

@@ -2,13 +2,15 @@ import { error } from '@sveltejs/kit';
 import { editionStatus } from '$lib/dates';
 import { client } from '$lib/sanity/client';
 import { editionFields } from '$lib/sanity/editions';
-import { newsLandingFields } from '$lib/sanity/news';
+import { newsLandingFields, newsTileFields } from '$lib/sanity/news';
 import { pageSeo, seoFields } from '$lib/sanity/seo';
 import { exhibitionEvent } from '$lib/structuredData';
 
 /**
  * An edition by slug, with every other edition at its location, newest
- * first, for Other Editions. The nav shows its location after Upcoming,
+ * first, for Other Editions, and its location's eight newest news items,
+ * as the News landing's filter for the location has them (press is
+ * General), for the end of the page. The nav shows its location after Upcoming,
  * On View or, once it's over, its year (see editionStatus), on a line of
  * its own on phones.
  * Shared, it shows its title, the start of its description and its first
@@ -23,7 +25,9 @@ export async function load({ params, url }) {
 				"descriptionText": pt::text(description),
 				${seoFields},
 				"others": *[_type == "edition" && location._ref == ^.location._ref && _id != ^._id]
-					| order(year desc){ ${editionFields} }
+					| order(year desc){ ${editionFields} },
+				"news": *[_type == "news" && kind != "press" && location._ref == ^.location._ref]
+					| order(publishDate desc) [0...8]{ ${newsTileFields} }
 			},
 			"news": { ${newsLandingFields} }
 		}`,

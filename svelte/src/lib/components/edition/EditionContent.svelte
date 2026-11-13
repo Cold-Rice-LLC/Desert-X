@@ -13,10 +13,11 @@
 	 * An edition, as its page shows it and as Other Editions shows it when
 	 * opened: the gallery, the dates and description, the exhibition map and
 	 * its artworks by artist (the map after them from lg up), its sponsors,
-	 * then `children` as another section, and last up to three news items,
-	 * sections a 2xl step apart. The gallery is the edition's images, or
-	 * else each artwork's first. Sections with nothing to show are left out.
-	 * `news` holds the News landing fields the news tiles need, and
+	 * then `children` as another section, and last its `news` items (its
+	 * page gives its location's), sections a 2xl step apart. The gallery is
+	 * the edition's images, or else each artwork's first. Sections with
+	 * nothing to show are left out. `news` holds the News landing fields the
+	 * news tiles need; without it, as in Other Editions, there's no news.
 	 * `headingLevel` sets its sections' headings: h2s on its own page, h3s
 	 * in Other Editions. `class` goes on what follows the gallery.
 	 */
@@ -76,5 +77,7 @@
 
 	{@render children?.()}
 
-	<NewsModule module={{ _type: 'newsModule', items: edition.news, ...news }} {headingLevel} />
+	{#if news}
+		<NewsModule module={{ _type: 'newsModule', items: edition.news, ...news }} {headingLevel} />
+	{/if}
 </div>

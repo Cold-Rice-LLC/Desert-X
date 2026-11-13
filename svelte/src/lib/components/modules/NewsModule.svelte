@@ -3,8 +3,8 @@
 	import NewsGrid from '$lib/components/news/NewsGrid.svelte';
 
 	/**
-	 * A "News" heading, which editors can't change, up to three news tiles,
-	 * in a row that scrolls sideways on phones, and a link to the News
+	 * A "News" heading, which editors can't change, news tiles (three, or
+	 * an exhibition page's eight), in a row that scrolls sideways on phones, and a link to the News
 	 * landing. Pages pick the latest or a selection; news articles add one of
 	 * related news to their own end. `headingLevel` passes to the heading.
 	 */
