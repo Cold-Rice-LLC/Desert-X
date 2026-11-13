@@ -7,12 +7,13 @@
 	 * Site footer, on every page but the homepage: search over a rule, then
 	 * the footer's `groups`, each its links or text, untitled, and the
 	 * trademark and copyright the site writes itself, over the `credits`.
-	 * On phones the groups go two to a row, a rule under each row, the
-	 * trademark under them all. From md up they're a row, each as wide as
-	 * its content and the edge margin apart, with the trademark filling the
-	 * rest of the row, or under them across the footer when that would
-	 * leave it less than 36.5rem. Its lines sit against the right edge
-	 * while none of them wraps, and fill its space once one does. `footer` is `{ groups, credits }`.
+	 * On phones the groups go two to a row, the edge margin apart, a rule
+	 * under each row, the trademark under them all. From md up they're a
+	 * row, each as wide as its content and the edge margin apart, with the
+	 * trademark filling the rest of the row, or under them across the
+	 * footer when that would leave it less than 36.5rem. Its lines sit
+	 * against the right edge while none of them wraps, and fill its space
+	 * once one does. `footer` is `{ groups, credits }`.
 	 */
 	let { footer } = $props();
 </script>
@@ -27,10 +28,14 @@
 	</a>
 
 	<!-- On phones each group's border joins its neighbour's into the rule
-	     under their row, as the columns have no gap between them -->
+	     under their row, as the columns have no gap between them; half the
+	     edge margin of padding either side of the line between them sets
+	     their text the edge margin apart -->
 	<div class="grid grid-cols-2 md:flex md:flex-wrap md:gap-x-edge">
 		{#each footer.groups as group (group._key)}
-			<div class="border-b-2 pt-[2rem] pb-[2.3rem] md:border-b-0 md:pb-0">
+			<div
+				class="border-b-2 pt-[2rem] pb-[2.3rem] odd:pr-[calc(var(--spacing-edge)/2)] even:pl-[calc(var(--spacing-edge)/2)] md:border-b-0 md:px-0 md:pb-0"
+			>
 				{#if group.kind === 'text'}
 					<Portable value={group.text} />
 				{:else if group.links?.length}
