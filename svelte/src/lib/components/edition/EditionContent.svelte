@@ -45,7 +45,9 @@
 	{#if dates || edition.description}
 		<div class="space-y-line px-gutter">
 			{#if dates}
-				<p class="text-center">{dates}</p>
+				<!-- Proportional figures, so they read as Schengen rather than the
+				     tabular ones the site sets elsewhere -->
+				<p class="text-center proportional-nums">{dates}</p>
 			{/if}
 			{#if edition.description}
 				<Portable value={edition.description} />
