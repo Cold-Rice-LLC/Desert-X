@@ -127,12 +127,6 @@ export default defineType({
           title: 'Group',
           fields: [
             defineField({
-              name: 'title',
-              type: 'string',
-              title: 'Title',
-              validation: (rule) => rule.required(),
-            }),
-            defineField({
               name: 'kind',
               type: 'string',
               title: 'Content',
@@ -163,12 +157,23 @@ export default defineType({
               ...shownWhere(({parent}) => parent?.kind === 'text', {required: 'Add some text.'}),
             }),
           ],
+          // Untitled, so named for what it holds: its links' labels, or the
+          // start of its text
           preview: {
-            select: {title: 'title', kind: 'kind', links: 'links'},
-            prepare: ({title, kind, links = []}) => ({
-              title,
-              subtitle: kind === 'text' ? 'Text' : countLabel(links.length, 'link'),
-            }),
+            select: {kind: 'kind', links: 'links', text: 'text'},
+            prepare: ({kind, links = [], text = []}) =>
+              kind === 'text'
+                ? {
+                    title: text
+                      .flatMap((block) => block.children ?? [])
+                      .map((child) => child.text)
+                      .join(''),
+                    subtitle: 'Text',
+                  }
+                : {
+                    title: links.map((link) => link.label).join(', '),
+                    subtitle: countLabel(links.length, 'link'),
+                  },
           },
         }),
       ],

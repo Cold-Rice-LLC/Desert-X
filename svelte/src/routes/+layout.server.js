@@ -34,7 +34,6 @@ export async function load() {
 			footerLinks2[]{ ${navLinkFields} },
 			footerGroups[]{
 				_key,
-				title,
 				kind,
 				kind != "text" => { links[]{ ${navLinkFields} } },
 				kind == "text" => { text[]{ ${richTextFields} } }
