@@ -38,7 +38,9 @@ export async function load() {
 				headline,
 				title,
 				${linkFields},
-				"linked": internalLink->${linkedFields}
+				// Only while it links there: switching a slide's link to None
+				// or External keeps the internal one it had, unused
+				"linked": select(linkType == "internal" => internalLink->${linkedFields})
 			},
 			${seoFields}
 		}
