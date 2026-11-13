@@ -33,6 +33,13 @@
 
 	let home = $derived(page.url.pathname === '/');
 
+	// On the page the Donate link goes to, or a page under it (checkout)
+	let onDonate = $derived.by(() => {
+		const href = linkHref(data.donateLink);
+		const path = page.url.pathname;
+		return !!href && (path === href || path.startsWith(`${href}/`));
+	});
+
 	// What the nav shows beside the menu button: the page's title, which
 	// can link up a level (navHref), and an optional detail after it, with
 	// a shorter one for phones (navDetailPhone), or an artwork's title
@@ -68,12 +75,12 @@
 	Skip to content
 </a>
 
-<!-- Without the Donate link on the page it goes to -->
+<!-- Without the Donate link where it would only lead back -->
 <MainNav
 	{home}
 	{...nav}
 	stacked={page.data.navStacked}
-	donateLink={linkHref(data.donateLink) === page.url.pathname ? null : data.donateLink}
+	donateLink={onDonate ? null : data.donateLink}
 />
 
 <Menu menu={data.menu} />
