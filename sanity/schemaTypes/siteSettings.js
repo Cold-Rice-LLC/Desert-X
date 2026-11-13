@@ -28,6 +28,11 @@ export default defineType({
       title: 'Footer',
       options: {collapsible: true, collapsed: false},
     },
+    {
+      name: 'homepage',
+      title: 'Homepage',
+      options: {collapsible: true, collapsed: false},
+    },
   ],
   fields: [
     defineField({
@@ -109,42 +114,83 @@ export default defineType({
       rows: 3,
     }),
     defineField({
-      name: 'footerLocations',
+      name: 'footerGroups',
       type: 'array',
-      title: 'Locations',
+      title: 'Groups',
       description:
-        'The footer’s first column, in order, each linking to its newest exhibition. Locations with no exhibition yet are left out. Leave empty to list every location with an exhibition, oldest first.',
+        'The footer’s columns, in order: four across from tablet up, two to a row on phones.',
       fieldset: 'footer',
       of: [
         defineArrayMember({
-          type: 'reference',
-          to: [{type: 'location'}],
-          options: {disableNew: true},
+          name: 'footerGroup',
+          type: 'object',
+          title: 'Group',
+          fields: [
+            defineField({
+              name: 'title',
+              type: 'string',
+              title: 'Title',
+              validation: (rule) => rule.required(),
+            }),
+            defineField({
+              name: 'kind',
+              type: 'string',
+              title: 'Content',
+              options: {
+                list: [
+                  {title: 'Links', value: 'links'},
+                  {title: 'Text', value: 'text'},
+                ],
+                layout: 'radio',
+                direction: 'horizontal',
+              },
+              initialValue: 'links',
+              validation: (rule) => rule.required(),
+            }),
+            defineField({
+              name: 'links',
+              type: 'array',
+              title: 'Links',
+              ...shownWhere(({parent}) => parent?.kind !== 'text', {
+                required: 'Add at least one link.',
+              }),
+              of: [defineArrayMember({type: 'navLink'})],
+            }),
+            defineField({
+              name: 'text',
+              type: 'richText',
+              title: 'Text',
+              ...shownWhere(({parent}) => parent?.kind === 'text', {required: 'Add some text.'}),
+            }),
+          ],
+          preview: {
+            select: {title: 'title', kind: 'kind', links: 'links'},
+            prepare: ({title, kind, links = []}) => ({
+              title,
+              subtitle: kind === 'text' ? 'Text' : countLabel(links.length, 'link'),
+            }),
+          },
         }),
       ],
-      validation: (rule) => rule.unique(),
-    }),
-    // The footer's second column. Named for when both were links, so its
-    // content didn't need moving.
-    defineField({
-      name: 'footerLinks2',
-      type: 'array',
-      title: 'Links',
-      description: 'The footer’s second column.',
-      fieldset: 'footer',
-      of: [defineArrayMember({type: 'navLink'})],
-    }),
-    defineField({
-      name: 'footerText',
-      type: 'richText',
-      title: 'Text',
-      fieldset: 'footer',
     }),
     defineField({
       name: 'credits',
       type: 'richText',
-      title: 'Credits',
+      title: 'Footer Note',
+      description:
+        'Under “DESERT X is a ® registered trademark. © Desert Biennial [year].”, which the site writes itself.',
       fieldset: 'footer',
+    }),
+    // The homepage's second column of quick links. Named for when the
+    // footer had them too, so its content didn't need moving.
+    defineField({
+      name: 'footerLinks2',
+      type: 'array',
+      title: 'Quick Links',
+      description:
+        'The homepage’s second column of quick links, after each location with an exhibition.',
+      fieldset: 'homepage',
+      of: [defineArrayMember({type: 'navLink'})],
     }),
   ],
 })

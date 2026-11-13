@@ -76,7 +76,7 @@
 	donateLink={linkHref(data.donateLink) === page.url.pathname ? null : data.donateLink}
 />
 
-<Menu menu={data.menu} footer={data.footer} />
+<Menu menu={data.menu} />
 
 <!-- A flex column like the body, so pages lay out as they would directly
      in it: the homepage carousel fills the height left -->

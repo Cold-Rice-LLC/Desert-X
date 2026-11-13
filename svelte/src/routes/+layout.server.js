@@ -32,17 +32,19 @@ export async function load() {
 			menuText,
 			donateLink{ ${navLinkFields} },
 			footerLinks2[]{ ${navLinkFields} },
-			footerText[]{ ${richTextFields} },
+			footerGroups[]{
+				_key,
+				title,
+				kind,
+				kind != "text" => { links[]{ ${navLinkFields} } },
+				kind == "text" => { text[]{ ${richTextFields} } }
+			},
 			credits[]{ ${richTextFields} }
 		},
-		// For the footer: the locations Menu, Footer & SEO lists, in its
-		// order, or else each one, oldest first, as a link to its newest
-		// edition, like a menu link to a location. Locations with no edition
-		// have nowhere to go.
-		"locations": coalesce(
-			*[_id == "siteSettings"][0].footerLocations[]->[count(${editionsOf}) > 0]${locationLink},
-			*[_type == "location" && count(${editionsOf}) > 0]${locationLink} | order(since asc)
-		)
+		// For the homepage's quick links: each location, oldest first, as a
+		// link to its newest edition, like a menu link to a location.
+		// Locations with no edition have nowhere to go.
+		"locations": *[_type == "location" && count(${editionsOf}) > 0]${locationLink} | order(since asc)
 	}`);
 
 	return {
@@ -51,17 +53,20 @@ export async function load() {
 			siteTitle: settings?.siteTitle,
 			description: settings?.metaDescription,
 			image: settings?.ogImage,
-			sameAs: socialProfiles(settings?.footerLinks2)
+			sameAs: socialProfiles([
+				...(settings?.footerGroups ?? []).flatMap((group) => group.links ?? []),
+				...(settings?.footerLinks2 ?? [])
+			])
 		},
 		menu: {
 			items: settings?.menuItems ?? [],
 			text: settings?.menuText
 		},
 		footer: {
-			links: [locations, settings?.footerLinks2 ?? []],
-			text: settings?.footerText,
+			groups: settings?.footerGroups ?? [],
 			credits: settings?.credits
 		},
+		quickLinks: [locations, settings?.footerLinks2 ?? []],
 		donateLink: settings?.donateLink
 	};
 }

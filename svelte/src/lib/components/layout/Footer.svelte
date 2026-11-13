@@ -1,35 +1,54 @@
 <script>
+	import AppLink from '$lib/components/AppLink.svelte';
 	import Portable from '$lib/components/Portable.svelte';
-	import FooterLinks from '$lib/components/layout/FooterLinks.svelte';
+	import Search from '$lib/components/icons/Search.svelte';
 
 	/**
-	 * Site footer, on every page but the homepage. On phones it's search and
-	 * the two link columns (the locations, then Menu, Footer & SEO's links),
-	 * centred in the space after search. From md up, on the 12-column grid:
-	 * search in column 1, the link columns in columns 2 and 4, and the
-	 * text, copyright and credits across columns 6–12. Everything sits on
-	 * the bottom edge. The menu shows it too, on phones only, with `menu`
-	 * set: in the larger sizes it has from md up, on the 12-column grid (see
-	 * FooterLinks). `class` goes on the <footer>.
+	 * Site footer, on every page but the homepage: search over a rule, then
+	 * the footer's `groups`, each a title over its links or text, and the
+	 * trademark and copyright the site writes itself, over the `credits`.
+	 * On phones the groups go two to a row, a rule under each row, the
+	 * trademark under them all. From md up they're a row, each as wide as
+	 * its content and the edge margin apart, with the trademark, at most
+	 * 36.5rem wide, against the right edge; either wraps under the other
+	 * when they don't fit. `footer` is `{ groups, credits }`.
 	 */
-	let { footer, menu, class: className } = $props();
+	let { footer } = $props();
 </script>
 
+<!-- Rich text links are underlined elsewhere, but not here, so they fade instead -->
 <footer
-	class={[
-		'mt-auto grid items-end px-edge pb-edge md:grid-cols-12',
-		menu ? 'grid-cols-12 text-lead' : 'grid-cols-[auto_1fr_1fr] text-base',
-		className
-	]}
+	class="mt-auto px-edge pb-edge text-base md:flex md:flex-wrap md:items-start md:justify-between md:gap-x-edge [&_a]:no-underline [&_a]:link-fade"
 >
-	<FooterLinks links={footer.links} compact={menu} />
+	<!-- The rule is the search row's border, across the footer -->
+	<a href="/search" aria-label="Search" class="block border-b-2 pb-[1.8rem] md:basis-full">
+		<Search class="h-[2.4rem] w-auto" />
+	</a>
 
-	<!-- Rich text links are underlined elsewhere, but not here, so they fade instead -->
-	<div class="col-span-7 col-start-6 hidden md:block [&_a]:no-underline [&_a]:link-fade">
-		{#if footer.text}
-			<Portable value={footer.text} />
-		{/if}
-		<p>© Desert Biennial {new Date().getFullYear()}. DESERT X is a ® registered trademark.</p>
+	<!-- On phones each group's border joins its neighbour's into the rule
+	     under their row, as the columns have no gap between them -->
+	<div class="grid grid-cols-2 md:flex md:flex-wrap md:gap-x-edge">
+		{#each footer.groups as group (group._key)}
+			<div class="space-y-line border-b-2 pt-[2rem] pb-[2.3rem] md:border-b-0 md:pb-0">
+				<h2>{group.title}</h2>
+				{#if group.kind === 'text'}
+					<Portable value={group.text} />
+				{:else if group.links?.length}
+					<ul>
+						{#each group.links as link (link._key)}
+							<li><AppLink {link}>{link.label}</AppLink></li>
+						{/each}
+					</ul>
+				{/if}
+			</div>
+		{/each}
+	</div>
+
+	<div class="max-w-[36.5rem] pt-[2rem]">
+		<p>
+			<span aria-hidden="true">[logo]</span><span class="sr-only">DESERT X</span> is a ® registered
+			trademark. © Desert Biennial {new Date().getFullYear()}.
+		</p>
 		{#if footer.credits}
 			<Portable value={footer.credits} />
 		{/if}

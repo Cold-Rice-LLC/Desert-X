@@ -11,18 +11,21 @@ import { urlFor } from '$lib/sanity/client';
 const SOCIAL_HOSTS =
 	/(^|\.)(instagram|facebook|x|twitter|youtube|tiktok|linkedin|vimeo|threads)\.(com|net)$/;
 
-/** The footer's links to the organization's social profiles, as URLs. */
-export const socialProfiles = (links = []) =>
-	links
-		.filter((link) => link.linkType === 'external' && link.externalUrl)
-		.map((link) => link.externalUrl)
-		.filter((href) => {
-			try {
-				return SOCIAL_HOSTS.test(new URL(href).hostname);
-			} catch {
-				return false;
-			}
-		});
+/** Links to the organization's social profiles, as URLs, each once. */
+export const socialProfiles = (links = []) => [
+	...new Set(
+		links
+			.filter((link) => link.linkType === 'external' && link.externalUrl)
+			.map((link) => link.externalUrl)
+			.filter((href) => {
+				try {
+					return SOCIAL_HOSTS.test(new URL(href).hostname);
+				} catch {
+					return false;
+				}
+			})
+	)
+];
 
 const organizationId = (origin) => `${origin}/#organization`;
 

@@ -2,7 +2,7 @@
 	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/state';
 	import AppLink from '$lib/components/AppLink.svelte';
-	import Footer from '$lib/components/layout/Footer.svelte';
+	import Search from '$lib/components/icons/Search.svelte';
 	import TopBar from '$lib/components/layout/TopBar.svelte';
 	import { linkHref } from '$lib/sanity/links';
 	import { ui } from '$lib/ui.svelte.js';
@@ -21,7 +21,7 @@
 	 * item is a button that opens them in place of the menu text, under the
 	 * whole row, placed against it so they stay nested in their item's
 	 * list. The rest are plain links. Below the breakpoint the menu text is
-	 * left off, and the site footer is at the bottom instead; the menu
+	 * left off, and search is at the bottom left instead; the menu
 	 * scrolls if it runs past the screen. Sub-items linking to a location
 	 * get the Desert X mark, the font's "[x]", the size of the logo's X;
 	 * one that goes nowhere, like a location with no
@@ -32,7 +32,7 @@
 	 * stacked above the nav so the fade-out isn't cut off when the dialog
 	 * leaves the top layer.
 	 */
-	let { menu, footer } = $props();
+	let { menu } = $props();
 
 	const desktop = new MediaQuery('width >= 70rem');
 	let dialog;
@@ -143,5 +143,11 @@
 		<p class="mt-line hidden px-gutter tracking-tight menu:block">{menu.text}</p>
 	{/if}
 
-	<Footer {footer} menu class="pt-md menu:hidden" />
+	<a
+		href="/search"
+		aria-label="Search"
+		class="mt-auto self-start px-edge pt-md pb-edge link-fade menu:hidden"
+	>
+		<Search class="h-[2.4rem] w-auto" />
+	</a>
 </dialog>

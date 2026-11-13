@@ -162,7 +162,7 @@
 		class="pointer-events-none absolute inset-x-0 bottom-edge z-20 grid grid-cols-12 items-end px-edge text-lead text-white *:pointer-events-auto md:text-md md:tracking-tight"
 		bind:offsetHeight={linksHeight}
 	>
-		<FooterLinks links={quickLinks} compact />
+		<FooterLinks links={quickLinks} />
 	</nav>
 </section>
 
