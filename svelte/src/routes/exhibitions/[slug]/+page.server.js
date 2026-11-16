@@ -8,9 +8,9 @@ import { exhibitionEvent } from '$lib/structuredData';
 
 /**
  * An edition by slug, with every other edition at its location, newest
- * first, for Other Editions, and its location's eight newest news items,
- * as the News landing's filter for the location has them (press is
- * General), for the end of the page. The nav shows its location after Upcoming,
+ * first, for Other Editions, and the eight newest news items for the end
+ * of the page: its location's, as the News landing's filter for the
+ * location has them, and any news or press linked to it by Exhibition. The nav shows its location after Upcoming,
  * On View or, once it's over, its year (see editionStatus), on a line of
  * its own on phones.
  * Shared, it shows its title, the start of its description and its first
@@ -26,7 +26,9 @@ export async function load({ params, url }) {
 				${seoFields},
 				"others": *[_type == "edition" && location._ref == ^.location._ref && _id != ^._id]
 					| order(year desc){ ${editionFields} },
-				"news": *[_type == "news" && kind != "press" && location._ref == ^.location._ref]
+				"news": *[_type == "news" && (
+					(kind != "press" && location._ref == ^.location._ref) || edition._ref == ^._id
+				)]
 					| order(publishDate desc) [0...8]{ ${newsTileFields} }
 			},
 			"news": { ${newsLandingFields} }

@@ -5,16 +5,18 @@
 
 	let { data } = $props();
 
-	// General, then each location, one at a time: on phones General down
-	// the left half and the locations down the right
-	const filter = ({ title, slug }) => ({
-		key: slug,
-		label: title,
-		href: `/news?filter=${slug}`,
-		current: slug === data.filter
-	});
+	// General and Press, then each location, one at a time: on phones
+	// General and Press down the left half and the locations down the right
+	// Choosing the current one again clears it
+	const filter = ({ title, slug }) => {
+		const current = slug === data.filter;
+		return { key: slug, label: title, href: current ? '/news' : `/news?filter=${slug}`, current };
+	};
 	let filters = $derived([
-		[filter({ title: 'General', slug: 'general' })],
+		[
+			data.hasGeneral && filter({ title: 'General', slug: 'general' }),
+			filter({ title: 'Press', slug: 'press' })
+		].filter(Boolean),
 		data.locations.map(filter)
 	]);
 </script>

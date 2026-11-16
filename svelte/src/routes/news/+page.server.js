@@ -6,24 +6,27 @@ import { pageParam } from '$lib/url';
 
 const PAGE_SIZE = 24;
 
-// Press is always General. News with no kind predates the field: it's news.
+// General is news with no location; press only shows under Press. News with
+// no kind predates the field: it's news.
 const filterConditions = {
-	general: '(kind == "press" || !defined(location))',
+	general: 'kind != "press" && !defined(location)',
+	press: 'kind == "press"',
 	location: 'kind != "press" && location->slug.current == $filter'
 };
 
 /**
- * News, newest first, optionally filtered to General or one location by
+ * News, newest first, optionally filtered to General, Press or one location by
  * `?filter=`; `?page=` is how many batches of 24 to show (see LoadMore).
- * Only locations with news of their own are offered as filters, so none
- * leads to an empty list: Jalisco, say, joins them with its first news.
+ * General and locations are only offered as filters once they have news of
+ * their own, so none leads to an empty list: Jalisco, say, joins them with
+ * its first news.
  */
 export async function load({ url }) {
 	const filter = url.searchParams.get('filter');
 	const page = pageParam(url);
 
 	const condition = filter
-		? filterConditions[filter === 'general' ? 'general' : 'location']
+		? filterConditions[filter === 'general' || filter === 'press' ? filter : 'location']
 		: 'true';
 
 	const [landing, results] = await Promise.all([
@@ -34,6 +37,7 @@ export async function load({ url }) {
 				"items": *[_type == "news" && ${condition}] | order(publishDate desc) [0...$end]{
 					${newsTileFields}
 				},
+				"hasGeneral": count(*[_type == "news" && ${filterConditions.general}]) > 0,
 				"locations": *[
 					_type == "location" &&
 					count(*[_type == "news" && kind != "press" && location._ref == ^._id]) > 0
