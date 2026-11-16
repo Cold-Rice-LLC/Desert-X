@@ -19,11 +19,11 @@
 	/**
 	 * A gallery's images full screen, opened at image `start`. It fades in
 	 * as it opens and out as it closes, or cuts with reduced motion. Close,
-	 * top right in white, underlined as the map card's, is focused on
+	 * top right in white, underlined as the map card's, at the nav's size, is focused on
 	 * opening, with its ring only if the keyboard opened it (see
 	 * layout.css). Images sit a column of the 24-column grid apart, as the
 	 * gallery's do, on white, and an image's caption sits over it bottom
-	 * left, in white at the body size.
+	 * left, in white at the gallery captions' size.
 	 *
 	 * From md up it's a carousel, as the homepage's is: each image covers the
 	 * window around its hotspot. Clicking the left half goes back an image
@@ -153,7 +153,7 @@
 		<!-- Each place this is rendered is straight inside a figure -->
 		<!-- svelte-ignore a11y_figcaption_parent -->
 		<figcaption
-			class="pointer-events-auto absolute right-edge bottom-edge left-edge text-md text-white"
+			class="pointer-events-auto absolute right-edge bottom-edge left-edge text-base text-white"
 		>
 			<Portable {value} />
 		</figcaption>
@@ -178,7 +178,7 @@
 	<button
 		type="button"
 		autofocus
-		class="absolute top-0 right-edge z-20 flex h-nav items-center font-mono text-card text-white"
+		class="absolute top-0 right-edge z-20 flex h-nav items-center text-md text-white"
 		onclick={close}
 	>
 		<span class="link-underline">Close</span>
