@@ -54,6 +54,7 @@
 				data-sveltekit-keepfocus
 			>
 				<Choice
+					param="lang"
 					current={!spanish}
 					href={queryHref(page.url, { lang: null })}
 					hreflang="en"
@@ -62,6 +63,7 @@
 				>
 				/
 				<Choice
+					param="lang"
 					current={Boolean(spanish)}
 					href={queryHref(page.url, { lang: 'es' })}
 					hreflang="es"
@@ -84,7 +86,10 @@
 
 	{#snippet footer()}
 		{#if previous && next}
-			<nav aria-label="Artworks" class="flex justify-between gap-x-edge px-module text-title md:justify-start md:text-md">
+			<nav
+				aria-label="Artworks"
+				class="flex justify-between gap-x-edge px-module text-title md:justify-start md:text-md"
+			>
 				<a
 					href={previous.href}
 					rel="prev"

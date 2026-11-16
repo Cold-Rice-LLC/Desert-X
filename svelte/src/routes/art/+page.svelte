@@ -50,9 +50,10 @@
 		{/if}
 
 		<nav aria-label="Artwork views" class="mt-line text-title uppercase md:text-md">
-			<Choice href={href({ view: null })} current={data.view === 'grid'}>Grid</Choice>
+			<Choice param="view" href={href({ view: null })} current={data.view === 'grid'}>Grid</Choice>
 			/
-			<Choice href={href({ view: 'list' })} current={data.view === 'list'}>List</Choice>
+			<Choice param="view" href={href({ view: 'list' })} current={data.view === 'list'}>List</Choice
+			>
 		</nav>
 
 		<SearchField
