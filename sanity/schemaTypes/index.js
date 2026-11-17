@@ -20,6 +20,7 @@ import dropdownsModule from './modules/dropdownsModule'
 import newsModule from './modules/newsModule'
 import donateModule from './modules/donateModule'
 import newsletterModule from './modules/newsletterModule'
+import carouselModule from './modules/carouselModule'
 
 export const schemaTypes = [
   // Documents
@@ -47,4 +48,5 @@ export const schemaTypes = [
   newsModule,
   donateModule,
   newsletterModule,
+  carouselModule,
 ]

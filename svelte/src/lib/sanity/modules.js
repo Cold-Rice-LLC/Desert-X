@@ -1,4 +1,4 @@
-import { imageFields } from '$lib/sanity/images';
+import { galleryImageFields, imageFields } from '$lib/sanity/images';
 import { richTextFields } from '$lib/sanity/links';
 import { latestNews, newsLandingFields, newsTileFields } from '$lib/sanity/news';
 
@@ -56,6 +56,9 @@ export const modulesFields = `
 		title,
 		text,
 		amounts
+	},
+	_type == "carouselModule" => {
+		"images": images[defined(asset)]{ ${galleryImageFields} }
 	},
 	_type == "newsletterModule" => {
 		heading,
