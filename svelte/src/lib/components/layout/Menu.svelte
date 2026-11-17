@@ -18,9 +18,11 @@
 	 * row from the left, a word-like gap apart, never wrapping.
 	 * Items whose Link Type is Sub-items show them under the item below the
 	 * breakpoint, always, with the item an underlined label; from it the
-	 * item is a button that opens them in place of the menu text, under the
-	 * whole row, placed against it so they stay nested in their item's
-	 * list. The rest are plain links. Below the breakpoint the menu text is
+	 * item is a button that toggles them, on a line of their own under the
+	 * whole row and above the menu text, the first such item open whenever
+	 * the menu opens. Its <li> drops out of the layout there, so they can
+	 * wrap below the row while staying nested in their item's list. The
+	 * rest are plain links. Below the breakpoint the menu text is
 	 * left off, and search is at the bottom left instead; the menu
 	 * scrolls if it runs past the screen. Sub-items linking to a location
 	 * get the Desert X mark, the font's "[x]", the size of the logo's X;
@@ -50,7 +52,7 @@
 	// which Chrome only fires once the page next renders
 	$effect(() => {
 		if (ui.menuOpen && !dialog.open) {
-			activeKey = null;
+			activeKey = withSubItems[0]?._key ?? null;
 			dialog.showModal();
 		}
 		if (!ui.menuOpen && dialog.open) dialog.close();
@@ -90,11 +92,11 @@
 
 	<nav aria-label="Main">
 		<ul
-			class="mt-[0.9rem] grid grid-flow-col grid-cols-[5fr_6fr] pr-edge pl-indent menu:relative menu:mt-[2.3rem] menu:flex menu:gap-x-[0.8em] menu:px-gutter menu:whitespace-nowrap"
+			class="mt-[0.9rem] grid grid-flow-col grid-cols-[5fr_6fr] pr-edge pl-indent menu:mt-[2.3rem] menu:flex menu:flex-wrap menu:gap-x-[0.8em] menu:px-gutter menu:whitespace-nowrap"
 			style:grid-template-rows="repeat({rows}, auto)"
 		>
 			{#each menu.items as item (item._key)}
-				<li class={[item.linkType === 'subItems' && 'col-span-2']}>
+				<li class={[item.linkType === 'subItems' && 'col-span-2 menu:contents']}>
 					{#if item.linkType === 'subItems'}
 						{#if desktop.current}
 							<button
@@ -111,7 +113,7 @@
 						{#if item === active || !desktop.current}
 							<ul
 								id="menu-sub-items-{item._key}"
-								class="my-line flex flex-col menu:absolute menu:inset-x-0 menu:top-full menu:mt-md menu:mb-0 menu:flex-row menu:flex-wrap menu:gap-x-[0.8em] menu:px-gutter"
+								class="my-line flex flex-col menu:order-last menu:mt-md menu:mb-0 menu:basis-full menu:flex-row menu:flex-wrap menu:gap-x-[0.8em]"
 							>
 								{#each item.subItems ?? [] as subItem (subItem._key)}
 									{#snippet label()}
@@ -140,7 +142,7 @@
 		</ul>
 	</nav>
 
-	{#if menu.text && !active}
+	{#if menu.text}
 		<p class="mt-line hidden px-gutter tracking-tight menu:block">{menu.text}</p>
 	{/if}
 
