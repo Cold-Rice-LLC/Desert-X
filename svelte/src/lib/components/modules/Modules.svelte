@@ -68,7 +68,9 @@
 
 <style>
 	.modules {
-		> :global(* + *) {
+		/* Not a dialog, such as a Carousel's lightbox, which fills the window
+		   from its top */
+		> :global(* + :not(dialog)) {
 			margin-top: var(--spacing-xl);
 		}
 
