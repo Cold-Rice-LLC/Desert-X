@@ -23,7 +23,7 @@
 	 * the menu opens. Its <li> drops out of the layout there, so they can
 	 * wrap below the row while staying nested in their item's list. The
 	 * rest are plain links. Below the breakpoint the menu text is
-	 * left off, and search is at the bottom left instead; the menu
+	 * left off. Search is at the bottom left at every width; the menu
 	 * scrolls if it runs past the screen. Sub-items linking to a location
 	 * get the Desert X mark, the font's "[x]", the size of the logo's X;
 	 * one that goes nowhere, like a location with no
@@ -149,7 +149,7 @@
 	<a
 		href="/search"
 		aria-label="Search"
-		class="mt-auto self-start px-edge pt-md pb-edge link-fade menu:hidden"
+		class="mt-auto self-start px-edge pt-md pb-edge link-fade"
 	>
 		<Search class="h-[2.4rem] w-auto" />
 	</a>
