@@ -17,11 +17,13 @@ export default defineType({
     },
   ],
   preview: {
-    select: {images: 'images', image: 'images.0'},
-    prepare: ({images, image}) => ({
-      title: countLabel(images?.length, 'image'),
+    // The array alone: selecting images.0 beside it would turn it into an
+    // object with only that key, and so no length
+    select: {images: 'images'},
+    prepare: ({images = []}) => ({
+      title: countLabel(images.length, 'image'),
       subtitle: 'Carousel',
-      media: image,
+      media: images[0],
     }),
   },
 })
