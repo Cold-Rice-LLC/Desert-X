@@ -2,8 +2,10 @@
 	import './layout.css';
 	import 'nprogress/nprogress.css';
 	import NProgress from 'nprogress';
-	import { beforeNavigate } from '$app/navigation';
+	import { onMount } from 'svelte';
+	import { afterNavigate, beforeNavigate } from '$app/navigation';
 	import { page } from '$app/state';
+	import { loadAnalytics, trackPageView } from '$lib/analytics';
 	import Footer from '$lib/components/layout/Footer.svelte';
 	import MainNav from '$lib/components/layout/MainNav.svelte';
 	import Menu from '$lib/components/layout/Menu.svelte';
@@ -24,6 +26,16 @@
 		NProgress.start();
 		const done = () => NProgress.done();
 		complete.then(done, done);
+	});
+
+	onMount(loadAnalytics);
+
+	// A page view for each page, the first load included. Query changes made
+	// in code on the same page (searching as you type, loading more) aren't
+	// new pages.
+	afterNavigate(({ type, from, to }) => {
+		if (type === 'goto' && from?.url.pathname === to?.url.pathname) return;
+		trackPageView();
 	});
 
 	// Whether a pointer or Tab last moved focus, for text fields' focus
