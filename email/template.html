@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="x-apple-disable-message-reformatting">
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
+<title>*|MC:SUBJECT|*</title>
+
+<!--[if mso]>
+<noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
+<![endif]-->
+
+<!--
+	The brand font, served by the website. Apple Mail, iOS Mail, Outlook for Mac,
+	Samsung Mail and Thunderbird show it; everything else falls back to Helvetica
+	or Arial. Kept in its own <style> so a client that rejects @font-face doesn't
+	throw away the layout rules below with it. When the site moves to desertx.org,
+	change this URL (it's the only place it appears). Not wrapped in an
+	[if !mso] comment: Mailchimp's importer empties those. Outlook on Windows
+	would show Times New Roman for it, which the [if mso] block below prevents.
+-->
+<style>
+	@font-face {
+		font-family: 'DESERT X Schengen';
+		src: url('https://desert-x.vercel.app/fonts/DESERTXSchengen-Regular.woff2') format('woff2');
+		font-weight: 400;
+		font-style: normal;
+	}
+</style>
+
+<!--
+	Mobile first: these base values are what phones (and any client that ignores
+	media queries) get; the min-width query below widens to the Figma sizes.
+	Mailchimp inlines this CSS when it sends, so the query's rules need !important
+	to beat the inlined base values. Email clients don't support nested CSS, so
+	the breakpoint is one block rather than nested per selector.
+-->
+<style>
+	body {
+		margin: 0;
+		padding: 0;
+		background-color: #ffffff;
+		-webkit-text-size-adjust: 100%;
+		-ms-text-size-adjust: 100%;
+	}
+	table {
+		border-collapse: collapse;
+		mso-table-lspace: 0;
+		mso-table-rspace: 0;
+	}
+	img {
+		border: 0;
+		outline: none;
+		text-decoration: none;
+		-ms-interpolation-mode: bicubic;
+	}
+	/* #010101, not #000000: Gmail ignores pure black on links and makes them
+	   blue. Mailchimp copies this rule onto each link when it sends */
+	a {
+		color: #010101;
+		text-decoration: underline;
+	}
+	/* The site's rich-text underline (layout.css, PortableLink.svelte). In a
+	   media query so Mailchimp's inliner leaves it here rather than copying it
+	   onto each link, where Gmail, which doesn't support it, can throw out the
+	   link's whole style attribute. !important to beat the links' inline
+	   text-decoration, which resets the thickness. Apple Mail and the like show it */
+	@media screen {
+		a {
+			text-underline-offset: 0.12em !important;
+			text-decoration-thickness: 0.05em !important;
+		}
+	}
+	/* Clients with hover (Apple Mail, Gmail and Outlook.com in a browser) drop
+	   the underline; !important to beat the footer links' inline style */
+	a:hover {
+		text-decoration: none !important;
+	}
+	.page {
+		padding: 16px;
+	}
+	/* Figma spaces blocks 70px (scaled down on phones) from a line's baseline
+	   or an image's edge to the next capital's top, so text cells take off the
+	   room their line box leaves above the capitals and below the baseline */
+	.module {
+		padding-bottom: 38px;
+	}
+	.module-text {
+		padding-bottom: 34px;
+	}
+	.module-logo {
+		padding-bottom: 24px;
+	}
+	.logo {
+		display: block;
+		width: 173px;
+		height: auto;
+	}
+	.image {
+		display: block;
+		width: 100%;
+		max-width: 640px;
+		height: auto;
+	}
+	.title,
+	.text {
+		font-family: 'DESERT X Schengen', Helvetica, Arial, sans-serif;
+		font-size: 20px;
+		line-height: 20px;
+		color: #000000;
+	}
+	.title {
+		text-align: center;
+		text-transform: uppercase;
+	}
+	.text p {
+		margin: 0;
+	}
+	.text p + p {
+		margin-top: 2em;
+	}
+	.footer {
+		border-top: 1px solid #000000;
+		padding-top: 10px;
+	}
+	.footer,
+	.footer-legal {
+		font-family: 'DESERT X Schengen', Helvetica, Arial, sans-serif;
+		font-size: 13px;
+		line-height: 13px;
+		color: #000000;
+	}
+	.footer-col {
+		display: block;
+		padding-bottom: 13px;
+		vertical-align: top;
+	}
+	.footer-legal {
+		padding-bottom: 13px;
+	}
+	.footer-logo {
+		width: 56px;
+		height: auto;
+	}
+
+	@media (min-width: 690px) {
+		.page {
+			padding: 25px !important;
+		}
+		.module {
+			padding-bottom: 66px !important;
+		}
+		.module-text {
+			padding-bottom: 60px !important;
+		}
+		.module-logo {
+			padding-bottom: 44px !important;
+		}
+		.logo {
+			width: 303px !important;
+		}
+		.title,
+		.text {
+			font-size: 35px !important;
+			line-height: 35px !important;
+		}
+		.footer {
+			padding-top: 14px !important;
+		}
+		.footer,
+		.footer-legal {
+			font-size: 22px !important;
+			line-height: 22px !important;
+		}
+		.footer-col {
+			display: table-cell !important;
+			padding-bottom: 0 !important;
+		}
+		.footer-col-gap {
+			padding-right: 33px !important;
+		}
+		.footer-legal {
+			padding-top: 22px !important;
+			padding-bottom: 22px !important;
+		}
+		.footer-logo {
+			width: 95px !important;
+		}
+	}
+</style>
+
+<!--
+	Outlook on Windows ignores media queries, so give it the desktop sizes here,
+	and Arial: without this it shows the fallback as Times New Roman.
+-->
+<!--[if mso]>
+<style>
+	* { font-family: Arial, Helvetica, sans-serif !important; }
+	.page { padding: 25px !important; }
+	.module { padding-bottom: 66px !important; }
+	.module-text { padding-bottom: 60px !important; }
+	.module-logo { padding-bottom: 44px !important; }
+	.title, .text { font-size: 35px !important; line-height: 35px !important; }
+	.footer { padding-top: 14px !important; }
+	.footer, .footer-legal { font-size: 22px !important; line-height: 22px !important; }
+	.footer-col { padding-bottom: 0 !important; }
+	.footer-col-gap { padding-right: 33px !important; }
+	.footer-legal { padding-top: 22px !important; padding-bottom: 22px !important; }
+</style>
+<![endif]-->
+</head>
+<body>
+<!-- Inbox preview text, set in the campaign's "Preview text" field -->
+<span style="display: none; font-size: 0; line-height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; visibility: hidden; mso-hide: all;">*|MC_PREVIEW_TEXT|*</span>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff;">
+	<tr>
+		<td align="center" class="page">
+			<!--[if mso]><table role="presentation" width="640" align="center" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
+			<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 640px;">
+				<tr>
+					<td align="left">
+
+						<!--
+							Modules. In the Mailchimp editor each one can be added again,
+							reordered, or removed; the ones below are Design 1's layout.
+						-->
+
+						<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" mc:repeatable="content" mc:variant="Logo header">
+							<tr>
+								<td class="module module-logo">
+									<a href="https://desertx.org"><img src="images/logo.png" width="303" alt="DESERT X" class="logo"></a>
+								</td>
+							</tr>
+						</table>
+
+						<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" mc:repeatable="content" mc:variant="Image">
+							<tr>
+								<td class="module">
+									<img mc:edit="image" src="images/sample-photo.jpg" width="640" alt="Doug Aitken, Mirage, 2017" class="image">
+								</td>
+							</tr>
+						</table>
+
+						<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" mc:repeatable="content" mc:variant="Centered title">
+							<tr>
+								<td class="module-text title" mc:edit="title">10 Year Anniversary</td>
+							</tr>
+						</table>
+
+						<!--
+							Paragraphs (Enter) get the design's two-line gap; a blank line
+							(Shift+Enter twice) gives the one-line gap used between the dates.
+						-->
+						<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" mc:repeatable="content" mc:variant="Text">
+							<tr>
+								<td class="module-text text" mc:edit="text">
+									<p>On October 30, DESERT X returns to the Coachella Valley for its tenth-anniversary exhibition, curated by Neville Wakefield and Kaitlin Garcia-Maestas. For this edition, the exhibition opens in the fall and continues through winter and spring. New site-responsive works will evolve with the desert, inviting visitors to return throughout the season and see how the works change with the landscape.</p>
+									<p>Opening Weekend<br>Oct 28–31, 2027<br><br>Public exhibition<br>Oct 30, 2027–<br>May 7, 2028</p>
+									<p>The exhibition is free and open to all. Participating artists and public programs will be announced in the coming months.</p>
+									<p>See you in the desert,<br>DESERT X</p>
+								</td>
+							</tr>
+						</table>
+
+						<!-- Footer: fixed, not editable in campaigns -->
+						<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+							<tr>
+								<td class="footer">
+									<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+										<tr>
+											<td width="163" class="footer-col footer-col-gap">For questions<br>or inquiries<br><a href="mailto:info@desertx.org" style="color: #010101; text-decoration: none;">info@desertx.org</a></td>
+											<td width="158" class="footer-col footer-col-gap">Want to change how you receive these emails?</td>
+											<td width="254" class="footer-col">You can update your <a href="*|UPDATE_PROFILE|*" style="color: #010101; text-decoration: underline;">preferences</a> or <a href="*|UNSUB|*" style="color: #010101; text-decoration: underline;">unsubscribe</a> from this list.</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td class="footer-legal">
+									<img src="images/logo.png" width="95" alt="DESERT X" class="footer-logo"> is a ® registered trademark. © Desert Biennial *|CURRENT_YEAR|*. All rights reserved. *|LIST:ADDRESSLINE|*
+								</td>
+							</tr>
+						</table>
+
+					</td>
+				</tr>
+			</table>
+			<!--[if mso]></td></tr></table><![endif]-->
+		</td>
+	</tr>
+</table>
+</body>
+</html>

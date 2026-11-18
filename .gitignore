@@ -1,0 +1,6 @@
+.claude/settings.local.json
+.DS_Store
+
+# The Mailchimp template's upload zip, and its unzipped copy, built from email/
+email/desertx-mailchimp.zip
+email/desertx-mailchimp/
