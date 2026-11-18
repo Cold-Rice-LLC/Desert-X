@@ -19,10 +19,9 @@
 	 * nothing to show are left out. `news` holds the News landing fields the
 	 * news tiles need; without it, as in Other Editions, there's no news.
 	 * `headingLevel` sets its sections' headings: h2s on its own page, h3s
-	 * in Other Editions. `title`, on its own page, is its h1, centred
-	 * right over the dates in their style. `class` goes on what follows the gallery.
+	 * in Other Editions. `class` goes on what follows the gallery.
 	 */
-	let { edition, news, headingLevel, title, class: className, children } = $props();
+	let { edition, news, headingLevel, class: className, children } = $props();
 
 	let entries = $derived(sortEntries(artworkEntries(edition.artworks ?? [])));
 
@@ -35,19 +34,12 @@
 {/if}
 
 <div class={['space-y-2xl pt-page-top text-md', className]}>
-	{#if title || dates || edition.description}
+	{#if dates || edition.description}
 		<div class="space-y-line px-gutter">
-			{#if title || dates}
+			{#if dates}
 				<!-- Proportional figures, so they read as Schengen rather than the
 				     tabular ones the site sets elsewhere -->
-				<hgroup class="text-center proportional-nums">
-					{#if title}
-						<h1>{title}</h1>
-					{/if}
-					{#if dates}
-						<p>{dates}</p>
-					{/if}
-				</hgroup>
+				<p class="text-center proportional-nums">{dates}</p>
 			{/if}
 			{#if edition.description}
 				<Portable value={edition.description} />
