@@ -5,7 +5,7 @@ import { richTextFields } from '$lib/sanity/links';
 
 /**
  * The Search landing, and the titles and names of everything search can
- * find: artworks, editions, pages, the other landings and news. Searching
+ * find: artworks, editions, pages and hotels, the other landings and news. Searching
  * happens in +page.js, from the URL, so typing doesn't load them again.
  * Kept out of search engines, results and all.
  */
@@ -18,8 +18,8 @@ export async function load() {
 				_id, _type, title, "slug": slug.current, year, "location": location->title
 			},
 			"pages": *[
-				(_type == "page" && defined(slug.current)) ||
-				_id in ["newsLanding", "artLanding", "visitLanding"]
+				(_type in ["page", "hotel"] && defined(slug.current)) ||
+				_id in ["newsLanding", "artLanding", "visitLanding", "stayLanding"]
 			]{ _id, _type, title, "slug": slug.current },
 			"news": *[_type == "news" && (defined(slug.current) || (kind == "press" && defined(pressUrl)))]{
 				_id, _type, "kind": coalesce(kind, "news"), title, "slug": slug.current, pressUrl,

@@ -6,12 +6,11 @@ import {
   HomeIcon,
   ImageIcon,
   PinIcon,
-  StarIcon,
   UserIcon,
 } from '@sanity/icons'
 import DocumentsPane from 'sanity-plugin-documents-pane'
 import {landings} from './schemaTypes/documents/landings'
-import {HOMEPAGE_IDS, HOTEL_PREFIX} from './schemaTypes/documents/page'
+import {HOMEPAGE_IDS} from './schemaTypes/documents/page'
 
 const publishedId = (document) => document?.displayed?._id?.replace('drafts.', '')
 
@@ -63,7 +62,27 @@ export const myStructure = (S) =>
                 S.listItem()
                   .title(title)
                   .icon(icon)
-                  .child(S.document().schemaType(name).documentId(name)),
+                  .child(
+                    name === 'stayLanding'
+                      ? // The Stay page, and the hotels it lists, each with
+                        // a page of its own under it
+                        S.list()
+                          .title(title)
+                          .items([
+                            S.listItem()
+                              .title('Stay Page')
+                              .icon(icon)
+                              .child(S.document().schemaType(name).documentId(name)),
+                            S.documentTypeListItem('hotel')
+                              .title('Hotels')
+                              .child(
+                                S.documentTypeList('hotel')
+                                  .title('Hotels')
+                                  .defaultOrdering([{field: 'title', direction: 'asc'}]),
+                              ),
+                          ])
+                      : S.document().schemaType(name).documentId(name),
+                  ),
               ),
               S.divider(),
               S.documentTypeListItem('page')
@@ -71,24 +90,8 @@ export const myStructure = (S) =>
                 .child(
                   S.documentTypeList('page')
                     .title('All pages')
-                    .filter(
-                      // coalesce, or pages with no slug yet would drop out
-                      '_type == "page" && !(_id in $homepageIds) && !coalesce(string::startsWith(slug.current, $prefix), false)',
-                    )
-                    .params({homepageIds: HOMEPAGE_IDS, prefix: HOTEL_PREFIX}),
-                ),
-              // The pages under Stay, kept apart from the rest. New ones
-              // start under stay/ with a carousel and a text module.
-              S.listItem()
-                .title('Partner Hotels')
-                .icon(StarIcon)
-                .child(
-                  S.documentTypeList('page')
-                    .title('Partner Hotels')
-                    .filter('_type == "page" && string::startsWith(slug.current, $prefix)')
-                    .params({prefix: HOTEL_PREFIX})
-                    .defaultOrdering([{field: 'title', direction: 'asc'}])
-                    .initialValueTemplates([S.initialValueTemplateItem('hotel-page')]),
+                    .filter('_type == "page" && !(_id in $homepageIds)')
+                    .params({homepageIds: HOMEPAGE_IDS}),
                 ),
             ]),
         ),

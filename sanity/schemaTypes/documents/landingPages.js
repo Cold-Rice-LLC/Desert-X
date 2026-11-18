@@ -1,4 +1,4 @@
-import {DocumentTextIcon, EarthGlobeIcon, ImageIcon, SearchIcon} from '@sanity/icons'
+import {DocumentTextIcon, EarthGlobeIcon, ImageIcon, MoonIcon, SearchIcon} from '@sanity/icons'
 
 /**
  * The landing pages and their default titles. Kept apart from the schema
@@ -9,5 +9,6 @@ export const landingPages = [
   {name: 'newsLanding', title: 'News', icon: DocumentTextIcon},
   {name: 'artLanding', title: 'Art', icon: ImageIcon},
   {name: 'visitLanding', title: 'Visit', icon: EarthGlobeIcon},
+  {name: 'stayLanding', title: 'Stay', icon: MoonIcon},
   {name: 'searchLanding', title: 'Search', icon: SearchIcon},
 ]

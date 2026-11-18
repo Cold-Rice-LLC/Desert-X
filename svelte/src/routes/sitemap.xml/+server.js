@@ -2,23 +2,29 @@ import { client } from '$lib/sanity/client';
 
 // The landings the site builds itself. Search is left out, as it isn't
 // indexed (nor is Donate's checkout, which isn't a document).
-const LANDINGS = ['/', '/art', '/news', '/visit'];
+const LANDINGS = ['/', '/art', '/news', '/visit', '/stay'];
 
 // Where each document type lives, as in linkHref
-const PREFIXES = { page: '/', edition: '/exhibitions/', artwork: '/art/', news: '/news/' };
+const PREFIXES = {
+	page: '/',
+	edition: '/exhibitions/',
+	artwork: '/art/',
+	news: '/news/',
+	hotel: '/stay/'
+};
 
 const escape = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 /**
  * Every indexed page, for search engines: the landings, then each page,
- * edition, artwork and news article with a slug, with when it last
+ * edition, artwork, news article and hotel with a slug, with when it last
  * changed. Press has no page of its own, so it's left out. robots.txt
  * points here.
  */
 export async function GET({ url }) {
 	const documents = await client.fetch(`
 		*[
-			_type in ["page", "edition", "artwork", "news"]
+			_type in ["page", "edition", "artwork", "news", "hotel"]
 			&& defined(slug.current)
 			&& _id != "homepage"
 			&& !(_id in path("drafts.**"))

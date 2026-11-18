@@ -56,6 +56,7 @@ export const linkTargetFields = ({
       {type: 'location'},
       {type: 'artwork'},
       {type: 'news'},
+      {type: 'hotel'},
       ...landingPages.map(({name}) => ({type: name})),
     ],
     options: {disableNew: true},

@@ -5,13 +5,15 @@
 	let { data } = $props();
 </script>
 
-<h1 class="sr-only">{data.edition.location} {data.edition.year}</h1>
-
 <!-- Keyed, so moving to another edition starts afresh: its own carousel
      and open dropdown -->
 {#key data.edition._id}
 	<div class="pb-page-bottom">
-		<EditionContent edition={data.edition} news={data.news}>
+		<EditionContent
+			edition={data.edition}
+			news={data.news}
+			title="DESERT X {data.edition.location} {data.edition.year}"
+		>
 			{#if data.edition.others.length}
 				<OtherEditions editions={data.edition.others} />
 			{/if}

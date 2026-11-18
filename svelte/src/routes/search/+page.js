@@ -48,7 +48,7 @@ export function load({ data, url }) {
 	// A page whose path a landing's route already takes (a page slugged
 	// "visit") can't be reached, so only the landing is listed
 	const landingHrefs = new Set(
-		index.pages.filter(({ _type }) => _type !== 'page').map((landing) => hrefOf(landing))
+		index.pages.filter(({ _type }) => _type.endsWith('Landing')).map((landing) => hrefOf(landing))
 	);
 	const reachable = index.pages.filter(
 		(page) => page._type !== 'page' || !landingHrefs.has(hrefOf(page))

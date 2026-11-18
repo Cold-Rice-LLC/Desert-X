@@ -5,6 +5,7 @@ import artwork from './documents/artwork'
 import news from './documents/news'
 import location from './documents/location'
 import edition from './documents/edition'
+import hotel from './documents/hotel'
 import {landings} from './documents/landings'
 import navLink from './objects/navLink'
 import palette from './objects/palette'
@@ -31,6 +32,7 @@ export const schemaTypes = [
   news,
   location,
   edition,
+  hotel,
   ...landings,
   // Objects
   navLink,

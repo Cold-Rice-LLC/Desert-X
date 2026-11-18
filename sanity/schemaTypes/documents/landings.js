@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import {defineArrayMember, defineField, defineType} from 'sanity'
 import {NoteField} from '../../components/NoteField'
 import {moduleMembers} from '../modules'
 import {landingPages} from './landingPages'
@@ -66,6 +66,26 @@ const landingFields = {
     modulesField(moduleMembers, {
       description:
         'General visitor information, shown first. Each exhibition that’s on (today is between its Start and End Date, or from its Show on Visit Page From date if set) follows with its Visit Info and map, then the latest news.',
+    }),
+  ],
+  stayLanding: [
+    modulesField(moduleMembers, {
+      description: 'Optional. Shown above the hotels, e.g. an introduction.',
+    }),
+    defineField({
+      name: 'hotels',
+      type: 'array',
+      title: 'Hotels',
+      description:
+        'The partner hotels, in order: drag to reorder. Each shows its photo and caption, linking to its page. A hotel not in this list still shows, after these.',
+      of: [
+        defineArrayMember({
+          type: 'reference',
+          to: [{type: 'hotel'}],
+          options: {disableNew: true},
+        }),
+      ],
+      validation: (rule) => rule.unique(),
     }),
   ],
   searchLanding: [

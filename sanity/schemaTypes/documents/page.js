@@ -9,15 +9,12 @@ export const HOMEPAGE_IDS = ['homepage', 'drafts.homepage']
 
 const isHomepage = (document) => HOMEPAGE_IDS.includes(document?._id)
 
-/** The slug prefix of a partner hotel's page, under the Stay page. */
-export const HOTEL_PREFIX = 'stay/'
-
 // A slug is one or more parts, a / between them, so a page can sit under
 // another: stay/parker-palm-springs is at /stay/parker-palm-springs
 const SLUG_PATTERN = /^[a-z0-9-]+(\/[a-z0-9-]+)*$/
 
 // The title as a slug's last part, keeping the parts before it, so
-// Generate on a hotel's page keeps its stay/
+// Generate on a page under another keeps where it is
 const slugify = (title, _schemaType, {parent}) => {
   const prefix = parent?.slug?.current?.match(/^.*\//)?.[0] ?? ''
   const part = title
@@ -50,13 +47,14 @@ export default defineType({
   fields: [
     ...titleSlugFields({
       slug: {
-        description: `Where the page is: about is at /about. A partner hotel’s starts with ${HOTEL_PREFIX}, which puts it under the Stay page.`,
+        description:
+          'Where the page is: about is at /about. Parts with a / between put it under another page, e.g. about/history at /about/history.',
         options: {source: 'title', slugify},
         ...shownWhere(({document}) => !isHomepage(document), {
           required: 'Slug is required.',
           check: ({current}) =>
             SLUG_PATTERN.test(current) ||
-            'Use lowercase letters, numbers and hyphens, with a / between parts, e.g. stay/parker-palm-springs.',
+            'Use lowercase letters, numbers and hyphens, with a / between parts, e.g. about/history.',
         }),
       },
     }),

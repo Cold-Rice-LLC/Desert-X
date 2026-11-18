@@ -21,6 +21,7 @@ const landingPaths = {
 	newsLanding: '/news',
 	artLanding: '/art',
 	visitLanding: '/visit',
+	stayLanding: '/stay',
 	searchLanding: '/search'
 };
 
@@ -31,7 +32,8 @@ const paths = {
 	news: (slug) => `/news/${slug}`,
 	artwork: (slug) => `/art/${slug}`,
 	edition: (slug) => `/exhibitions/${slug}`,
-	location: (slug) => `/exhibitions/${slug}`
+	location: (slug) => `/exhibitions/${slug}`,
+	hotel: (slug) => `/stay/${slug}`
 };
 
 /** The href for a link, or null when it points nowhere. */
