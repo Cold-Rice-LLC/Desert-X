@@ -55,6 +55,11 @@ export const italicText = defineType({
   ],
 })
 
-/** The plain text of a rich text value, for previews. */
-export const blocksToText = (blocks = []) =>
-  blocks.map((block) => (block.children || []).map((child) => child.text).join('')).join(' ')
+/**
+ * The plain text of a rich text value, for previews. An empty field comes
+ * to a preview as null, not undefined, so a default value wouldn't cover it.
+ */
+export const blocksToText = (blocks) =>
+  (blocks ?? [])
+    .map((block) => (block.children || []).map((child) => child.text).join(''))
+    .join(' ')

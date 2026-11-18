@@ -50,11 +50,13 @@ export default defineType({
     seoField,
   ],
   preview: {
-    select: {title: 'title', caption: 'caption', stayImage: 'stayImage', image: 'images.0'},
-    prepare: ({title, caption, stayImage, image}) => ({
+    // The whole array: images.0 selects nothing here, as on the Carousel
+    // module
+    select: {title: 'title', caption: 'caption', stayImage: 'stayImage', images: 'images'},
+    prepare: ({title, caption, stayImage, images}) => ({
       title,
       subtitle: blocksToText(caption),
-      media: stayImage?.asset ? stayImage : image,
+      media: stayImage?.asset ? stayImage : images?.[0],
     }),
   },
 })
