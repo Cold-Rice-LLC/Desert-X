@@ -8,6 +8,7 @@
 	import CarouselHalves from '$lib/components/CarouselHalves.svelte';
 	import Image from '$lib/components/Image.svelte';
 	import FooterLinks from '$lib/components/layout/FooterLinks.svelte';
+	import Portable from '$lib/components/Portable.svelte';
 	import { urlFor } from '$lib/sanity/client';
 	import { hotspotPosition } from '$lib/sanity/images';
 	import { linkHref } from '$lib/sanity/links';
@@ -78,9 +79,13 @@
 	};
 </script>
 
-{#snippet caption({ name, work })}
-	{name}
-	{#if work}<i>{work}</i>{/if}
+{#snippet caption({ text, name, work })}
+	{#if text}
+		<Portable value={text} inline />
+	{:else}
+		{name}
+		{#if work}<i>{work}</i>{/if}
+	{/if}
 {/snippet}
 
 <section

@@ -22,15 +22,14 @@ const caption = {
   type: 'richText',
   title: 'Caption',
   description:
-    'Shown under the media, e.g. the artist, the title in italics and the year. Overrides the caption set on the image or video in the Media library. YouTube and Vimeo only have this caption.',
+    'Optional. Shown under the media, e.g. the artist, the title in italics and the year.',
 }
 
 const secondCaption = {
   name: 'secondCaption',
   type: 'richText',
   title: 'Second Caption',
-  description:
-    'Shown under the second image, as Caption is under the first. Overrides the caption set on it in the Media library.',
+  description: 'Optional. Shown under the second image, as Caption is under the first.',
   hidden: ({parent}) => !(parent?.mediaType === 'image' && parent?.secondImage),
 }
 
@@ -127,8 +126,6 @@ export default defineType({
       caption: 'caption',
       image: 'image',
       poster: 'poster',
-      imageCaption: 'image.asset.description',
-      videoCaption: 'video.asset.description',
       videoName: 'video.asset.originalFilename',
       youtubeId: 'youtubeId',
       vimeoUrl: 'vimeoUrl',
@@ -136,7 +133,7 @@ export default defineType({
       internalTitle: 'link.internalLink.title',
       externalUrl: 'link.externalUrl',
     },
-    prepare: ({mediaType, caption, image, poster, imageCaption, videoCaption, ...source}) => {
+    prepare: ({mediaType, caption, image, poster, ...source}) => {
       const typeTitle = MEDIA_TYPES.find(({value}) => value === mediaType)?.title
       const sources = {mp4: source.videoName, youtube: source.youtubeId, vimeo: source.vimeoUrl}
       // Only an image links anywhere, and a link set back to None keeps its
@@ -144,8 +141,7 @@ export default defineType({
       const linked = mediaType === 'image' && ['internal', 'external'].includes(source.linkType)
       const link = linked && linkTargetSubtitle(source)
       return {
-        title:
-          blocksToText(caption) || (mediaType === 'image' ? imageCaption : videoCaption) || 'Media',
+        title: blocksToText(caption) || 'Media',
         subtitle: [typeTitle, sources[mediaType], link].filter(Boolean).join(' · '),
         media: mediaType === 'image' ? image : poster,
       }

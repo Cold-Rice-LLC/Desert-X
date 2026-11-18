@@ -3,6 +3,7 @@ import {DocumentIcon} from '@sanity/icons'
 import {pageModuleMembers} from '../modules'
 import {linkTargetFields, linkTargetSelect, linkTargetSubtitle} from '../objects/linkTarget'
 import {modulesField, seoField, shownWhere, titleSlugFields} from '../objects/fields'
+import {blocksToText} from '../objects/richText'
 
 /** The homepage's ids, published and draft: a page with no slug of its own. */
 export const HOMEPAGE_IDS = ['homepage', 'drafts.homepage']
@@ -113,10 +114,10 @@ export default defineType({
             ...linkTargetFields(),
             defineField({
               name: 'title',
-              type: 'string',
+              type: 'italicText',
               title: 'Title',
               description:
-                'Optional. Shown bottom right of the slide, linking to where it goes if it has a link. Leave empty for the linked artwork’s artist and title, or the linked page’s title.',
+                'Optional. Shown bottom right of the slide, linking to where it goes if it has a link. Leave empty for the linked artwork’s artist and title, or the linked page’s title. Put an artwork title in italics.',
             }),
           ],
           preview: {
@@ -131,7 +132,7 @@ export default defineType({
             },
             // Its headline, or else what its caption says or links to
             prepare: ({mediaType, image, poster, videoName, title, headline, ...link}) => ({
-              title: headline || title || linkTargetSubtitle(link) || 'No text',
+              title: headline || blocksToText(title) || linkTargetSubtitle(link) || 'No text',
               subtitle:
                 mediaType === 'video' ? ['Video', videoName].filter(Boolean).join(' · ') : 'Image',
               media: mediaType === 'video' ? poster : image,

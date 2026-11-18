@@ -37,6 +37,24 @@ export default defineType({
   ],
 })
 
+/**
+ * A short line of text with italic only, for a caption that's a link
+ * itself, like a hotel's on Stay, so it can't hold links of its own.
+ */
+export const italicText = defineType({
+  name: 'italicText',
+  type: 'array',
+  title: 'Italic Text',
+  of: [
+    defineArrayMember({
+      type: 'block',
+      styles: [{title: 'Normal', value: 'normal'}],
+      lists: [],
+      marks: {decorators: [{title: 'Italic', value: 'em'}], annotations: []},
+    }),
+  ],
+})
+
 /** The plain text of a rich text value, for previews. */
 export const blocksToText = (blocks = []) =>
   blocks.map((block) => (block.children || []).map((child) => child.text).join('')).join(' ')

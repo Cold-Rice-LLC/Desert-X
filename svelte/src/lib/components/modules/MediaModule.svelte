@@ -11,8 +11,7 @@
 	 * on phones; with a second image the two sit side by side, 4:5, across
 	 * the middle 18, or stack across 20 on phones. Videos and embeds are
 	 * 16:9 across the middle 20, or the full width on phones. A caption sits
-	 * under each, rich text with the title in italics, or else the one on
-	 * the asset in the Media library, plain text. An image with a link makes
+	 * under each, rich text with the title in italics. An image with a link makes
 	 * it and its caption one link, as the Stay page's hotels are.
 	 */
 	let { module } = $props();
@@ -36,15 +35,11 @@
 </script>
 
 {#snippet caption(value, classes)}
-	{#if value}
+	{#if value?.length}
 		<!-- Each place this is rendered is straight inside a figure -->
 		<!-- svelte-ignore a11y_figcaption_parent -->
 		<figcaption class={['mt-xs text-base', classes]}>
-			{#if Array.isArray(value)}
-				<Portable {value} />
-			{:else}
-				{value}
-			{/if}
+			<Portable {value} />
 		</figcaption>
 	{/if}
 {/snippet}

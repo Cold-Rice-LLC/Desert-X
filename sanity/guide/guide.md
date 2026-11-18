@@ -30,7 +30,7 @@ The Studio lives at `desert-x.sanity.studio`. Sign in with the Sanity account yo
 | Tab           | What it's for                                                                        |
 | ------------- | ------------------------------------------------------------------------------------ |
 | **Structure** | All the site's content, in the Content list described below. Most work happens here. |
-| **Media**     | Every uploaded image and video, with its alt text and caption.                       |
+| **Media**     | Every uploaded image and video, with its alt text.                                   |
 | **Vision**    | A query tool for developers. You can ignore it.                                      |
 | **Guide**     | This guide.                                                                          |
 
@@ -227,7 +227,7 @@ Choose a **Media Type**:
 - **YouTube**: the **YouTube ID**, the 11 characters after `v=` in the video's address. For `youtube.com/watch?v=dQw4w9WgXcQ` that's `dQw4w9WgXcQ`.
 - **Vimeo**: the video's full `vimeo.com` address.
 
-Videos can have a **Poster** image, shown before they play. **Caption** is shown under the media, e.g. the artist, the title in italics and the year. For images and MP4s, leaving it empty uses the caption saved on the file in the Media library (see [section 14](#14-images-video-alt-text-and-captions)).
+Videos can have a **Poster** image, shown before they play. **Caption** is shown under the media, e.g. the artist, the title in italics and the year.
 
 ## 13. Menu, Footer & SEO
 
@@ -259,7 +259,9 @@ Most images on the site are cropped to fit their space: 4:3 at the top of artwor
 
 ### Alt text and captions
 
-Alt text and default captions belong to the file itself, so they follow it everywhere it's used. Set them in the **Media** tab: open an image and fill in **Alt Text** (a short description for people using screen readers) and **Description**, which is the default caption. A Media module's own Caption overrides it for that one use.
+Alt text belongs to the file itself, so it follows it everywhere it's used. Set it in the **Media** tab: open an image and fill in **Alt Text** (a short description for people using screen readers).
+
+Captions belong to each use of an image, so the same photo can be credited differently in different places. Every caption field is formatted text: select an artwork title and press the **Italic** button (or ⌘I) to set it in italics. The Media tab's **Description** isn't shown on the site.
 
 Write alt text for every image that carries meaning: what it shows, not what it is ("A mirrored pavilion reflecting desert scrub at dusk", not "Image of artwork").
 

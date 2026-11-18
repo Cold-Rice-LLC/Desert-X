@@ -1,6 +1,7 @@
 import {defineField, defineType} from 'sanity'
 import {CaseIcon} from '@sanity/icons'
 import {galleryImagesField, seoField, titleSlugFields} from '../objects/fields'
+import {blocksToText} from '../objects/richText'
 
 /**
  * A partner hotel: listed on the Stay page, its photo and caption linking
@@ -21,10 +22,10 @@ export default defineType({
     }),
     defineField({
       name: 'caption',
-      type: 'string',
+      type: 'italicText',
       title: 'Caption on Stay',
       description:
-        'Optional. Shown under its photo on the Stay page, e.g. “Villa Royale – Hosts of our Artistic Team”. Leave empty for its name.',
+        'Optional. Shown under its photo on the Stay page, e.g. “Villa Royale – Hosts of our Artistic Team”, with any titles in italics. Leave empty for its name.',
     }),
     defineField({
       name: 'stayImage',
@@ -52,7 +53,7 @@ export default defineType({
     select: {title: 'title', caption: 'caption', stayImage: 'stayImage', image: 'images.0'},
     prepare: ({title, caption, stayImage, image}) => ({
       title,
-      subtitle: caption,
+      subtitle: blocksToText(caption),
       media: stayImage?.asset ? stayImage : image,
     }),
   },

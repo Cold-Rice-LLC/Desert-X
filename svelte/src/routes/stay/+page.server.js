@@ -18,8 +18,14 @@ export async function load() {
 			"hotels": *[_type == "hotel" && defined(slug.current)] | order(_createdAt asc){
 				_id,
 				_type,
-				title,
-				caption,
+				// Its name stands in as a paragraph of rich text
+				"caption": coalesce(caption, [{
+					"_key": "name",
+					"_type": "block",
+					"style": "normal",
+					"markDefs": [],
+					"children": [{ "_key": "name", "_type": "span", "marks": [], "text": title }]
+				}]),
 				"slug": slug.current,
 				"image": select(defined(stayImage.asset) => stayImage, images[0]){ ${imageFields} }
 			}
@@ -32,12 +38,12 @@ export async function load() {
 
 	const modules = [
 		...(landing?.modules ?? []),
-		...hotels.map(({ _id, _type, title, caption, slug, image }) => ({
+		...hotels.map(({ _id, _type, caption, slug, image }) => ({
 			_key: _id,
 			_type: 'mediaModule',
 			mediaType: 'image',
 			image,
-			caption: caption || title,
+			caption,
 			link: { linkType: 'internal', internal: { _id, _type, slug } }
 		}))
 	];

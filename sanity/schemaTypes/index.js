@@ -9,7 +9,7 @@ import hotel from './documents/hotel'
 import {landings} from './documents/landings'
 import navLink from './objects/navLink'
 import palette from './objects/palette'
-import richText from './objects/richText'
+import richText, {italicText} from './objects/richText'
 import seo from './objects/seo'
 import textModule from './modules/textModule'
 import scheduleModule from './modules/scheduleModule'
@@ -38,6 +38,7 @@ export const schemaTypes = [
   navLink,
   palette,
   richText,
+  italicText,
   seo,
   // Modules
   textModule,

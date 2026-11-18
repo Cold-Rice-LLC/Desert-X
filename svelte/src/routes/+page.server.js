@@ -7,11 +7,11 @@ import { pageSeo, seoFields } from '$lib/sanity/seo';
 // What links to a slide's caption needs from the document it links to
 const linkedFields = `{ _type, title, artistCredit, "artists": artists[]->{ title } }`;
 
-// What a slide shows bottom right: its own Title, or else what it links to,
-// an artwork by its artist then its title in italics, anything else by
-// its title
+// What a slide shows bottom right: its own Title (rich text, italics and
+// all), or else what it links to, an artwork by its artist then its title
+// in italics, anything else by its title
 const caption = ({ title, linked }) => {
-	if (title) return { name: title };
+	if (title?.length) return { text: title };
 	if (linked?._type === 'artwork') {
 		return { name: artworkCredit(linked), work: linked.title };
 	}
