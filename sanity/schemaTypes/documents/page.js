@@ -9,6 +9,28 @@ export const HOMEPAGE_IDS = ['homepage', 'drafts.homepage']
 
 const isHomepage = (document) => HOMEPAGE_IDS.includes(document?._id)
 
+/** The slug prefix of a partner hotel's page, under the Stay page. */
+export const HOTEL_PREFIX = 'stay/'
+
+// A slug is one or more parts, a / between them, so a page can sit under
+// another: stay/parker-palm-springs is at /stay/parker-palm-springs
+const SLUG_PATTERN = /^[a-z0-9-]+(\/[a-z0-9-]+)*$/
+
+// The title as a slug's last part, keeping the parts before it, so
+// Generate on a hotel's page keeps its stay/
+const slugify = (title, _schemaType, {parent}) => {
+  const prefix = parent?.slug?.current?.match(/^.*\//)?.[0] ?? ''
+  const part = title
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/&/g, ' and ')
+    .replace(/['’]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+  return (prefix + part).slice(0, 200)
+}
+
 const SLIDE_MEDIA_TYPES = [
   {title: 'Image', value: 'image'},
   {title: 'Video', value: 'video'},
@@ -27,7 +49,16 @@ export default defineType({
   icon: DocumentIcon,
   fields: [
     ...titleSlugFields({
-      slug: shownWhere(({document}) => !isHomepage(document), {required: 'Slug is required.'}),
+      slug: {
+        description: `Where the page is: about is at /about. A partner hotel’s starts with ${HOTEL_PREFIX}, which puts it under the Stay page.`,
+        options: {source: 'title', slugify},
+        ...shownWhere(({document}) => !isHomepage(document), {
+          required: 'Slug is required.',
+          check: ({current}) =>
+            SLUG_PATTERN.test(current) ||
+            'Use lowercase letters, numbers and hyphens, with a / between parts, e.g. stay/parker-palm-springs.',
+        }),
+      },
     }),
     defineField({
       name: 'slides',

@@ -1,6 +1,7 @@
 import {defineField, defineType} from 'sanity'
 import {ImageIcon} from '@sanity/icons'
 import {shownWhere, spanishField, spanishFieldset} from '../objects/fields'
+import {linkTargetFields, linkTargetSubtitle} from '../objects/linkTarget'
 import {blocksToText} from '../objects/richText'
 
 const MEDIA_TYPES = [
@@ -100,6 +101,23 @@ export default defineType({
     }),
     defineField(caption),
     defineField(secondCaption),
+    defineField({
+      name: 'link',
+      type: 'object',
+      title: 'Link',
+      description: 'Optional. Makes the image and its caption one link, e.g. to a hotel’s page.',
+      hidden: ({parent}) => parent?.mediaType !== 'image',
+      fields: linkTargetFields(),
+    }),
+    defineField({
+      name: 'secondLink',
+      type: 'object',
+      title: 'Second Link',
+      description:
+        'Optional. Makes the second image and its caption one link, as Link does the first.',
+      hidden: ({parent}) => !(parent?.mediaType === 'image' && parent?.secondImage),
+      fields: linkTargetFields(),
+    }),
     spanishField(caption),
     spanishField(secondCaption),
   ],
@@ -114,14 +132,21 @@ export default defineType({
       videoName: 'video.asset.originalFilename',
       youtubeId: 'youtubeId',
       vimeoUrl: 'vimeoUrl',
+      linkType: 'link.linkType',
+      internalTitle: 'link.internalLink.title',
+      externalUrl: 'link.externalUrl',
     },
     prepare: ({mediaType, caption, image, poster, imageCaption, videoCaption, ...source}) => {
       const typeTitle = MEDIA_TYPES.find(({value}) => value === mediaType)?.title
       const sources = {mp4: source.videoName, youtube: source.youtubeId, vimeo: source.vimeoUrl}
+      // Only an image links anywhere, and a link set back to None keeps its
+      // old page, which isn't shown
+      const linked = mediaType === 'image' && ['internal', 'external'].includes(source.linkType)
+      const link = linked && linkTargetSubtitle(source)
       return {
         title:
           blocksToText(caption) || (mediaType === 'image' ? imageCaption : videoCaption) || 'Media',
-        subtitle: [typeTitle, sources[mediaType]].filter(Boolean).join(' · '),
+        subtitle: [typeTitle, sources[mediaType], link].filter(Boolean).join(' · '),
         media: mediaType === 'image' ? image : poster,
       }
     },

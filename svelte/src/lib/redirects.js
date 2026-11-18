@@ -307,13 +307,16 @@ const EDITIONS = new Map([
 	['dx-27-coachella-valley', '/exhibitions/california-2027']
 ]);
 
+// Partner hotels whose slug was fixed on the way over
+const HOTELS = new Map([['/visit/stay/thompson-palm-springa', '/stay/thompson-palm-springs']]);
+
 /**
  * Where an old-site path lives now, or null if it isn't an old path (or
  * has no new home, like /learn and /shop for now, which 404). The Spanish
  * copy under /es goes to the English page. Artworks and news go to their
  * own pages; anything else under an edition, such as its sponsors, to the
- * edition; and the old About, Visit and Support sections to the page that
- * replaces them.
+ * edition; partner hotels to theirs under /stay; and the old About, Visit
+ * and Support sections to the page that replaces them.
  */
 export const redirectFor = (pathname) => {
 	const spanish = /^\/es(\/|$)/.test(pathname);
@@ -330,6 +333,10 @@ export const redirectFor = (pathname) => {
 		if (EDITIONS.has(folder)) return EDITIONS.get(folder);
 	}
 	if (section === 'about' && folder) return '/about';
+	// Partner hotels moved up a level, Stay with them
+	if (section === 'visit' && folder === 'stay') {
+		return HOTELS.get(path) ?? path.replace(/^\/visit/, '');
+	}
 	if (section === 'visit' && folder) return '/visit';
 	if (section === 'support') return '/donate';
 	return spanish ? path : null;

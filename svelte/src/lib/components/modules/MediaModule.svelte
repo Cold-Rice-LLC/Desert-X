@@ -1,7 +1,9 @@
 <script>
+	import AppLink from '$lib/components/AppLink.svelte';
 	import ImageFrame from '$lib/components/ImageFrame.svelte';
 	import Portable from '$lib/components/Portable.svelte';
 	import { urlFor } from '$lib/sanity/client';
+	import { linkHref } from '$lib/sanity/links';
 
 	/**
 	 * One piece of media on a 24-column grid (half-columns of the 12-column
@@ -10,11 +12,13 @@
 	 * the middle 18, or stack across 20 on phones. Videos and embeds are
 	 * 16:9 across the middle 20, or the full width on phones. A caption sits
 	 * under each, rich text with the title in italics, or else the one on
-	 * the asset in the Media library, plain text.
+	 * the asset in the Media library, plain text. An image with a link makes
+	 * it and its caption one link, as the Stay page's hotels are.
 	 */
 	let { module } = $props();
 
 	let pair = $derived(module.mediaType === 'image' && module.secondImage?.asset);
+	let linked = $derived(module.mediaType === 'image' && linkHref(module.link));
 	let span = $derived(
 		module.mediaType === 'image'
 			? 'col-span-20 col-start-3 md:col-span-16 md:col-start-5'
@@ -28,6 +32,7 @@
 	);
 
 	const pairSizes = '(width >= 768px) calc((100vw - 50px) * 9 / 24), calc((100vw - 50px) * 5 / 6)';
+	const singleSizes = '(width >= 768px) calc((100vw - 50px) * 2 / 3), calc((100vw - 50px) * 5 / 6)';
 </script>
 
 {#snippet caption(value, classes)}
@@ -44,25 +49,49 @@
 	{/if}
 {/snippet}
 
+{#snippet image(value, captionValue, link, classes)}
+	{#snippet content()}
+		<ImageFrame
+			image={value}
+			aspect={pair ? 4 / 5 : undefined}
+			sizes={pair ? pairSizes : singleSizes}
+		/>
+		{@render caption(captionValue)}
+	{/snippet}
+	{#if linkHref(link)}
+		<AppLink {link} class={['block transition-opacity duration-300 hover:opacity-70', classes]}>
+			<figure>{@render content()}</figure>
+		</AppLink>
+	{:else}
+		<figure class={classes}>{@render content()}</figure>
+	{/if}
+{/snippet}
+
+<!-- A pair, or a linked image, is a grid of figures, each inside its link
+     if it has one; anything else is a figure that's its own grid -->
 {#if pair}
 	<div class="grid grid-cols-24 gap-y-base px-edge">
-		<figure class="col-span-20 col-start-3 md:col-span-9 md:col-start-4">
-			<ImageFrame image={module.image} aspect={4 / 5} sizes={pairSizes} />
-			{@render caption(module.caption)}
-		</figure>
-		<figure class="col-span-20 col-start-3 md:col-span-9 md:col-start-auto">
-			<ImageFrame image={module.secondImage} aspect={4 / 5} sizes={pairSizes} />
-			{@render caption(module.secondCaption)}
-		</figure>
+		{@render image(
+			module.image,
+			module.caption,
+			module.link,
+			'col-span-20 col-start-3 md:col-span-9 md:col-start-4'
+		)}
+		{@render image(
+			module.secondImage,
+			module.secondCaption,
+			module.secondLink,
+			'col-span-20 col-start-3 md:col-span-9 md:col-start-auto'
+		)}
+	</div>
+{:else if linked}
+	<div class="grid grid-cols-24 px-edge">
+		{@render image(module.image, module.caption, module.link, span)}
 	</div>
 {:else}
 	<figure class="grid grid-cols-24 px-edge">
 		{#if module.mediaType === 'image'}
-			<ImageFrame
-				image={module.image}
-				sizes="(width >= 768px) calc((100vw - 50px) * 2 / 3), calc((100vw - 50px) * 5 / 6)"
-				class={span}
-			/>
+			<ImageFrame image={module.image} sizes={singleSizes} class={span} />
 		{:else if module.mediaType === 'mp4' && module.video}
 			<!-- svelte-ignore a11y_media_has_caption -->
 			<video

@@ -1,5 +1,5 @@
 import { galleryImageFields, imageFields } from '$lib/sanity/images';
-import { richTextFields } from '$lib/sanity/links';
+import { linkFields, richTextFields } from '$lib/sanity/links';
 import { latestNews, newsLandingFields, newsTileFields } from '$lib/sanity/news';
 
 /** GROQ projection for a modules array, with a branch per module type. */
@@ -33,7 +33,9 @@ export const modulesFields = `
 		"video": video.asset->url,
 		poster{ ${imageFields} },
 		youtubeId,
-		vimeoUrl
+		vimeoUrl,
+		link{ ${linkFields} },
+		secondLink{ ${linkFields} }
 	},
 	_type == "scheduleModule" => {
 		heading,
