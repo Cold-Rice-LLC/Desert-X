@@ -3,7 +3,9 @@
 	 * Two titled lists of people, typed as plain text with their own line
 	 * breaks, stacked on phones, the right list's second text under its
 	 * first. From md up the left list is across half the grid, and the right
-	 * list's two texts split the other half.
+	 * list's two texts split the other half. The left list and the right's
+	 * first text each keep a gap clear on their right, so long lines don't
+	 * run into the column after; every column still starts on its grid line.
 	 */
 	let { module } = $props();
 
@@ -12,7 +14,7 @@
 </script>
 
 <div class="grid gap-y-md px-gutter text-base md:grid-cols-12">
-	<section class="space-y-line md:col-span-6">
+	<section class="space-y-line md:col-span-6 md:pr-base">
 		{#if left.title}
 			<h2>{left.title}</h2>
 		{/if}
@@ -27,7 +29,7 @@
 		{/if}
 		{#each [right.text1, right.text2] as text, i (i)}
 			{#if text}
-				<p class={['whitespace-pre-line', i && 'md:col-start-2']}>{text}</p>
+				<p class={['whitespace-pre-line', i ? 'md:col-start-2' : 'md:pr-base']}>{text}</p>
 			{/if}
 		{/each}
 	</section>
