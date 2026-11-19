@@ -14,7 +14,8 @@
 	 * Below the menu breakpoint (see layout.css), phones and tablets, items
 	 * are indented by a column of the 12-column grid; ones with sub-items
 	 * run across, and the rest fill two columns, down then across, the
-	 * second starting halfway along the grid. From there up they sit in one
+	 * second starting halfway along the grid, the locations item first
+	 * whatever its place in the editors' order. From there up they sit in one
 	 * row from the left, a word-like gap apart, never wrapping.
 	 * Items whose Link Type is Sub-items show them under the item below the
 	 * breakpoint, always, with the item an underlined label; from it the
@@ -40,13 +41,26 @@
 	const desktop = new MediaQuery('width >= 70rem');
 	let dialog;
 	let activeKey = $state(null);
-	let active = $derived(menu.items.find((item) => item._key === activeKey));
-	let withSubItems = $derived(menu.items.filter((item) => item.linkType === 'subItems'));
+	// The locations item: the first with sub-items linking to a location.
+	// Below the breakpoint it always leads; from it the editors' order stands.
+	// Reordered here rather than in CSS so focus follows what's on screen.
+	let locations = $derived(
+		menu.items.find(
+			(item) =>
+				item.linkType === 'subItems' &&
+				item.subItems?.some((subItem) => subItem.internal?._type === 'location')
+		)
+	);
+	let items = $derived(
+		desktop.current || !locations
+			? menu.items
+			: [locations, ...menu.items.filter((item) => item !== locations)]
+	);
+	let active = $derived(items.find((item) => item._key === activeKey));
+	let withSubItems = $derived(items.filter((item) => item.linkType === 'subItems'));
 	// The phone layout's rows: one for each item with sub-items, then the
 	// two columns of the rest
-	let rows = $derived(
-		withSubItems.length + Math.ceil((menu.items.length - withSubItems.length) / 2)
-	);
+	let rows = $derived(withSubItems.length + Math.ceil((items.length - withSubItems.length) / 2));
 
 	// ui.menuOpen drives the dialog, rather than the dialog's close event,
 	// which Chrome only fires once the page next renders
@@ -95,7 +109,7 @@
 			class="mt-[0.9rem] grid grid-flow-col grid-cols-[5fr_6fr] pr-edge pl-indent menu:mt-[2.3rem] menu:flex menu:flex-wrap menu:gap-x-[0.8em] menu:px-gutter menu:whitespace-nowrap"
 			style:grid-template-rows="repeat({rows}, auto)"
 		>
-			{#each menu.items as item (item._key)}
+			{#each items as item (item._key)}
 				<li class={[item.linkType === 'subItems' && 'col-span-2 menu:contents']}>
 					{#if item.linkType === 'subItems'}
 						{#if desktop.current}
@@ -146,11 +160,7 @@
 		<p class="mt-line hidden px-gutter tracking-tight menu:block">{menu.text}</p>
 	{/if}
 
-	<a
-		href="/search"
-		aria-label="Search"
-		class="mt-auto self-start px-edge pt-md pb-edge link-fade"
-	>
+	<a href="/search" aria-label="Search" class="mt-auto self-start px-edge pt-md pb-edge link-fade">
 		<Search class="h-[2.4rem] w-auto" />
 	</a>
 </dialog>
