@@ -4,8 +4,8 @@ import HeadingText from './HeadingText'
 import SmallText from './SmallText'
 
 /**
- * Shared rich text: normal and small paragraphs and headings, with italic
- * and links only, wherever a field takes formatted text.
+ * Shared rich text: normal and small paragraphs, headings and bulleted
+ * lists, with italic and links only, wherever a field takes formatted text.
  */
 export default defineType({
   name: 'richText',
@@ -21,7 +21,7 @@ export default defineType({
         {title: 'Heading', value: 'h3', component: HeadingText},
         {title: 'Small', value: 'small', component: SmallText},
       ],
-      lists: [],
+      lists: [{title: 'Bullets', value: 'bullet'}],
       marks: {
         decorators: [{title: 'Italic', value: 'em'}],
         annotations: [
