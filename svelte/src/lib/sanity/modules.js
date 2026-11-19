@@ -20,6 +20,8 @@ export const modulesFields = `
 		}
 	},
 	_type == "peopleListModule" => {
+		heading,
+		intro[]{ ${richTextFields} },
 		leftList,
 		rightList
 	},

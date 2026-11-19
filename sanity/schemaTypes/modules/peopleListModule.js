@@ -1,5 +1,6 @@
 import {defineField, defineType} from 'sanity'
 import {UsersIcon} from '@sanity/icons'
+import {headingField} from '../objects/fields'
 
 // A titled list of people as plain text, typed exactly as it shows, e.g.
 // "Name, Role" on one line or the role on a line of its own. `texts` names
@@ -33,6 +34,13 @@ export default defineType({
   title: 'People List',
   icon: UsersIcon,
   fields: [
+    headingField,
+    defineField({
+      name: 'intro',
+      type: 'richText',
+      title: 'Intro Text',
+      description: 'Shown under the heading, above the lists.',
+    }),
     peopleList('leftList', 'Left List', [['text', 'Text']]),
     peopleList('rightList', 'Right List', [
       ['text1', 'Text 1'],
@@ -40,9 +48,9 @@ export default defineType({
     ]),
   ],
   preview: {
-    select: {leftTitle: 'leftList.title', rightTitle: 'rightList.title'},
-    prepare: ({leftTitle, rightTitle}) => ({
-      title: [leftTitle, rightTitle].filter(Boolean).join(' / ') || 'People List',
+    select: {heading: 'heading', leftTitle: 'leftList.title', rightTitle: 'rightList.title'},
+    prepare: ({heading, leftTitle, rightTitle}) => ({
+      title: heading || [leftTitle, rightTitle].filter(Boolean).join(' / ') || 'People List',
       subtitle: 'People List',
     }),
   },
