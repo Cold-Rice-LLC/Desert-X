@@ -27,11 +27,12 @@ export const titleSlugFields = ({title = {}, slug = {}} = {}) => [
   }),
 ]
 
-/** A module's optional Heading. */
+/** A module's optional Heading, shown centred and in capitals. */
 export const headingField = defineField({
   name: 'heading',
   type: 'string',
   title: 'Heading',
+  description: 'Shown centred, in all caps.',
 })
 
 /** A document's SEO overrides. */
