@@ -4,10 +4,10 @@
 	import Search from '$lib/components/icons/Search.svelte';
 
 	/**
-	 * Site footer, on every page but the homepage: search over a rule, then
-	 * the footer's `groups`, each its links or text, untitled, and the
-	 * trademark and copyright the site writes itself, the `credits` run on
-	 * after it.
+	 * Site footer, on every page but the homepage: a search icon linking to
+	 * search, over a rule, then the footer's `groups`, each its links or
+	 * text, untitled, and the trademark and copyright the site writes
+	 * itself, the `credits` run on after it.
 	 * On phones the groups go two to a row, the edge margin apart, a rule
 	 * under each row, the trademark under them all. From md up they're a
 	 * row, each as wide as its content and the edge margin apart, with the
@@ -39,10 +39,13 @@
 <footer
 	class="mt-auto px-edge pb-edge text-base md:flex md:flex-wrap md:items-start md:gap-x-edge [&_a]:no-underline [&_a]:link-fade"
 >
-	<!-- The rule is the search row's border, across the footer -->
-	<a href="/search" aria-label="Search" class="block border-b-2 pb-[1.8rem] md:basis-full">
+	<!-- Only the icon is the link, padded out to a comfortable target and
+	     drawn back by as much, so it takes the icon's place; the rule under
+	     it runs across the footer -->
+	<a href="/search" aria-label="Search" class="-m-xs block w-fit p-xs">
 		<Search class="h-[2.4rem] w-auto" />
 	</a>
+	<hr class="mt-[1.8rem] border-t-2 md:basis-full" />
 
 	<!-- On phones each group's border joins its neighbour's into the rule
 	     under their row, as the columns have no gap between them; half the
