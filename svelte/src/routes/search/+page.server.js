@@ -1,5 +1,5 @@
 import { artworkEntryFields } from '$lib/art';
-import { client } from '$lib/sanity/client';
+import { client } from '$lib/server/sanity';
 import { loadLanding } from '$lib/sanity/landing';
 import { richTextFields } from '$lib/sanity/links';
 

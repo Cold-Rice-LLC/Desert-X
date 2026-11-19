@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { client } from '$lib/sanity/client';
+import { client } from '$lib/server/sanity';
 import { formatLongDate } from '$lib/dates';
 import { modulesFields } from '$lib/sanity/modules';
 import { imageFields } from '$lib/sanity/images';

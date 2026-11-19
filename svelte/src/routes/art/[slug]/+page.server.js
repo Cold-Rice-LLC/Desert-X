@@ -7,7 +7,7 @@ import {
 	neighbours,
 	sortEntries
 } from '$lib/art';
-import { client } from '$lib/sanity/client';
+import { client } from '$lib/server/sanity';
 import { galleryImageFields } from '$lib/sanity/images';
 import { modulesFields } from '$lib/sanity/modules';
 import { moduleDescription, moduleTextField, pageSeo, seoFields } from '$lib/sanity/seo';

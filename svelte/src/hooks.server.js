@@ -16,15 +16,19 @@ const CACHE_CONTROL = 'public, max-age=0, s-maxage=60, stale-while-revalidate=86
  * for client-side navigation, which SvelteKit marks no-store, and
  * endpoints without a cache policy of their own) are cached on the CDN
  * (see CACHE_CONTROL), each URL apart, query included. Without it, every
- * view waits on Sanity.
+ * view waits on Sanity. Draft previews (?preview=true, see
+ * $lib/server/sanity) are never cached or indexed.
  */
 export async function handle({ event, resolve }) {
 	const location = redirectFor(event.url.pathname);
 	if (location) return new Response(null, { status: 301, headers: { location } });
 
 	const response = await resolve(event);
-	if (env.PUBLIC_NOINDEX === 'true') response.headers.set('X-Robots-Tag', 'noindex');
-	if (
+	const preview = event.url.searchParams.get('preview') === 'true';
+	if (env.PUBLIC_NOINDEX === 'true' || preview) response.headers.set('X-Robots-Tag', 'noindex');
+	if (preview) {
+		response.headers.set('cache-control', 'private, no-store');
+	} else if (
 		event.request.method === 'GET' &&
 		response.status === 200 &&
 		(event.isDataRequest || !response.headers.has('cache-control'))

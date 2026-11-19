@@ -9,6 +9,7 @@
 	import Footer from '$lib/components/layout/Footer.svelte';
 	import MainNav from '$lib/components/layout/MainNav.svelte';
 	import Menu from '$lib/components/layout/Menu.svelte';
+	import PreviewBanner from '$lib/components/layout/PreviewBanner.svelte';
 	import Seo from '$lib/components/layout/Seo.svelte';
 	import { linkHref } from '$lib/sanity/links';
 	import { ui } from '$lib/ui.svelte.js';
@@ -105,4 +106,8 @@
 
 {#if !home}
 	<Footer footer={data.footer} />
+{/if}
+
+{#if data.preview}
+	<PreviewBanner />
 {/if}

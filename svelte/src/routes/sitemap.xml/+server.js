@@ -1,4 +1,4 @@
-import { client } from '$lib/sanity/client';
+import { client } from '$lib/server/sanity';
 
 // The landings the site builds itself. Search is left out, as it isn't
 // indexed (nor is Donate's checkout, which isn't a document).

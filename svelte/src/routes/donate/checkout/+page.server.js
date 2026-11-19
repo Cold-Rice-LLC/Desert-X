@@ -1,4 +1,4 @@
-import { client } from '$lib/sanity/client';
+import { client } from '$lib/server/sanity';
 
 // The nav reads as the Donate page's title, linking back to it. Kept out
 // of search engines: it's a step of donating, not a page of its own.

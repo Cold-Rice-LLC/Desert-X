@@ -1,4 +1,4 @@
-import { client } from '$lib/sanity/client';
+import { client } from '$lib/server/sanity';
 import { artworkListFields } from '$lib/art';
 import { loadLanding } from '$lib/sanity/landing';
 import { richTextFields } from '$lib/sanity/links';

@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { client } from '$lib/sanity/client';
+import { client } from '$lib/server/sanity';
 import { loadLanding } from '$lib/sanity/landing';
 import { newsTileFields } from '$lib/sanity/news';
 import { pageParam } from '$lib/url';

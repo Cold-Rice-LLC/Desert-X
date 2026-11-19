@@ -1,4 +1,4 @@
-import { client } from '$lib/sanity/client';
+import { client } from '$lib/server/sanity';
 import { pageSeo, seoFields } from '$lib/sanity/seo';
 
 /**

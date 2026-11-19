@@ -1,5 +1,5 @@
 import { today } from '$lib/dates';
-import { client } from '$lib/sanity/client';
+import { client } from '$lib/server/sanity';
 import { loadLanding } from '$lib/sanity/landing';
 import { richTextFields } from '$lib/sanity/links';
 import { modulesFields } from '$lib/sanity/modules';

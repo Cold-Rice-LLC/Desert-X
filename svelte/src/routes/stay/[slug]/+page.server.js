@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { client } from '$lib/sanity/client';
+import { client } from '$lib/server/sanity';
 import { galleryImageFields } from '$lib/sanity/images';
 import { richTextFields } from '$lib/sanity/links';
 import { pageSeo, seoFields } from '$lib/sanity/seo';

@@ -8,6 +8,8 @@ import {myStructure} from './myStructure'
 import {templates} from './templates'
 import {landingTypes} from './schemaTypes/documents/landings'
 import {guideTool} from './guide'
+import {openPreviewAction} from './actions/openPreview'
+import {previewTypes} from './previewUrl'
 
 // One fixed document each, opened from the structure: no create, delete or
 // duplicate, and kept out of the "new document" menu
@@ -33,10 +35,14 @@ export default defineConfig({
     ],
   },
 
+  // Singletons keep only publishing; every type with a page on the site
+  // gets Open preview (see previewUrl)
   document: {
-    actions: (input, {schemaType}) =>
-      singletonTypes.has(schemaType)
+    actions: (input, {schemaType}) => {
+      const actions = singletonTypes.has(schemaType)
         ? input.filter(({action}) => action && singletonActions.has(action))
-        : input,
+        : input
+      return previewTypes.includes(schemaType) ? [...actions, openPreviewAction] : actions
+    },
   },
 })

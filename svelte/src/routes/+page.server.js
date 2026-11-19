@@ -1,5 +1,5 @@
 import { artworkCredit } from '$lib/art';
-import { client } from '$lib/sanity/client';
+import { client } from '$lib/server/sanity';
 import { imageFields } from '$lib/sanity/images';
 import { linkFields } from '$lib/sanity/links';
 import { pageSeo, seoFields } from '$lib/sanity/seo';
@@ -47,8 +47,12 @@ export async function load() {
 	`);
 
 	// The homepage is titled with the site's title alone, unless the
-	// Studio sets one
-	const seo = pageSeo(homepage?.seo);
+	// Studio sets one. Shared, it shows its first slide: the image, or a
+	// video's poster.
+	const [first] = homepage?.slides ?? [];
+	const seo = pageSeo(homepage?.seo, {
+		image: first?.mediaType === 'video' ? first.poster : first?.image
+	});
 
 	if (homepage?.slides?.length) {
 		return { slides: withCaptions(homepage.slides), seo };

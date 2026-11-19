@@ -26,6 +26,23 @@ export const moduleDescription = ({ moduleText, title }) => {
 };
 
 /**
+ * The first image in a page's Carousel or Media modules, in order, as its
+ * share image: a carousel's first image, a media module's image or, for
+ * an MP4, its poster. YouTube and Vimeo modules have none of their own.
+ */
+export const firstModuleImage = (modules) => {
+	for (const module of modules ?? []) {
+		const image =
+			module._type === 'carouselModule'
+				? module.images?.[0]
+				: module._type === 'mediaModule' &&
+					{ image: module.image, mp4: module.poster }[module.mediaType];
+		if (image?.asset) return image;
+	}
+	return undefined;
+};
+
+/**
  * A page's title, description and share image for the layout's head
  * tags: the Studio's overrides where set, or else `defaults` from the page
  * itself. Whatever's still empty falls back to Menu, Footer & SEO there.

@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 import { editionStatus } from '$lib/dates';
-import { client } from '$lib/sanity/client';
+import { client } from '$lib/server/sanity';
 import { editionFields } from '$lib/sanity/editions';
 import { newsLandingFields, newsTileFields } from '$lib/sanity/news';
 import { pageSeo, seoFields } from '$lib/sanity/seo';

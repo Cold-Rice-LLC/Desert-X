@@ -1,4 +1,4 @@
-import { client } from '$lib/sanity/client';
+import { client, isPreview } from '$lib/server/sanity';
 import { imageFields } from '$lib/sanity/images';
 import { linkFields, richTextFields } from '$lib/sanity/links';
 import { socialProfiles } from '$lib/structuredData';
@@ -22,7 +22,7 @@ const locationLink = `{
 	"since": ${editionsOf} | order(year asc)[0].year
 }`;
 
-export async function load() {
+export async function load({ url }) {
 	const { settings, locations } = await client.fetch(`{
 		"settings": *[_id == "siteSettings"][0]{
 			siteTitle,
@@ -47,6 +47,9 @@ export async function load() {
 	}`);
 
 	return {
+		// Draft preview, for its banner. Read from `url`, so leaving
+		// preview reruns this load and the banner goes.
+		preview: isPreview(url),
 		// What pages fall back to for their head tags
 		seo: {
 			siteTitle: settings?.siteTitle,
