@@ -13,7 +13,8 @@
 	 * then `text` and, given `href`, a "View more information about" link
 	 * to the exhibition, named by `exhibition`. Choosing an
 	 * X turns it black and opens a card, in a news tile's text size, with
-	 * the artist, title (up to two lines), a Close button, the thumbnail, a
+	 * the artist and title (three lines between them, always, so every card
+	 * is the same height), a Close button, the thumbnail, a
 	 * Details link to the artwork and a Next button, which moves on to the
 	 * next X, round to the first after the last. It's across the middle on phones and in
 	 * the top right from md up, scrolls if it's taller than the map, and
@@ -291,11 +292,14 @@
 						class="absolute inset-sm z-10 my-auto h-fit max-h-[calc(100%-2*var(--spacing-sm))] space-y-line overflow-y-auto overscroll-contain bg-white p-sm font-mono text-tile [scrollbar-width:none] md:inset-x-auto md:top-base md:right-base md:bottom-auto md:my-0 md:max-h-[calc(100%-2*var(--spacing-base))] md:w-[40rem] md:p-base"
 					>
 						<!-- The artist and title take what Close leaves, breaking a word
-						     too long for it rather than pushing Close off the card -->
+						     too long for it rather than pushing Close off the card.
+						     Together they always take three lines, cut to them and held
+						     open to them, so every card is the same height -->
 						<div class="flex items-start gap-base">
-							<p class="min-w-0 flex-1 wrap-break-word">
-								{selected.artists}
-								<cite class="-my-[0.1em] line-clamp-2 py-[0.1em]">{selected.artwork.title}</cite>
+							<p
+								class="-my-[0.1em] line-clamp-3 h-[calc(3lh+0.2em)] min-w-0 flex-1 py-[0.1em] wrap-break-word"
+							>
+								{selected.artists}<br /><cite>{selected.artwork.title}</cite>
 							</p>
 							<button
 								type="button"
@@ -308,15 +312,14 @@
 						</div>
 						<!-- Keyed so a new artwork's image fades in on the grey frame, not
 						     over the last one's -->
+						<!-- Without a thumbnail the grey frame holds its place -->
 						{#key selected.artwork._id}
-							{#if selected.artwork.thumbnail?.asset}
-								<ImageFrame
-									image={selected.artwork.thumbnail}
-									aspect={4 / 3}
-									sizes="400px"
-									loading="eager"
-								/>
-							{/if}
+							<ImageFrame
+								image={selected.artwork.thumbnail}
+								aspect={4 / 3}
+								sizes="400px"
+								loading="eager"
+							/>
 						{/key}
 						<div class="flex justify-between gap-base">
 							<a href="/art/{selected.artwork.slug}" class="link-underline">Details</a>
