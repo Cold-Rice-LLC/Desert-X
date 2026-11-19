@@ -1,10 +1,11 @@
 import {defineArrayMember, defineType} from 'sanity'
 import {linkTargetFields} from './linkTarget'
+import HeadingText from './HeadingText'
 import SmallText from './SmallText'
 
 /**
- * Shared rich text: normal and small paragraphs, with italic and links
- * only, wherever a field takes formatted text.
+ * Shared rich text: normal and small paragraphs and headings, with italic
+ * and links only, wherever a field takes formatted text.
  */
 export default defineType({
   name: 'richText',
@@ -13,9 +14,11 @@ export default defineType({
   of: [
     defineArrayMember({
       type: 'block',
+      // Heading: the text's own size, set apart by the space above it.
       // Small: a closing credit, like "Generous support provided by…"
       styles: [
         {title: 'Normal', value: 'normal'},
+        {title: 'Heading', value: 'h3', component: HeadingText},
         {title: 'Small', value: 'small', component: SmallText},
       ],
       lists: [],
