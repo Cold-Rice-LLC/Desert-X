@@ -164,7 +164,7 @@
 	<!-- Outside Swiper, over the halves, so clicking them follows the link -->
 	<nav
 		aria-label="Quick links"
-		class="pointer-events-none absolute inset-x-0 bottom-edge z-20 grid grid-cols-12 items-end px-edge text-lead text-white *:pointer-events-auto md:text-md md:tracking-tight"
+		class="pointer-events-none absolute inset-x-0 bottom-edge z-20 grid grid-cols-12 items-end px-edge text-lead text-white *:pointer-events-auto xl:text-md xl:tracking-tight"
 		bind:offsetHeight={linksHeight}
 	>
 		<FooterLinks links={quickLinks} />
