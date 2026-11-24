@@ -24,7 +24,9 @@
 	 * once the map nears the viewport, which also keeps it off the server,
 	 * and the page has loaded (see afterLoad). The map is locked at every
 	 * size, with no panning or zooming, framed on every X and refit as it
-	 * resizes, so scrolling past it always scrolls the page. Left out
+	 * resizes, so scrolling past it always scrolls the page. The Xs appear
+	 * one by one, in Next's order, once the map is drawn and a third of it
+	 * is in view; with reduced motion they're simply there. Left out
 	 * unless they stand in at least two different places. `class` passes
 	 * to its section, and `headingLevel` to its heading.
 	 */
@@ -57,6 +59,7 @@
 
 	let map;
 	let markers = [];
+	let revealed = $state(false);
 	let selectedId = $state(null);
 	let selected = $derived(located.find((pin) => pin.artwork._id === selectedId));
 
@@ -197,10 +200,11 @@
 		// Before the first render, so the light style never flashes
 		instance.on('style.load', () => restyle(instance));
 
-		markers = located.map((pin) => {
+		markers = located.map((pin, index) => {
 			const element = document.createElement('button');
 			element.type = 'button';
 			element.className = 'map-marker';
+			element.style.setProperty('--index', index);
 			element.setAttribute(
 				'aria-label',
 				[pin.artists, pin.artwork.title].filter(Boolean).join(', ')
@@ -208,6 +212,8 @@
 			element.setAttribute('aria-pressed', 'false');
 			const icon = mount(LogoMark, { target: element, props: { class: 'size-full' } });
 			element.addEventListener('click', () => select(pin.artwork._id));
+			// Tabbed to before they've appeared, they shouldn't be unseen
+			element.addEventListener('focus', () => (revealed = true));
 			const marker = new mapboxgl.Marker({ element }).setLngLat(pin.lngLat).addTo(instance);
 			// Mapbox calls every marker an image, hiding that it's a button
 			element.removeAttribute('role');
@@ -239,6 +245,17 @@
 	$effect(() => {
 		if (!located.length) return;
 		let cancelled = false;
+		revealed = false;
+
+		// Only watching from the map's load, so the Xs wait for both
+		const reveal = new IntersectionObserver(
+			([entry]) => {
+				if (!entry.isIntersecting) return;
+				reveal.disconnect();
+				revealed = true;
+			},
+			{ threshold: 1 / 3 }
+		);
 
 		const observer = new IntersectionObserver(
 			async ([entry]) => {
@@ -251,7 +268,9 @@
 					import('mapbox-gl'),
 					import('mapbox-gl/dist/mapbox-gl.css')
 				]);
-				if (!cancelled) map = createMap(mapboxgl);
+				if (cancelled) return;
+				map = createMap(mapboxgl);
+				map.once('load', () => reveal.observe(frameEl));
 			},
 			{ rootMargin: '400px' }
 		);
@@ -260,6 +279,7 @@
 		return () => {
 			cancelled = true;
 			observer.disconnect();
+			reveal.disconnect();
 			for (const { icon, marker } of markers) {
 				unmount(icon);
 				marker.remove();
@@ -279,9 +299,10 @@
 		<div class="mt-line px-gutter">
 			<div
 				bind:this={frameEl}
-				class="relative isolate h-[58vh] overflow-hidden bg-grey-2 md:h-[80vh]"
+				class={['relative isolate h-[58vh] overflow-hidden bg-grey-2 md:h-[80vh]', { revealed }]}
 			>
-				<!-- Mapbox's own CSS makes this position: relative, so it fills by size instead -->
+				<!-- Mapbox adds its own class here, so this one mustn't change. Its CSS makes
+				     this position: relative, so it fills by size instead -->
 				<div bind:this={mapEl} class="size-full"></div>
 
 				{#if selected}
@@ -361,5 +382,18 @@
 			z-index: 1;
 			color: var(--color-black);
 		}
+
+		/* The X rather than the marker, which can be tabbed to while it's
+		   unseen. No duration, only a delay: each appears at once, in turn */
+		& :global(svg) {
+			@media (prefers-reduced-motion: no-preference) {
+				visibility: hidden;
+				transition: visibility 0s calc(var(--index) * 120ms);
+			}
+		}
+	}
+
+	.revealed :global(.map-marker svg) {
+		visibility: visible;
 	}
 </style>
